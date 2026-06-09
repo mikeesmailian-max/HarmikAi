@@ -1,183 +1,446 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>MegaFleet Portal</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #1a1444; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
-    #__bundler_loading { position: fixed; bottom: 20px; right: 20px; font: 13px/1.4 -apple-system, BlinkMacSystemFont, sans-serif; color: #666; background: #fff; padding: 8px 14px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.12); z-index: 10000; }
-    #__bundler_thumbnail { position: fixed; inset: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #1a1444; z-index: 9999; }
-    #__bundler_thumbnail svg { width: 100%; height: 100%; object-fit: contain; }
-    #__bundler_placeholder { color: #999; font-size: 14px; }
-  </style>
-  <noscript>
-    <style>#__bundler_loading { display: none; }</style>
-    <div style="position:fixed;bottom:12px;left:12px;font:13px/1.4 -apple-system,BlinkMacSystemFont,sans-serif;color:#999;background:rgba(255,255,255,0.9);padding:6px 12px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.08);z-index:10000;">
-      This page requires JavaScript to display.
-    </div>
-  </noscript>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MegaFleet Portal — Harmik AI</title>
+<style>
+:root{
+  --ease:cubic-bezier(.22,1,.36,1);
+  --bg1:#0d0a1e;
+  --bg2:#130f2d;
+  --accent:#7b3fff;
+  --accent2:#3aa0ff;
+  --glass:rgba(255,255,255,.08);
+  --glass-b:rgba(255,255,255,.14);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;}
+body{min-height:100vh;color:#fff;overflow:hidden;}
+
+/* ===== Animated background ===== */
+.bg{
+  position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 120% 80% at 20% 10%, rgba(80,50,200,.55) 0%,transparent 55%),
+    radial-gradient(ellipse 100% 80% at 85% 15%, rgba(160,60,255,.45) 0%,transparent 50%),
+    radial-gradient(ellipse 130% 100% at 60% 100%, rgba(30,80,220,.5) 0%,transparent 55%),
+    linear-gradient(160deg,#120d2e 0%,#0a0818 50%,#06040f 100%);
+}
+.bg .blob{position:absolute;border-radius:50%;filter:blur(80px);animation:drift 18s ease-in-out infinite alternate;}
+.b1{width:600px;height:600px;background:rgba(100,70,255,.35);top:-100px;left:-150px;animation-delay:0s;}
+.b2{width:500px;height:500px;background:rgba(200,70,255,.28);top:0;right:-80px;animation-delay:-6s;}
+.b3{width:700px;height:700px;background:rgba(40,100,255,.3);bottom:-200px;left:20%;animation-delay:-12s;}
+.b4{width:400px;height:400px;background:rgba(80,200,255,.18);top:50%;right:10%;animation-delay:-4s;}
+@keyframes drift{from{transform:translate(0,0) scale(1);}to{transform:translate(40px,30px) scale(1.08);}}
+
+/* Fine grid overlay */
+.bg::after{
+  content:"";position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+
+/* ===== Views ===== */
+.view{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s var(--ease),transform .6s var(--ease),filter .6s var(--ease);}
+.view.hidden{opacity:0;transform:translateY(-20px) scale(1.03);filter:blur(8px);pointer-events:none;}
+
+/* ===== LOCK SCREEN ===== */
+#lock{gap:0;}
+.lock-header{text-align:center;margin-bottom:56px;}
+.lock-logo{
+  display:inline-flex;align-items:center;gap:14px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+  border-radius:20px;padding:14px 26px;margin-bottom:32px;
+  backdrop-filter:blur(20px);
+}
+.lock-logo-icon{
+  width:44px;height:44px;border-radius:12px;
+  background:linear-gradient(135deg,#7b3fff,#3aa0ff);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:700;letter-spacing:-1px;
+  box-shadow:0 4px 20px rgba(123,63,255,.5);
+  flex-shrink:0;
+}
+.lock-logo-text{text-align:left;line-height:1.2;}
+.lock-logo-brand{font-size:19px;font-weight:700;letter-spacing:-.3px;
+  background:linear-gradient(135deg,#c0a0ff,#7bc8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.lock-logo-sub{font-size:12px;color:rgba(255,255,255,.5);font-weight:500;letter-spacing:.6px;text-transform:uppercase;}
+.lock-time-big{font-size:96px;font-weight:200;letter-spacing:-4px;line-height:.9;
+  background:linear-gradient(180deg,#fff 0%,rgba(255,255,255,.7) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.lock-date-str{font-size:20px;font-weight:400;color:rgba(255,255,255,.65);margin-top:10px;letter-spacing:.3px;}
+
+.auth-card{
+  width:100%;max-width:400px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:28px;
+  padding:40px 36px;
+  backdrop-filter:blur(30px) saturate(180%);
+  box-shadow:0 40px 100px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.08) inset;
+}
+.auth-title{font-size:22px;font-weight:700;margin-bottom:6px;letter-spacing:-.3px;}
+.auth-sub{font-size:14px;color:rgba(255,255,255,.55);margin-bottom:28px;font-weight:400;}
+.pwd-wrap{position:relative;margin-bottom:14px;}
+.pwd{
+  width:100%;height:54px;border:none;outline:none;border-radius:16px;
+  background:rgba(255,255,255,.1);
+  border:1.5px solid rgba(255,255,255,.15);
+  color:#fff;font-size:17px;text-align:left;letter-spacing:2px;
+  padding:0 58px 0 20px;
+  transition:border-color .25s,background .25s,box-shadow .25s;
+  font-family:inherit;
+}
+.pwd::placeholder{color:rgba(255,255,255,.4);letter-spacing:.5px;font-size:15px;}
+.pwd:focus{background:rgba(255,255,255,.14);border-color:rgba(160,120,255,.6);box-shadow:0 0 0 4px rgba(123,63,255,.15);}
+.pwd-go{
+  position:absolute;right:8px;top:8px;width:38px;height:38px;border:none;border-radius:12px;
+  background:linear-gradient(135deg,#7b3fff,#4a90ff);
+  color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:transform .15s,box-shadow .2s;
+  box-shadow:0 4px 14px rgba(123,63,255,.45);
+}
+.pwd-go:hover{transform:scale(1.07);box-shadow:0 6px 20px rgba(123,63,255,.6);}
+.pwd-go:active{transform:scale(.9);}
+.pwd-hint{height:18px;font-size:13px;color:rgba(255,130,130,.9);font-weight:500;margin-bottom:6px;}
+.shake{animation:shake .45s var(--ease);}
+@keyframes shake{10%,90%{transform:translateX(-3px)}20%,80%{transform:translateX(5px)}30%,50%,70%{transform:translateX(-8px)}40%,60%{transform:translateX(8px)}}
+
+/* ===== HOME SCREEN ===== */
+#home{justify-content:flex-start;overflow:auto;}
+
+/* Header bar */
+.portal-nav{
+  width:100%;padding:0 40px;height:70px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(255,255,255,.04);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(20px);
+  position:sticky;top:0;z-index:50;
+}
+.nav-brand{display:flex;align-items:center;gap:12px;}
+.nav-brand-icon{
+  width:38px;height:38px;border-radius:11px;
+  background:linear-gradient(135deg,#7b3fff,#3aa0ff);
+  display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;
+  box-shadow:0 3px 12px rgba(123,63,255,.4);
+}
+.nav-brand-name{font-size:17px;font-weight:700;
+  background:linear-gradient(135deg,#c0a0ff,#7bc8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-brand-sep{width:1px;height:20px;background:rgba(255,255,255,.2);margin:0 4px;}
+.nav-portal-label{font-size:14px;font-weight:500;color:rgba(255,255,255,.55);}
+.nav-right{display:flex;align-items:center;gap:14px;}
+.nav-time{font-size:15px;font-weight:600;color:rgba(255,255,255,.7);}
+.nav-lock{
+  padding:8px 16px;border-radius:10px;border:1px solid rgba(255,255,255,.15);
+  background:rgba(255,255,255,.07);color:rgba(255,255,255,.7);
+  font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;gap:6px;
+}
+.nav-lock:hover{background:rgba(255,255,255,.12);color:#fff;}
+
+/* Hero welcome */
+.home-hero{
+  width:100%;max-width:1100px;padding:56px 40px 36px;
+  display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;
+}
+.hero-greeting{font-size:38px;font-weight:700;letter-spacing:-.8px;line-height:1.1;}
+.hero-greeting span{
+  background:linear-gradient(135deg,#c0a0ff 0%,#7bc8ff 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-sub{font-size:16px;color:rgba(255,255,255,.5);margin-top:8px;font-weight:400;}
+.hero-badge{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 18px;border-radius:14px;
+  background:rgba(61,220,110,.1);border:1px solid rgba(61,220,110,.25);
+  font-size:13px;font-weight:600;color:rgba(61,220,110,.9);
+}
+.hero-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:#3ddc6e;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(61,220,110,.4);}50%{opacity:.8;box-shadow:0 0 0 6px rgba(61,220,110,0);}}
+
+/* App grid area */
+.apps-section{width:100%;max-width:1100px;padding:0 40px 60px;}
+.apps-section-label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.35);margin-bottom:24px;}
+
+.apps-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:18px;
+}
+
+/* App card — iOS icon aesthetic but website-sized */
+.app-card{
+  cursor:pointer;border:none;background:none;color:inherit;
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;gap:14px;
+  padding:28px 16px 22px;
+  border-radius:28px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.09);
+  transition:transform .22s var(--ease),background .22s,box-shadow .22s,border-color .22s;
+  position:relative;overflow:hidden;
+}
+.app-card::before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.06) 0%,transparent 50%);
+  border-radius:28px;
+}
+.app-card:hover{
+  transform:translateY(-5px) scale(1.02);
+  background:rgba(255,255,255,.09);
+  border-color:rgba(255,255,255,.18);
+  box-shadow:0 24px 60px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.25);
+}
+.app-card:active{transform:scale(.95);}
+
+/* The icon tile — pure iOS */
+.app-tile{
+  width:88px;height:88px;border-radius:24px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  box-shadow:0 14px 30px -8px rgba(0,0,0,.6),0 1px 0 rgba(255,255,255,.35) inset;
+  flex-shrink:0;
+}
+.app-tile::after{
+  content:"";position:absolute;inset:0;border-radius:24px;
+  background:linear-gradient(180deg,rgba(255,255,255,.22),transparent 45%);
+}
+.app-tile svg{width:48px;height:48px;position:relative;z-index:2;}
+
+.g-green{background:linear-gradient(160deg,#3ddc6e,#159a4a);}
+.g-blue{background:linear-gradient(160deg,#3aa0ff,#1666e8);}
+.g-orange{background:linear-gradient(160deg,#ffb44a,#ff7a2f);}
+.g-teal{background:linear-gradient(160deg,#34e3c8,#0fb39c);}
+.g-purple{background:linear-gradient(160deg,#c06bff,#7b3fff);}
+
+.app-name{font-size:15px;font-weight:600;letter-spacing:-.1px;line-height:1.2;}
+.app-desc{font-size:12px;color:rgba(255,255,255,.45);margin-top:3px;font-weight:400;line-height:1.4;}
+.app-arrow{
+  position:absolute;bottom:14px;right:14px;
+  width:22px;height:22px;border-radius:50%;
+  background:rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity .2s;
+}
+.app-card:hover .app-arrow{opacity:1;}
+
+/* Launch flash */
+#launch-flash{
+  position:fixed;inset:0;z-index:200;pointer-events:none;opacity:0;
+  background:linear-gradient(135deg,#7b3fff,#3aa0ff);
+  transition:opacity .35s;
+}
+#launch-flash.go{opacity:1;}
+
+/* Footer */
+.portal-footer{
+  width:100%;padding:18px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-top:1px solid rgba(255,255,255,.06);
+  flex-shrink:0;margin-top:auto;
+}
+.footer-copy{font-size:12px;color:rgba(255,255,255,.28);}
+.footer-powered{font-size:12px;color:rgba(255,255,255,.35);display:flex;align-items:center;gap:6px;}
+.footer-powered span{
+  background:linear-gradient(135deg,#c0a0ff,#7bc8ff);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:600;}
+
+/* Scrollable home wrapper */
+.home-scroll{width:100%;display:flex;flex-direction:column;align-items:center;min-height:calc(100vh - 70px);overflow-y:auto;}
+
+@media(max-width:640px){
+  .apps-grid{grid-template-columns:repeat(2,1fr);}
+  .home-hero{padding:36px 20px 24px;}
+  .hero-greeting{font-size:28px;}
+  .apps-section{padding:0 20px 50px;}
+  .portal-nav{padding:0 20px;}
+  .portal-footer{padding:14px 20px;}
+  .auth-card{margin:0 16px;}
+}
+</style>
 </head>
 <body>
-  <div id="__bundler_thumbnail">
-    <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
-      <rect width="1200" height="800" fill="#1a1444"></rect>
-      <rect x="470" y="170" width="260" height="460" rx="56" fill="#2b2270" stroke="#7b6cff" stroke-width="6"></rect>
-      <rect x="540" y="250" width="120" height="120" rx="30" fill="#7b3fff"></rect>
-      <text x="600" y="334" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="70" font-weight="700" fill="#fff" text-anchor="middle">M</text>
-      <text x="600" y="470" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="34" font-weight="600" fill="#fff" text-anchor="middle">MegaFleet</text>
-      <rect x="510" y="520" width="180" height="44" rx="22" fill="#ffffff" opacity="0.85"></rect>
-    </svg>
+<div class="bg">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+  <div class="blob b4"></div>
+</div>
+
+<!-- ===== LOCK SCREEN ===== -->
+<div class="view" id="lock">
+  <div class="lock-header">
+    <div class="lock-logo">
+      <div class="lock-logo-icon">H</div>
+      <div class="lock-logo-text">
+        <div class="lock-logo-brand">Harmik AI</div>
+        <div class="lock-logo-sub">MegaFleet Portal</div>
+      </div>
+    </div>
+    <div class="lock-time-big" id="lock-time">9:41</div>
+    <div class="lock-date-str" id="lock-date">Tuesday, June 9</div>
   </div>
-  <div id="__bundler_loading">Unpacking...</div>
 
-  <script>
-    
-document.addEventListener('DOMContentLoaded', async function() {
-  const loading = document.getElementById('__bundler_loading');
-  function setStatus(msg) { if (loading) loading.textContent = msg; }
+  <div class="auth-card">
+    <div class="auth-title">Welcome back</div>
+    <div class="auth-sub">Enter your password to access the portal</div>
+    <form id="pwd-form" autocomplete="off">
+      <div class="pwd-hint" id="pwd-hint"></div>
+      <div class="pwd-wrap">
+        <input class="pwd" id="pwd" type="password" placeholder="Enter password" autocomplete="new-password">
+        <button class="pwd-go" id="pwd-go" type="submit" aria-label="Unlock">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h13M13 6l6 6-6 6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
 
-  // Error sink persists across replaceWith since it's on window, not the DOM.
-  window.addEventListener('error', function(e) {
-    var p = document.body || document.documentElement;
-    var d = document.getElementById('__bundler_err') || p.appendChild(document.createElement('div'));
-    d.id = '__bundler_err';
-    d.style.cssText = 'position:fixed;bottom:12px;left:12px;right:12px;font:12px/1.4 ui-monospace,monospace;background:#2a1215;color:#ff8a80;padding:10px 14px;border-radius:8px;border:1px solid #5c2b2e;z-index:99999;white-space:pre-wrap;max-height:40vh;overflow:auto';
-    d.textContent = (d.textContent ? d.textContent + String.fromCharCode(10) : '') +
-      '[bundle] ' + (e.message || e.type) +
-      (e.filename ? ' (' + e.filename.slice(0, 60) + ':' + e.lineno + ')' : '');
-  }, true);
+<!-- ===== HOME SCREEN ===== -->
+<div class="view hidden" id="home" style="justify-content:flex-start;overflow:hidden;">
+  <!-- Nav -->
+  <nav class="portal-nav">
+    <div class="nav-brand">
+      <div class="nav-brand-icon">H</div>
+      <div class="nav-brand-name">Harmik AI</div>
+      <div class="nav-brand-sep"></div>
+      <div class="nav-portal-label">MegaFleet Portal</div>
+    </div>
+    <div class="nav-right">
+      <div class="nav-time" id="home-time">9:41</div>
+      <button class="nav-lock" onclick="lockNow()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M7 10V7a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="5" y="10" width="14" height="10" rx="3" fill="currentColor"/></svg>
+        Lock
+      </button>
+    </div>
+  </nav>
 
-  try {
-    const manifestEl = document.querySelector('script[type="__bundler/manifest"]');
-    const templateEl = document.querySelector('script[type="__bundler/template"]');
-    if (!manifestEl || !templateEl) {
-      setStatus('Error: missing bundle data');
-      console.error('[bundler] Missing script tags — manifestEl:', !!manifestEl, 'templateEl:', !!templateEl);
-      return;
-    }
+  <!-- Scrollable body -->
+  <div class="home-scroll">
+    <!-- Hero -->
+    <div class="home-hero">
+      <div>
+        <div class="hero-greeting">Good <span id="greeting-part">morning</span>,<br>Mega Fleet 👋</div>
+        <div class="hero-sub" id="hero-date">Tuesday, June 9 &nbsp;·&nbsp; All systems operational</div>
+      </div>
+      <div class="hero-badge">All Systems Online</div>
+    </div>
 
-    const manifest = JSON.parse(manifestEl.textContent);
-    let template = JSON.parse(templateEl.textContent);
+    <!-- Apps -->
+    <div class="apps-section">
+      <div class="apps-section-label">Your Applications</div>
+      <div class="apps-grid" id="apps-grid"></div>
+    </div>
 
-    const uuids = Object.keys(manifest);
-    setStatus('Unpacking ' + uuids.length + ' assets...');
+    <!-- Footer -->
+    <div class="portal-footer">
+      <div class="footer-copy">© 2025 Mega Fleet Logistics Corp. All rights reserved.</div>
+      <div class="footer-powered">Powered by <span>Harmik AI</span></div>
+    </div>
+  </div>
+</div>
 
-    const blobUrls = {};
-    await Promise.all(uuids.map(async (uuid) => {
-      const entry = manifest[uuid];
-      try {
-        const binaryStr = atob(entry.data);
-        const bytes = new Uint8Array(binaryStr.length);
-        for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
+<!-- Launch flash -->
+<div id="launch-flash"></div>
 
-        let finalBytes = bytes;
-        if (entry.compressed) {
-          if (typeof DecompressionStream !== 'undefined') {
-            const ds = new DecompressionStream('gzip');
-            const writer = ds.writable.getWriter();
-            const reader = ds.readable.getReader();
-            writer.write(bytes);
-            writer.close();
-            const chunks = [];
-            let totalLen = 0;
-            while (true) {
-              const { done, value } = await reader.read();
-              if (done) break;
-              chunks.push(value);
-              totalLen += value.length;
-            }
-            finalBytes = new Uint8Array(totalLen);
-            let offset = 0;
-            for (const chunk of chunks) { finalBytes.set(chunk, offset); offset += chunk.length; }
-          } else {
-            console.warn('DecompressionStream not available, asset ' + uuid + ' may not render');
-          }
-        }
+<script>
+const PASSWORD = "Megafleet424$";
 
-        blobUrls[uuid] = URL.createObjectURL(new Blob([finalBytes], { type: entry.mime }));
-      } catch (err) {
-        console.error('Failed to decode asset ' + uuid + ':', err);
-        blobUrls[uuid] = URL.createObjectURL(new Blob([], { type: entry.mime }));
-      }
-    }));
+const ICONS = {
+  auto:`<svg viewBox="0 0 24 24" fill="none"><path d="M5 16l1.5-4.5A2 2 0 0 1 8.4 10h7.2a2 2 0 0 1 1.9 1.5L19 16M5 16h14M5 16v2.5A1.5 1.5 0 0 0 6.5 20H7a1.5 1.5 0 0 0 1.5-1.5V18M19 16v2.5A1.5 1.5 0 0 1 17.5 20H17a1.5 1.5 0 0 1-1.5-1.5V18" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7.5" cy="16" r="1.1" fill="#fff"/><circle cx="16.5" cy="16" r="1.1" fill="#fff"/></svg>`,
+  track:`<svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11Z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.6" fill="#fff"/></svg>`,
+  pct:`<svg viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7" stroke="#fff" stroke-width="1.9" stroke-linecap="round"/><circle cx="8" cy="8" r="2.2" stroke="#fff" stroke-width="1.8"/><circle cx="16" cy="16" r="2.2" stroke="#fff" stroke-width="1.8"/></svg>`,
+  pay:`<svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="6" width="17" height="12" rx="2.5" stroke="#fff" stroke-width="1.8"/><path d="M3.5 10h17" stroke="#fff" stroke-width="1.8"/><path d="M6.5 14.5h3" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+  crm:`<svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="9" r="3" stroke="#fff" stroke-width="1.8"/><path d="M4 19a5 5 0 0 1 10 0" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><path d="M16 7.5a2.6 2.6 0 0 1 0 5M17.5 18.5a4.6 4.6 0 0 0-2.2-3.9" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>`
+};
 
-    const extResEl = document.querySelector('script[type="__bundler/ext_resources"]');
-    const extResources = extResEl ? JSON.parse(extResEl.textContent) : [];
-    const resourceMap = {};
-    for (const entry of extResources) {
-      if (blobUrls[entry.uuid]) resourceMap[entry.id] = blobUrls[entry.uuid];
-    }
+const APPS = [
+  {name:"O'Reilly's Auto",  desc:"Parts & inventory",      url:"https://megafleet-6g26tnah.manus.space", cls:"g-green",  icon:ICONS.auto},
+  {name:"LINX Tracking",    desc:"Live load tracking",      url:"https://megafleet-6g26tnah.manus.space", cls:"g-blue",   icon:ICONS.track},
+  {name:"Agent Commission", desc:"Freight broker calc",     url:"/commission",                             cls:"g-orange", icon:ICONS.pct},
+  {name:"Payables",         desc:"AP & billing",            url:"https://megafleetpay-aijaerxz.manus.space", cls:"g-teal",   icon:ICONS.pay},
+  {name:"CRM Outreach",     desc:"Leads & contacts",        url:"https://megafleet-dhzsbjcq.manus.space", cls:"g-purple", icon:ICONS.crm}
+];
 
-    setStatus('Rendering...');
-    for (const uuid of uuids) template = template.split(uuid).join(blobUrls[uuid]);
+// Build app grid
+const grid = document.getElementById('apps-grid');
+APPS.forEach(a => {
+  const btn = document.createElement('button');
+  btn.className = 'app-card';
+  btn.innerHTML = `
+    <div class="app-tile ${a.cls}">${a.icon}</div>
+    <div>
+      <div class="app-name">${a.name}</div>
+      <div class="app-desc">${a.desc}</div>
+    </div>
+    <div class="app-arrow">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+  `;
+  btn.addEventListener('click', () => launchApp(a));
+  grid.appendChild(btn);
+});
 
-    // Strip integrity + crossorigin — blob URLs from a file:// document inherit
-    // a null origin, so crossorigin forces a CORS fetch that SRI then rejects.
-    // The manifest bytes are ours; SRI protects against CDN compromise, not this.
-    template = template.replace(/\s+integrity="[^"]*"/gi, '').replace(/\s+crossorigin="[^"]*"/gi, '');
+function launchApp(a) {
+  const flash = document.getElementById('launch-flash');
+  flash.classList.add('go');
+  setTimeout(() => { window.location.href = a.url; }, 320);
+}
 
-    const resourceScript = '<script>window.__resources = ' +
-      JSON.stringify(resourceMap).split('</' + 'script>').join('<\\/' + 'script>') +
-      ';</' + 'script>';
-    // Inject after <head> so the DOCTYPE stays first; prepending the script
-    // would push the parser into quirks mode. DOMParser always emits a <head>
-    // (synthesizing one if the source HTML omitted it) but may carry
-    // attributes through, so match the full opening tag. slice() rather than
-    // replace() keeps us clear of $-pattern substitution in resourceScript.
-    const headOpen = template.match(/<head[^>]*>/i);
-    if (headOpen) {
-      const i = headOpen.index + headOpen[0].length;
-      template = template.slice(0, i) + resourceScript + template.slice(i);
-    }
+// Clock & greeting
+function tick() {
+  const d = new Date();
+  const h = d.getHours(), m = String(d.getMinutes()).padStart(2,'0');
+  const h12 = ((h + 11) % 12) + 1;
+  const t = h12 + ':' + m;
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const mons = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const dateStr = days[d.getDay()] + ', ' + mons[d.getMonth()] + ' ' + d.getDate();
+  document.getElementById('lock-time').textContent = t;
+  document.getElementById('lock-date').textContent = dateStr;
+  document.getElementById('home-time').textContent = t;
+  document.getElementById('hero-date').textContent = dateStr + ' · All systems operational';
+  const greet = h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening';
+  document.getElementById('greeting-part').textContent = greet;
+}
+tick(); setInterval(tick, 1000);
 
-    // Parse the template and swap the root element. Scripts inserted via
-    // DOMParser/replaceWith are inert per spec — re-create each with
-    // createElement so they execute, awaiting onload for src scripts to
-    // preserve ordering (React before ReactDOM before Babel before text/babel).
-    const doc = new DOMParser().parseFromString(template, 'text/html');
-    document.documentElement.replaceWith(doc.documentElement);
-    const dead = Array.from(document.scripts);
-    for (const old of dead) {
-      const s = document.createElement('script');
-      for (const a of old.attributes) s.setAttribute(a.name, a.value);
-      s.textContent = old.textContent;
-      // text/babel scripts with a src: fetch and inline. transformScriptTags
-      // does XHR against the src, but blob:null/ from a file:// origin is
-      // silently dropped. Inlining makes it a plain inline babel script,
-      // which transformScriptTags handles unconditionally.
-      if ((s.type === 'text/babel' || s.type === 'text/jsx') && s.src) {
-        const r = await fetch(s.src);
-        s.textContent = await r.text();
-        s.removeAttribute('src');
-      }
-      const p = s.src ? new Promise(function(r) { s.onload = s.onerror = r; }) : null;
-      old.replaceWith(s);
-      if (p) await p;
-    }
-    // Babel standalone auto-transforms type=text/babel on DOMContentLoaded,
-    // which fired before we swapped the document. Trigger manually if present.
-    if (window.Babel && typeof window.Babel.transformScriptTags === 'function') {
-      window.Babel.transformScriptTags();
-    }
-  } catch (err) {
-    setStatus('Error unpacking: ' + err.message);
-    console.error('Bundle unpack error:', err);
+// Auth
+const lock = document.getElementById('lock');
+const home = document.getElementById('home');
+const pwd = document.getElementById('pwd');
+const hint = document.getElementById('pwd-hint');
+
+function unlock() {
+  lock.classList.add('hidden');
+  home.classList.remove('hidden');
+  sessionStorage.setItem('mf_unlocked','1');
+}
+function lockNow() {
+  home.classList.add('hidden');
+  lock.classList.remove('hidden');
+  pwd.value = ''; hint.textContent = '';
+  sessionStorage.removeItem('mf_unlocked');
+  setTimeout(() => pwd.focus(), 500);
+}
+
+document.getElementById('pwd-form').addEventListener('submit', e => {
+  e.preventDefault();
+  if (pwd.value === PASSWORD) {
+    hint.textContent = ''; unlock();
+  } else {
+    hint.textContent = 'Incorrect password. Try again.';
+    const wrap = document.querySelector('.pwd-wrap');
+    wrap.classList.remove('shake'); void wrap.offsetWidth; wrap.classList.add('shake');
+    pwd.value = ''; pwd.focus();
   }
 });
 
-  </script>
-
-  <script type="__bundler/manifest">
-{}
-  </script>
-
-  <script type="__bundler/ext_resources">
-[]
-  </script>
-
-  <script type="__bundler/template">
-"<!DOCTYPE html>\n<html lang=\"en\"><head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>MegaFleet Portal<\u002Ftitle>\n<style>\n  :root{\n    --ease: cubic-bezier(.22,1,.36,1);\n  }\n  *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }\n  html,body{ height:100%; }\n  body{\n    font-family:-apple-system,BlinkMacSystemFont,\"SF Pro Display\",\"SF Pro Text\",\"Helvetica Neue\",Helvetica,Arial,sans-serif;\n    background:#0a0a0f;\n    color:#fff;\n    overflow:hidden;\n    display:flex;\n    align-items:center;\n    justify-content:center;\n    height:100vh;\n    /* ambient room light */\n    background:\n      radial-gradient(1200px 800px at 50% -10%, #1c1c2b 0%, #0a0a0f 60%, #060608 100%);\n  }\n\n  /* ===== Stage / scaling ===== */\n  #stage{\n    position:relative;\n    transform-origin:center center;\n  }\n\n  /* ===== Screen (bezel removed) ===== */\n  .phone{\n    --w:440px;\n    --h:940px;\n    width:var(--w);\n    height:var(--h);\n    position:relative;\n  }\n  .screen{\n    position:absolute; inset:0;\n    border-radius:56px;\n    overflow:hidden;\n    background:#000;\n    box-shadow:\n      0 0 0 1px rgba(255,255,255,.06),\n      0 50px 120px -30px rgba(0,0,0,.85),\n      0 24px 60px -24px rgba(0,0,0,.6);\n  }\n\n  /* Dynamic island */\n  .island{\n    position:absolute; top:16px; left:50%; transform:translateX(-50%);\n    width:124px; height:35px; background:#000; border-radius:20px; z-index:60;\n    display:flex; align-items:center; justify-content:flex-end; gap:8px; padding-right:14px;\n  }\n  .island::before{ content:\"\"; width:9px; height:9px; border-radius:50%;\n    background:radial-gradient(circle at 35% 30%, #1d3a4a, #050608); box-shadow:0 0 0 1px #0c1418; }\n\n  /* Status bar */\n  .statusbar{\n    position:absolute; top:0; left:0; right:0; height:62px; z-index:50;\n    display:flex; align-items:center; justify-content:space-between;\n    padding:22px 34px 0; font-size:16px; font-weight:600; letter-spacing:.2px;\n    pointer-events:none;\n  }\n  .statusbar .right{ display:flex; align-items:center; gap:7px; }\n  .bars{ display:flex; align-items:flex-end; gap:2px; height:11px; }\n  .bars i{ width:3px; background:#fff; border-radius:1px; }\n  .bars i:nth-child(1){ height:4px } .bars i:nth-child(2){ height:6px }\n  .bars i:nth-child(3){ height:8px } .bars i:nth-child(4){ height:11px }\n  .batt{ width:25px; height:12px; border:1.5px solid rgba(255,255,255,.75); border-radius:3px; position:relative; padding:1.5px; }\n  .batt::after{ content:\"\"; position:absolute; right:-3px; top:3.5px; width:2px; height:4px; background:rgba(255,255,255,.75); border-radius:0 1px 1px 0; }\n  .batt i{ display:block; height:100%; width:82%; background:#fff; border-radius:1px; }\n\n  /* ===== Wallpaper ===== */\n  .wallpaper{\n    position:absolute; inset:0;\n    background:\n      radial-gradient(120% 90% at 20% 12%, #6a7bff 0%, transparent 45%),\n      radial-gradient(120% 90% at 85% 18%, #c46cff 0%, transparent 42%),\n      radial-gradient(140% 120% at 70% 100%, #2a55ff 0%, transparent 55%),\n      linear-gradient(160deg, #3a2f9e 0%, #221a5e 55%, #140f3a 100%);\n    background-color:#1a1444;\n  }\n  .wallpaper .blob{ position:absolute; border-radius:50%; filter:blur(46px); opacity:.55; mix-blend-mode:screen; }\n  .b1{ width:260px;height:260px; background:#7b6cff; top:-40px; left:-40px;}\n  .b2{ width:240px;height:240px; background:#ff7bd5; top:40px; right:-60px;}\n  .b3{ width:300px;height:300px; background:#3f7bff; bottom:-60px; left:30px;}\n\n  /* ===== Screens container ===== */\n  .view{ position:absolute; inset:0; }\n\n  /* ===== Lock screen ===== */\n  #lock{\n    z-index:40;\n    display:flex; flex-direction:column; align-items:center;\n    transition:opacity .55s var(--ease), transform .55s var(--ease), filter .55s var(--ease);\n  }\n  #lock.hidden{ opacity:0; transform:translateY(-26px) scale(1.04); filter:blur(6px); pointer-events:none; }\n  .lock-top{ margin-top:96px; text-align:center; }\n  .lock-lockicon{ width:30px; height:30px; margin:0 auto 14px; opacity:.92; }\n  .lock-time{ font-size:84px; font-weight:600; letter-spacing:-2px; line-height:.92; text-shadow:0 2px 30px rgba(0,0,0,.25); }\n  .lock-date{ font-size:20px; font-weight:600; margin-top:4px; opacity:.9; }\n\n  .auth{ margin-top:auto; margin-bottom:46px; width:100%; display:flex; flex-direction:column; align-items:center; padding:0 40px; }\n  .welcome{ font-size:26px; font-weight:700; margin-bottom:4px; letter-spacing:-.3px; }\n  .welcome small{ display:block; font-size:15px; font-weight:500; opacity:.72; margin-top:6px; letter-spacing:.2px; }\n  .pwd-wrap{ margin-top:26px; width:100%; max-width:300px; position:relative; }\n  .pwd{\n    width:100%; height:56px; border:none; outline:none; border-radius:18px;\n    background:rgba(255,255,255,.14);\n    backdrop-filter:blur(20px) saturate(160%); -webkit-backdrop-filter:blur(20px) saturate(160%);\n    box-shadow:0 1px 0 rgba(255,255,255,.18) inset, 0 0 0 1px rgba(255,255,255,.10) inset;\n    color:#fff; font-size:19px; text-align:center; letter-spacing:2px;\n    padding:0 52px 0 22px;\n    transition:box-shadow .25s, background .25s;\n  }\n  .pwd::placeholder{ color:rgba(255,255,255,.6); letter-spacing:.4px; }\n  .pwd:focus{ background:rgba(255,255,255,.2); box-shadow:0 1px 0 rgba(255,255,255,.25) inset, 0 0 0 1.5px rgba(255,255,255,.4) inset; }\n  .pwd-go{\n    position:absolute; right:7px; top:7px; width:42px; height:42px; border:none; border-radius:14px;\n    background:rgba(255,255,255,.9); color:#2b2b6e; cursor:pointer; display:flex; align-items:center; justify-content:center;\n    transition:transform .15s, background .2s; \n  }\n  .pwd-go:hover{ transform:scale(1.05); }\n  .pwd-go:active{ transform:scale(.92); }\n  .pwd-hint{ height:20px; margin-top:14px; font-size:14px; font-weight:500; opacity:.85; color:#ffd1d1; transition:opacity .2s; }\n  .shake{ animation:shake .45s var(--ease); }\n  @keyframes shake{ 10%,90%{transform:translateX(-2px)} 20%,80%{transform:translateX(4px)} 30%,50%,70%{transform:translateX(-8px)} 40%,60%{transform:translateX(8px)} }\n\n  /* ===== Home screen ===== */\n  #home{\n    z-index:20; opacity:0; pointer-events:none;\n    transition:opacity .5s var(--ease) .15s;\n    display:flex; flex-direction:column;\n  }\n  #home.show{ opacity:1; pointer-events:auto; }\n  .home-head{ text-align:center; margin-top:78px; }\n  .home-head .h-time{ font-size:18px; font-weight:600; opacity:.95; }\n  .home-head .h-date{ font-size:13px; font-weight:500; opacity:.7; margin-top:1px; }\n\n  .grid{\n    flex:1;\n    display:grid; grid-template-columns:repeat(3,1fr);\n    gap:30px 8px;\n    align-content:start;\n    padding:38px 30px 0;\n  }\n  .app{ display:flex; flex-direction:column; align-items:center; gap:9px; cursor:pointer; background:none; border:none; color:inherit; }\n  .app .tile{\n    width:84px; height:84px; border-radius:22px; position:relative; overflow:hidden;\n    display:flex; align-items:center; justify-content:center;\n    box-shadow:0 10px 22px -8px rgba(0,0,0,.55), 0 1px 0 rgba(255,255,255,.35) inset;\n    transition:transform .18s var(--ease);\n  }\n  .app .tile::after{ content:\"\"; position:absolute; inset:0; border-radius:22px; box-shadow:0 0 0 1px rgba(0,0,0,.06) inset; background:linear-gradient(180deg,rgba(255,255,255,.22),transparent 40%); }\n  .app:hover .tile{ transform:translateY(-3px) scale(1.03); }\n  .app:active .tile{ transform:scale(.92); }\n  .app .tile svg{ width:46px; height:46px; position:relative; z-index:2; }\n  .app .label{ font-size:13.5px; font-weight:500; letter-spacing:.1px; text-shadow:0 1px 4px rgba(0,0,0,.4); white-space:nowrap; }\n\n  .g-green{ background:linear-gradient(160deg,#3ddc6e,#159a4a); }\n  .g-blue{ background:linear-gradient(160deg,#3aa0ff,#1666e8); }\n  .g-orange{ background:linear-gradient(160deg,#ffb44a,#ff7a2f); }\n  .g-teal{ background:linear-gradient(160deg,#34e3c8,#0fb39c); }\n  .g-purple{ background:linear-gradient(160deg,#c06bff,#7b3fff); }\n\n  /* Page dots */\n  .dots{ display:flex; gap:8px; justify-content:center; margin:6px 0 14px; }\n  .dots i{ width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,.4); }\n  .dots i.on{ background:#fff; }\n\n  /* Dock */\n  .dock{\n    margin:0 16px 26px; padding:16px 14px; border-radius:34px;\n    background:rgba(255,255,255,.16);\n    backdrop-filter:blur(26px) saturate(160%); -webkit-backdrop-filter:blur(26px) saturate(160%);\n    box-shadow:0 0 0 1px rgba(255,255,255,.14) inset;\n    display:grid; grid-template-columns:repeat(4,1fr); gap:14px; justify-items:center;\n  }\n  .dock .app .label{ display:none; }\n  .dock .app .tile{ width:72px; height:72px; border-radius:19px; }\n  .dock .app .tile svg{ width:40px; height:40px; }\n\n  /* Launch zoom overlay */\n  #launch{\n    position:absolute; inset:0; z-index:90; pointer-events:none; opacity:0;\n    display:flex; align-items:center; justify-content:center;\n  }\n  #launch.go{ animation:launch .6s var(--ease) forwards; }\n  #launch .ltile{ width:84px; height:84px; border-radius:22px; box-shadow:0 20px 50px -10px rgba(0,0,0,.6); }\n  @keyframes launch{\n    0%{ opacity:0; transform:scale(.3); }\n    18%{ opacity:1; }\n    100%{ opacity:1; transform:scale(13); border-radius:0; }\n  }\n\n  /* Home indicator */\n  .home-ind{ position:absolute; bottom:9px; left:50%; transform:translateX(-50%); width:134px; height:5px; border-radius:3px; background:rgba(255,255,255,.85); z-index:70; }\n\n  .hint-tap{ position:fixed; bottom:10px; left:0; right:0; text-align:center; font-size:12px; color:rgba(255,255,255,.22); font-weight:500; pointer-events:none; }\n<\u002Fstyle>\n<\u002Fhead>\n<body>\n  \n  <div id=\"stage\">\n    <div class=\"phone\">\n      <div class=\"screen\">\n        <!-- Wallpaper -->\n        <div class=\"wallpaper\">\n          <div class=\"blob b1\"><\u002Fdiv><div class=\"blob b2\"><\u002Fdiv><div class=\"blob b3\"><\u002Fdiv>\n        <\u002Fdiv>\n\n        <!-- Dynamic island -->\n        <div class=\"island\"><\u002Fdiv>\n\n        <!-- Status bar -->\n        <div class=\"statusbar\">\n          <span id=\"sb-time\">9:41<\u002Fspan>\n          <span class=\"right\">\n            <span class=\"bars\"><i><\u002Fi><i><\u002Fi><i><\u002Fi><i><\u002Fi><\u002Fspan>\n            <svg width=\"17\" height=\"12\" viewBox=\"0 0 17 12\" fill=\"none\"><path d=\"M8.5 2.2c2.3 0 4.4.9 6 2.4l1.2-1.3C13.8 1.4 11.3.4 8.5.4S3.2 1.4 1.3 3.3L2.5 4.6c1.6-1.5 3.7-2.4 6-2.4Z\" fill=\"#fff\"><\u002Fpath><path d=\"M8.5 5.4c1.4 0 2.7.6 3.7 1.5l1.2-1.3c-1.3-1.2-3-2-4.9-2s-3.6.8-4.9 2l1.2 1.3c1-.9 2.3-1.5 3.7-1.5Z\" fill=\"#fff\"><\u002Fpath><path d=\"M8.5 8.6c.6 0 1.1.2 1.5.6l-1.5 1.6L7 9.2c.4-.4 1-.6 1.5-.6Z\" fill=\"#fff\"><\u002Fpath><\u002Fsvg>\n            <span class=\"batt\"><i><\u002Fi><\u002Fspan>\n          <\u002Fspan>\n        <\u002Fdiv>\n\n        <!-- ===== LOCK SCREEN ===== -->\n        <div class=\"view\" id=\"lock\">\n          <div class=\"lock-top\">\n            <svg class=\"lock-lockicon\" viewBox=\"0 0 24 24\" fill=\"none\"><path d=\"M7 10V7a5 5 0 0 1 10 0v3\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\"><\u002Fpath><rect x=\"5\" y=\"10\" width=\"14\" height=\"10\" rx=\"3\" fill=\"#fff\"><\u002Frect><\u002Fsvg>\n            <div class=\"lock-time\" id=\"lock-time\">9:41<\u002Fdiv>\n            <div class=\"lock-date\" id=\"lock-date\">Monday, June 9<\u002Fdiv>\n          <\u002Fdiv>\n\n          <div class=\"auth\">\n            <div class=\"welcome\">Welcome, Harmik\n              <small>Enter your password to continue<\u002Fsmall>\n            <\u002Fdiv>\n            <form class=\"pwd-wrap\" id=\"pwd-form\" autocomplete=\"off\">\n              <input class=\"pwd\" id=\"pwd\" type=\"password\" placeholder=\"Password\" autocomplete=\"off\">\n              <button class=\"pwd-go\" id=\"pwd-go\" type=\"submit\" aria-label=\"Unlock\">\n                <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\"><path d=\"M5 12h13M13 6l6 6-6 6\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><\u002Fpath><\u002Fsvg>\n              <\u002Fbutton>\n            <\u002Fform>\n            <div class=\"pwd-hint\" id=\"pwd-hint\"><\u002Fdiv>\n          <\u002Fdiv>\n        <\u002Fdiv>\n\n        <!-- ===== HOME SCREEN ===== -->\n        <div class=\"view\" id=\"home\">\n          <div class=\"home-head\">\n            <div class=\"h-time\" id=\"home-time\">9:41<\u002Fdiv>\n            <div class=\"h-date\" id=\"home-date\">Monday, June 9<\u002Fdiv>\n          <\u002Fdiv>\n\n          <div class=\"grid\" id=\"grid\"><\u002Fdiv>\n\n          <div class=\"dots\"><i class=\"on\"><\u002Fi><i><\u002Fi><\u002Fdiv>\n\n          <div class=\"dock\" id=\"dock\"><\u002Fdiv>\n        <\u002Fdiv>\n\n        <!-- Launch overlay -->\n        <div id=\"launch\"><div class=\"ltile\"><\u002Fdiv><\u002Fdiv>\n\n        <div class=\"home-ind\"><\u002Fdiv>\n      <\u002Fdiv>\n    <\u002Fdiv>\n  <\u002Fdiv>\n  <div class=\"hint-tap\" id=\"taphint\">Tap the time on the home screen to lock<\u002Fdiv>\n\n<script>\n  const PASSWORD = \"Megafleet424$\";\n\n  // ---- App definitions ----\n  const ICONS = {\n    auto:'<svg viewBox=\"0 0 24 24\" fill=\"none\"><path d=\"M5 16l1.5-4.5A2 2 0 0 1 8.4 10h7.2a2 2 0 0 1 1.9 1.5L19 16M5 16h14M5 16v2.5A1.5 1.5 0 0 0 6.5 20H7a1.5 1.5 0 0 0 1.5-1.5V18M19 16v2.5A1.5 1.5 0 0 1 17.5 20H17a1.5 1.5 0 0 1-1.5-1.5V18\" stroke=\"#fff\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><circle cx=\"7.5\" cy=\"16\" r=\"1.1\" fill=\"#fff\"/><circle cx=\"16.5\" cy=\"16\" r=\"1.1\" fill=\"#fff\"/><\u002Fsvg>',\n    track:'<svg viewBox=\"0 0 24 24\" fill=\"none\"><path d=\"M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11Z\" stroke=\"#fff\" stroke-width=\"1.8\" stroke-linejoin=\"round\"/><circle cx=\"12\" cy=\"10\" r=\"2.6\" fill=\"#fff\"/><\u002Fsvg>',\n    pct:'<svg viewBox=\"0 0 24 24\" fill=\"none\"><path d=\"M7 17 17 7\" stroke=\"#fff\" stroke-width=\"1.9\" stroke-linecap=\"round\"/><circle cx=\"8\" cy=\"8\" r=\"2.2\" stroke=\"#fff\" stroke-width=\"1.8\"/><circle cx=\"16\" cy=\"16\" r=\"2.2\" stroke=\"#fff\" stroke-width=\"1.8\"/><\u002Fsvg>',\n    pay:'<svg viewBox=\"0 0 24 24\" fill=\"none\"><rect x=\"3.5\" y=\"6\" width=\"17\" height=\"12\" rx=\"2.5\" stroke=\"#fff\" stroke-width=\"1.8\"/><path d=\"M3.5 10h17\" stroke=\"#fff\" stroke-width=\"1.8\"/><path d=\"M6.5 14.5h3\" stroke=\"#fff\" stroke-width=\"1.8\" stroke-linecap=\"round\"/><\u002Fsvg>',\n    crm:'<svg viewBox=\"0 0 24 24\" fill=\"none\"><circle cx=\"9\" cy=\"9\" r=\"3\" stroke=\"#fff\" stroke-width=\"1.8\"/><path d=\"M4 19a5 5 0 0 1 10 0\" stroke=\"#fff\" stroke-width=\"1.8\" stroke-linecap=\"round\"/><path d=\"M16 7.5a2.6 2.6 0 0 1 0 5M17.5 18.5a4.6 4.6 0 0 0-2.2-3.9\" stroke=\"#fff\" stroke-width=\"1.8\" stroke-linecap=\"round\"/><\u002Fsvg>'\n  };\n\n  const APPS = [\n    { name:\"O'Reilly's Auto\", url:\"https://megafleet-6g26tnah.manus.space\", cls:\"g-green\",  icon:ICONS.auto },\n    { name:\"LINX Tracking\",   url:\"https://megafleet-6g26tnah.manus.space\", cls:\"g-blue\",   icon:ICONS.track },\n    { name:\"Agent Commission\",url:\"/commission\", cls:\"g-orange\", icon:ICONS.pct },\n    { name:\"Payables\",        url:\"https://megafleetpay-aijaerxz.manus.space\", cls:\"g-teal\",   icon:ICONS.pay },\n    { name:\"CRM Outreach\",    url:\"https://megafleet-dhzsbjcq.manus.space\", cls:\"g-purple\", icon:ICONS.crm }\n  ];\n\n  // Build grid\n  const grid = document.getElementById('grid');\n  APPS.forEach(a=>{\n    const b = document.createElement('button');\n    b.className = 'app';\n    b.innerHTML = `<span class=\"tile ${a.cls}\">${a.icon}<\u002Fspan><span class=\"label\">${a.name}<\u002Fspan>`;\n    b.addEventListener('click', ()=> launch(a));\n    grid.appendChild(b);\n  });\n  // Dock = favorites\n  const dock = document.getElementById('dock');\n  [APPS[0],APPS[2],APPS[3],APPS[4]].forEach(a=>{\n    const b = document.createElement('button');\n    b.className = 'app';\n    b.innerHTML = `<span class=\"tile ${a.cls}\">${a.icon}<\u002Fspan>`;\n    b.addEventListener('click', ()=> launch(a));\n    dock.appendChild(b);\n  });\n\n  // ---- App launch animation ----\n  function launch(a){\n    const overlay = document.getElementById('launch');\n    const lt = overlay.querySelector('.ltile');\n    lt.className = 'ltile ' + a.cls;\n    overlay.classList.remove('go'); void overlay.offsetWidth;\n    overlay.classList.add('go');\n    setTimeout(()=>{ window.location.href = a.url; }, 560);\n  }\n\n  // ---- Clock ----\n  function tick(){\n    const d = new Date();\n    let h = d.getHours(); const m = String(d.getMinutes()).padStart(2,'0');\n    const ampm = h>=12?'':''; // 24h-free, iOS style without am/pm on big clock\n    const h12 = ((h+11)%12)+1;\n    const t = h12 + ':' + m;\n    const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];\n    const mons=['January','February','March','April','May','June','July','August','September','October','November','December'];\n    const dateStr = days[d.getDay()]+', '+mons[d.getMonth()]+' '+d.getDate();\n    const sbt = h12 + ':' + m;\n    document.getElementById('lock-time').textContent = t;\n    document.getElementById('lock-date').textContent = dateStr;\n    document.getElementById('home-time').textContent = sbt;\n    document.getElementById('home-date').textContent = dateStr;\n    document.getElementById('sb-time').textContent = sbt;\n  }\n  tick(); setInterval(tick, 1000);\n\n  // ---- Unlock logic ----\n  const lock = document.getElementById('lock');\n  const home = document.getElementById('home');\n  const pwd = document.getElementById('pwd');\n  const hint = document.getElementById('pwd-hint');\n  const form = document.getElementById('pwd-form');\n\n  function unlock(){\n    lock.classList.add('hidden');\n    home.classList.add('show');\n    sessionStorage.setItem('mf_unlocked','1');\n    document.getElementById('taphint').style.display='block';\n  }\n  function lockNow(){\n    lock.classList.remove('hidden');\n    home.classList.remove('show');\n    pwd.value=''; hint.textContent='';\n    sessionStorage.removeItem('mf_unlocked');\n    setTimeout(()=>pwd.focus(), 400);\n  }\n\n  form.addEventListener('submit', e=>{\n    e.preventDefault();\n    if(pwd.value === PASSWORD){\n      hint.textContent=''; unlock();\n    } else {\n      hint.textContent = 'Incorrect password. Try again.';\n      const wrap = document.querySelector('.pwd-wrap');\n      wrap.classList.remove('shake'); void wrap.offsetWidth; wrap.classList.add('shake');\n      pwd.value=''; pwd.focus();\n    }\n  });\n\n  // Tap time to lock again\n  document.getElementById('home-time').addEventListener('click', lockNow);\n\n  // Restore session\n  if(sessionStorage.getItem('mf_unlocked')==='1'){\n    lock.classList.add('hidden'); home.classList.add('show');\n  } else {\n    document.getElementById('taphint').style.display='none';\n    setTimeout(()=>pwd.focus(), 500);\n  }\n\n  // ---- Scale phone to viewport ----\n  function fit(){\n    const stage = document.getElementById('stage');\n    const phoneH = 940, phoneW = 440;\n    const scale = Math.min((window.innerHeight-24)/phoneH, (window.innerWidth-24)/phoneW);\n    stage.style.transform = 'scale('+scale+')';\n  }\n  fit(); window.addEventListener('resize', fit);\n<\u002Fscript>\n\n\n<\u002Fbody><\u002Fhtml>"
-  </script>
+if (sessionStorage.getItem('mf_unlocked') === '1') {
+  unlock();
+} else {
+  setTimeout(() => pwd.focus(), 400);
+}
+</script>
 </body>
 </html>
