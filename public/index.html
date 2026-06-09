@@ -5,334 +5,413 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MegaFleet Portal — Harmik AI</title>
 <style>
-:root{
-  --ease:cubic-bezier(.22,1,.36,1);
-  --bg1:#0d0a1e;
-  --bg2:#130f2d;
-  --accent:#7b3fff;
-  --accent2:#3aa0ff;
-  --glass:rgba(255,255,255,.08);
-  --glass-b:rgba(255,255,255,.14);
-}
+:root{--ease:cubic-bezier(.22,1,.36,1);}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;}
-body{min-height:100vh;color:#fff;overflow:hidden;}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;overflow:hidden;}
 
-/* ===== Animated background ===== */
-.bg{
-  position:fixed;inset:0;z-index:0;
+/* ===== SCENE ===== */
+.scene{position:fixed;inset:0;z-index:0;background:#03030a;}
+
+/* Sky gradient */
+.sky{
+  position:absolute;inset:0;bottom:38%;
+  background:linear-gradient(180deg,
+    #03030a 0%,
+    #07052a 25%,
+    #120845 50%,
+    #1a0d5e 75%,
+    #2b1280 100%);
+}
+
+/* Stars */
+.stars-layer{position:absolute;inset:0;bottom:38%;overflow:hidden;}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--t,3s) ease-in-out infinite alternate;}
+@keyframes twinkle{from{opacity:var(--a,.3);transform:scale(1);}to{opacity:.05;transform:scale(.5);}}
+
+/* Aurora ribbons */
+.aurora{position:absolute;top:0;left:0;right:0;bottom:38%;overflow:hidden;pointer-events:none;}
+.aurora-band{
+  position:absolute;left:-20%;width:140%;height:180px;border-radius:50%;
+  filter:blur(50px);opacity:.25;animation:aurora-drift 14s ease-in-out infinite alternate;
+}
+.aurora-band:nth-child(1){top:15%;background:linear-gradient(90deg,transparent,#6a00ff,#0077ff,transparent);animation-delay:0s;}
+.aurora-band:nth-child(2){top:30%;background:linear-gradient(90deg,transparent,#ff00c8,#7b00ff,transparent);animation-delay:-5s;opacity:.18;}
+.aurora-band:nth-child(3){top:45%;background:linear-gradient(90deg,transparent,#00c8ff,#0044ff,transparent);animation-delay:-9s;opacity:.2;}
+@keyframes aurora-drift{from{transform:translateX(-8%) skewY(-1deg);}to{transform:translateX(8%) skewY(1deg);}}
+
+/* City skyline silhouette */
+.skyline{
+  position:absolute;bottom:38%;left:0;right:0;height:160px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 160' preserveAspectRatio='none'%3E%3Cpath fill='%230a0520' d='M0 160V90l30-5 10-30 10 30 15-50 15 50 10-40 10 40 20-60 8 20 8-20 10 60 12-35 10-10 10 10 10-15 10 15 15-45 10 25 8-25 8 25 12-55 8 30 8-30 12 55 10-20 8 5 8-5 10 20 12-40 8 10 8-10 12 40 15-60 10 35 10-35 15 60 8-25 8 10 8-10 8 25 12-45 10 20 10-20 12 45 10-30 8 8 8-8 10 30 15-50 10 25 10-25 15 50 8-20 8 5 8-5 8 20 12-35 10 15 10-15 12 35 15-55 10 30 10-30 15 55 8-22 8 8 8-8 8 22 12-40 10 18 10-18 12 40 10-28 8 10 8-10 10 28 15-48 10 22 10-22 15 48 8-18 8 6 8-6 8 18V160z'/%3E%3C/svg%3E") no-repeat bottom/cover;
+}
+
+/* City windows glow */
+.city-glow{
+  position:absolute;bottom:38%;left:0;right:0;height:130px;
+  background:linear-gradient(180deg,transparent 0%,rgba(80,40,180,.08) 60%,rgba(120,60,255,.12) 100%);
+  pointer-events:none;
+}
+
+/* Road */
+.road-wrap{position:absolute;bottom:0;left:0;right:0;height:38%;overflow:hidden;}
+.road{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,#0e0828 0%,#140c32 40%,#1a1040 100%);
+}
+/* Perspective road surface */
+.road-surface{
+  position:absolute;bottom:0;left:0;right:0;height:100%;
   background:
-    radial-gradient(ellipse 120% 80% at 20% 10%, rgba(80,50,200,.55) 0%,transparent 55%),
-    radial-gradient(ellipse 100% 80% at 85% 15%, rgba(160,60,255,.45) 0%,transparent 50%),
-    radial-gradient(ellipse 130% 100% at 60% 100%, rgba(30,80,220,.5) 0%,transparent 55%),
-    linear-gradient(160deg,#120d2e 0%,#0a0818 50%,#06040f 100%);
+    linear-gradient(180deg,#080518 0%,#0d0a28 100%);
+  clip-path:polygon(30% 0%,70% 0%,100% 100%,0% 100%);
 }
-.bg .blob{position:absolute;border-radius:50%;filter:blur(80px);animation:drift 18s ease-in-out infinite alternate;}
-.b1{width:600px;height:600px;background:rgba(100,70,255,.35);top:-100px;left:-150px;animation-delay:0s;}
-.b2{width:500px;height:500px;background:rgba(200,70,255,.28);top:0;right:-80px;animation-delay:-6s;}
-.b3{width:700px;height:700px;background:rgba(40,100,255,.3);bottom:-200px;left:20%;animation-delay:-12s;}
-.b4{width:400px;height:400px;background:rgba(80,200,255,.18);top:50%;right:10%;animation-delay:-4s;}
-@keyframes drift{from{transform:translate(0,0) scale(1);}to{transform:translate(40px,30px) scale(1.08);}}
+/* Road lanes */
+.lane-wrap{
+  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:4px;height:100%;overflow:hidden;
+}
+.lane-dashes{
+  position:absolute;top:0;left:0;width:100%;
+  animation:lane-scroll 1.2s linear infinite;
+}
+.lane-dash{
+  width:4px;height:40px;background:linear-gradient(180deg,#ff9f00,#ffcc44);
+  margin-bottom:40px;border-radius:2px;
+  box-shadow:0 0 8px #ff9f0088;
+}
+@keyframes lane-scroll{from{transform:translateY(-80px);}to{transform:translateY(80px);}}
 
-/* Fine grid overlay */
-.bg::after{
-  content:"";position:absolute;inset:0;
-  background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
-  background-size:60px 60px;
+/* Road glow lines */
+.road-edge{
+  position:absolute;bottom:0;height:100%;width:3px;
+  background:linear-gradient(180deg,transparent,#ff6b00,#ff9f00);
+  filter:blur(2px);opacity:.6;
+}
+.road-edge.left{left:20%;}
+.road-edge.right{right:20%;}
+
+/* Road reflection */
+.road-reflection{
+  position:absolute;bottom:0;left:0;right:0;height:50%;
+  background:linear-gradient(180deg,transparent,rgba(123,63,255,.06));
 }
 
-/* ===== Views ===== */
-.view{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s var(--ease),transform .6s var(--ease),filter .6s var(--ease);}
-.view.hidden{opacity:0;transform:translateY(-20px) scale(1.03);filter:blur(8px);pointer-events:none;}
+/* Trucks */
+.trucks{position:absolute;bottom:0;left:0;right:0;height:100%;}
+.truck{position:absolute;bottom:28%;animation:drive var(--spd,8s) linear infinite;}
+
+/* Truck going right */
+.truck.right{left:-300px;animation-name:drive-right;}
+@keyframes drive-right{from{left:-300px;}to{left:calc(100% + 50px);}}
+
+/* Truck going left */
+.truck.left-dir{right:-300px;animation-name:drive-left;transform:scaleX(-1);}
+@keyframes drive-left{from{right:-300px;}to{right:calc(100% + 50px);}}
+
+/* Headlight glow */
+.truck-glow{
+  position:absolute;top:50%;right:-120px;transform:translateY(-50%);
+  width:140px;height:50px;
+  background:radial-gradient(ellipse at left,rgba(255,220,100,.5),transparent 70%);
+  pointer-events:none;
+}
+.truck.left-dir .truck-glow{left:-120px;right:auto;background:radial-gradient(ellipse at right,rgba(255,220,100,.5),transparent 70%);}
+
+/* Road ground glow from headlights */
+.truck-road-glow{
+  position:absolute;bottom:-10px;right:-80px;
+  width:160px;height:20px;
+  background:radial-gradient(ellipse,rgba(255,200,50,.3),transparent 70%);
+}
+
+/* Floating particles */
+.particles{position:absolute;inset:0;pointer-events:none;}
+.particle{
+  position:absolute;border-radius:50%;
+  animation:float-up var(--ft,6s) linear infinite;
+  opacity:0;
+}
+@keyframes float-up{
+  0%{transform:translateY(0) translateX(0);opacity:0;}
+  10%{opacity:.7;}
+  90%{opacity:.2;}
+  100%{transform:translateY(-400px) translateX(var(--dx,20px));opacity:0;}
+}
+
+/* ===== VIEWS ===== */
+.view{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .65s var(--ease),transform .65s var(--ease),filter .65s var(--ease);}
+.view.hidden{opacity:0;transform:translateY(-24px) scale(1.04);filter:blur(10px);pointer-events:none;}
 
 /* ===== LOCK SCREEN ===== */
 #lock{gap:0;}
-.lock-header{text-align:center;margin-bottom:56px;}
-.lock-logo{
-  display:inline-flex;align-items:center;gap:14px;
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
-  border-radius:20px;padding:14px 26px;margin-bottom:32px;
+
+/* Logo chip */
+.lock-chip{
+  display:inline-flex;align-items:center;gap:12px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);
+  border-radius:50px;padding:10px 20px 10px 10px;margin-bottom:28px;
   backdrop-filter:blur(20px);
+  box-shadow:0 8px 32px rgba(123,63,255,.2);
+  cursor:default;
 }
-.lock-logo-icon{
-  width:44px;height:44px;border-radius:12px;
+.lock-chip-icon{
+  width:36px;height:36px;border-radius:50%;
   background:linear-gradient(135deg,#7b3fff,#3aa0ff);
   display:flex;align-items:center;justify-content:center;
-  font-size:22px;font-weight:700;letter-spacing:-1px;
-  box-shadow:0 4px 20px rgba(123,63,255,.5);
-  flex-shrink:0;
+  font-size:16px;font-weight:800;letter-spacing:-1px;
+  box-shadow:0 4px 16px rgba(123,63,255,.55);
 }
-.lock-logo-text{text-align:left;line-height:1.2;}
-.lock-logo-brand{font-size:19px;font-weight:700;letter-spacing:-.3px;
-  background:linear-gradient(135deg,#c0a0ff,#7bc8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.lock-logo-sub{font-size:12px;color:rgba(255,255,255,.5);font-weight:500;letter-spacing:.6px;text-transform:uppercase;}
-.lock-time-big{font-size:96px;font-weight:200;letter-spacing:-4px;line-height:.9;
-  background:linear-gradient(180deg,#fff 0%,rgba(255,255,255,.7) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.lock-date-str{font-size:20px;font-weight:400;color:rgba(255,255,255,.65);margin-top:10px;letter-spacing:.3px;}
+.lock-chip-name{
+  font-size:15px;font-weight:700;letter-spacing:-.2px;
+  background:linear-gradient(135deg,#c4a8ff,#7bcaff);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
 
-.auth-card{
-  width:100%;max-width:400px;
-  background:rgba(255,255,255,.07);
-  border:1px solid rgba(255,255,255,.13);
-  border-radius:28px;
-  padding:40px 36px;
-  backdrop-filter:blur(30px) saturate(180%);
-  box-shadow:0 40px 100px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.08) inset;
+/* Big time */
+.lock-time{
+  font-size:108px;font-weight:100;letter-spacing:-6px;line-height:.88;text-align:center;
+  background:linear-gradient(180deg,#ffffff 30%,rgba(160,130,255,.8) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  text-shadow:none;margin-bottom:10px;
+  filter:drop-shadow(0 0 40px rgba(160,100,255,.35));
 }
-.auth-title{font-size:22px;font-weight:700;margin-bottom:6px;letter-spacing:-.3px;}
-.auth-sub{font-size:14px;color:rgba(255,255,255,.55);margin-bottom:28px;font-weight:400;}
-.pwd-wrap{position:relative;margin-bottom:14px;}
+.lock-date{font-size:18px;font-weight:400;color:rgba(255,255,255,.55);text-align:center;letter-spacing:.5px;margin-bottom:48px;}
+
+/* Auth card */
+.auth-card{
+  width:100%;max-width:420px;
+  background:rgba(10,5,30,.55);
+  border:1px solid rgba(160,100,255,.25);
+  border-radius:32px;
+  padding:42px 38px 38px;
+  backdrop-filter:blur(40px) saturate(200%);
+  box-shadow:
+    0 50px 100px rgba(0,0,0,.6),
+    0 0 0 1px rgba(255,255,255,.06) inset,
+    0 1px 0 rgba(255,255,255,.12) inset,
+    inset 0 0 80px rgba(80,40,180,.08);
+  position:relative;overflow:hidden;
+}
+.auth-card::before{
+  content:"";position:absolute;top:-1px;left:10%;right:10%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(180,130,255,.6),transparent);
+}
+.auth-card::after{
+  content:"";position:absolute;inset:0;border-radius:32px;
+  background:radial-gradient(ellipse 80% 50% at 50% -20%,rgba(100,50,220,.15),transparent);
+  pointer-events:none;
+}
+
+.auth-greeting{
+  font-size:28px;font-weight:700;letter-spacing:-.5px;margin-bottom:5px;
+  background:linear-gradient(135deg,#fff 0%,rgba(200,170,255,.95) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.auth-sub{font-size:14px;color:rgba(255,255,255,.42);margin-bottom:30px;font-weight:400;letter-spacing:.2px;}
+
+/* Input */
+.pwd-wrap{position:relative;margin-bottom:10px;}
 .pwd{
-  width:100%;height:54px;border:none;outline:none;border-radius:16px;
-  background:rgba(255,255,255,.1);
-  border:1.5px solid rgba(255,255,255,.15);
-  color:#fff;font-size:17px;text-align:left;letter-spacing:2px;
-  padding:0 58px 0 20px;
-  transition:border-color .25s,background .25s,box-shadow .25s;
+  width:100%;height:56px;border:none;outline:none;border-radius:18px;
+  background:rgba(255,255,255,.07);
+  border:1.5px solid rgba(160,100,255,.2);
+  color:#fff;font-size:17px;text-align:left;letter-spacing:3px;
+  padding:0 64px 0 22px;
+  transition:border-color .3s,background .3s,box-shadow .3s;
   font-family:inherit;
 }
-.pwd::placeholder{color:rgba(255,255,255,.4);letter-spacing:.5px;font-size:15px;}
-.pwd:focus{background:rgba(255,255,255,.14);border-color:rgba(160,120,255,.6);box-shadow:0 0 0 4px rgba(123,63,255,.15);}
-.pwd-go{
-  position:absolute;right:8px;top:8px;width:38px;height:38px;border:none;border-radius:12px;
-  background:linear-gradient(135deg,#7b3fff,#4a90ff);
-  color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:transform .15s,box-shadow .2s;
-  box-shadow:0 4px 14px rgba(123,63,255,.45);
+.pwd::placeholder{color:rgba(255,255,255,.3);letter-spacing:.4px;font-size:14px;}
+.pwd:focus{
+  background:rgba(120,70,255,.1);
+  border-color:rgba(160,100,255,.55);
+  box-shadow:0 0 0 4px rgba(123,63,255,.18),0 8px 30px rgba(123,63,255,.15);
 }
-.pwd-go:hover{transform:scale(1.07);box-shadow:0 6px 20px rgba(123,63,255,.6);}
+.pwd-go{
+  position:absolute;right:8px;top:8px;width:40px;height:40px;border:none;border-radius:14px;
+  background:linear-gradient(135deg,#8b4fff,#4a90ff);
+  color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:transform .18s,box-shadow .2s;
+  box-shadow:0 4px 18px rgba(123,63,255,.5);
+}
+.pwd-go:hover{transform:scale(1.08);box-shadow:0 6px 24px rgba(123,63,255,.7);}
 .pwd-go:active{transform:scale(.9);}
-.pwd-hint{height:18px;font-size:13px;color:rgba(255,130,130,.9);font-weight:500;margin-bottom:6px;}
+
+.pwd-hint{height:18px;font-size:13px;color:rgba(255,130,130,.9);font-weight:500;margin-bottom:6px;letter-spacing:.1px;}
 .shake{animation:shake .45s var(--ease);}
-@keyframes shake{10%,90%{transform:translateX(-3px)}20%,80%{transform:translateX(5px)}30%,50%,70%{transform:translateX(-8px)}40%,60%{transform:translateX(8px)}}
+@keyframes shake{10%,90%{transform:translateX(-3px)}20%,80%{transform:translateX(6px)}30%,50%,70%{transform:translateX(-10px)}40%,60%{transform:translateX(10px)}}
+
+/* Decorative orbs on card */
+.orb{position:absolute;border-radius:50%;filter:blur(30px);pointer-events:none;z-index:0;}
+.orb1{width:120px;height:120px;background:rgba(123,63,255,.3);top:-40px;right:-30px;}
+.orb2{width:80px;height:80px;background:rgba(58,160,255,.25);bottom:-20px;left:-20px;}
 
 /* ===== HOME SCREEN ===== */
-#home{justify-content:flex-start;overflow:auto;}
-
-/* Header bar */
+#home{justify-content:flex-start;overflow:hidden;}
 .portal-nav{
-  width:100%;padding:0 40px;height:70px;flex-shrink:0;
+  width:100%;padding:0 40px;height:68px;flex-shrink:0;
   display:flex;align-items:center;justify-content:space-between;
-  background:rgba(255,255,255,.04);
-  border-bottom:1px solid rgba(255,255,255,.08);
-  backdrop-filter:blur(20px);
+  background:rgba(5,2,20,.7);
+  border-bottom:1px solid rgba(160,100,255,.15);
+  backdrop-filter:blur(24px);
   position:sticky;top:0;z-index:50;
 }
 .nav-brand{display:flex;align-items:center;gap:12px;}
 .nav-brand-icon{
-  width:38px;height:38px;border-radius:11px;
+  width:36px;height:36px;border-radius:10px;
   background:linear-gradient(135deg,#7b3fff,#3aa0ff);
-  display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;
-  box-shadow:0 3px 12px rgba(123,63,255,.4);
+  display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;
+  box-shadow:0 3px 12px rgba(123,63,255,.45);
 }
-.nav-brand-name{font-size:17px;font-weight:700;
-  background:linear-gradient(135deg,#c0a0ff,#7bc8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.nav-brand-sep{width:1px;height:20px;background:rgba(255,255,255,.2);margin:0 4px;}
-.nav-portal-label{font-size:14px;font-weight:500;color:rgba(255,255,255,.55);}
+.nav-brand-name{font-size:16px;font-weight:700;background:linear-gradient(135deg,#c0a0ff,#7bc8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-sep{width:1px;height:18px;background:rgba(255,255,255,.15);margin:0 4px;}
+.nav-portal{font-size:13px;font-weight:500;color:rgba(255,255,255,.45);}
 .nav-right{display:flex;align-items:center;gap:14px;}
-.nav-time{font-size:15px;font-weight:600;color:rgba(255,255,255,.7);}
+.nav-time{font-size:15px;font-weight:600;color:rgba(255,255,255,.65);}
 .nav-lock{
-  padding:8px 16px;border-radius:10px;border:1px solid rgba(255,255,255,.15);
-  background:rgba(255,255,255,.07);color:rgba(255,255,255,.7);
+  padding:8px 15px;border-radius:10px;border:1px solid rgba(160,100,255,.25);
+  background:rgba(120,60,255,.12);color:rgba(255,255,255,.65);
   font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;
   display:flex;align-items:center;gap:6px;
 }
-.nav-lock:hover{background:rgba(255,255,255,.12);color:#fff;}
+.nav-lock:hover{background:rgba(120,60,255,.25);color:#fff;border-color:rgba(160,100,255,.5);}
 
-/* Hero welcome */
-.home-hero{
-  width:100%;max-width:1100px;padding:56px 40px 36px;
-  display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;
-}
-.hero-greeting{font-size:38px;font-weight:700;letter-spacing:-.8px;line-height:1.1;}
-.hero-greeting span{
-  background:linear-gradient(135deg,#c0a0ff 0%,#7bc8ff 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.hero-sub{font-size:16px;color:rgba(255,255,255,.5);margin-top:8px;font-weight:400;}
-.hero-badge{
-  display:flex;align-items:center;gap:8px;
-  padding:10px 18px;border-radius:14px;
-  background:rgba(61,220,110,.1);border:1px solid rgba(61,220,110,.25);
-  font-size:13px;font-weight:600;color:rgba(61,220,110,.9);
-}
-.hero-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:#3ddc6e;animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(61,220,110,.4);}50%{opacity:.8;box-shadow:0 0 0 6px rgba(61,220,110,0);}}
+.home-scroll{width:100%;display:flex;flex-direction:column;align-items:center;height:calc(100vh - 68px);overflow-y:auto;}
+.home-hero{width:100%;max-width:1100px;padding:52px 40px 32px;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.hero-greeting{font-size:36px;font-weight:700;letter-spacing:-.7px;line-height:1.15;}
+.hero-greeting .name{background:linear-gradient(135deg,#c0a0ff 0%,#7bc8ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-sub{font-size:15px;color:rgba(255,255,255,.45);margin-top:8px;}
+.hero-badge{display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:14px;background:rgba(61,220,110,.1);border:1px solid rgba(61,220,110,.22);font-size:13px;font-weight:600;color:rgba(61,220,110,.9);}
+.hero-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:#3ddc6e;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(61,220,110,.4);}50%{opacity:.8;box-shadow:0 0 0 6px transparent;}}
 
-/* App grid area */
 .apps-section{width:100%;max-width:1100px;padding:0 40px 60px;}
-.apps-section-label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.35);margin-bottom:24px;}
-
-.apps-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
-  gap:18px;
-}
-
-/* App card — iOS icon aesthetic but website-sized */
+.apps-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.3);margin-bottom:22px;}
+.apps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;}
 .app-card{
   cursor:pointer;border:none;background:none;color:inherit;
-  display:flex;flex-direction:column;align-items:center;
-  text-align:center;gap:14px;
-  padding:28px 16px 22px;
-  border-radius:28px;
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.09);
-  transition:transform .22s var(--ease),background .22s,box-shadow .22s,border-color .22s;
+  display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;
+  padding:28px 16px 22px;border-radius:26px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.08);
+  transition:transform .24s var(--ease),background .22s,box-shadow .22s,border-color .22s;
   position:relative;overflow:hidden;
 }
-.app-card::before{
-  content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(255,255,255,.06) 0%,transparent 50%);
-  border-radius:28px;
-}
-.app-card:hover{
-  transform:translateY(-5px) scale(1.02);
-  background:rgba(255,255,255,.09);
-  border-color:rgba(255,255,255,.18);
-  box-shadow:0 24px 60px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.25);
-}
-.app-card:active{transform:scale(.95);}
-
-/* The icon tile — pure iOS */
-.app-tile{
-  width:88px;height:88px;border-radius:24px;
-  display:flex;align-items:center;justify-content:center;
-  position:relative;overflow:hidden;
-  box-shadow:0 14px 30px -8px rgba(0,0,0,.6),0 1px 0 rgba(255,255,255,.35) inset;
-  flex-shrink:0;
-}
-.app-tile::after{
-  content:"";position:absolute;inset:0;border-radius:24px;
-  background:linear-gradient(180deg,rgba(255,255,255,.22),transparent 45%);
-}
-.app-tile svg{width:48px;height:48px;position:relative;z-index:2;}
-
+.app-card::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.05),transparent 50%);border-radius:26px;}
+.app-card:hover{transform:translateY(-6px) scale(1.03);background:rgba(160,100,255,.1);border-color:rgba(160,100,255,.3);box-shadow:0 24px 60px rgba(0,0,0,.45),0 0 30px rgba(123,63,255,.15);}
+.app-card:active{transform:scale(.94);}
+.app-tile{width:86px;height:86px;border-radius:24px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 14px 30px -8px rgba(0,0,0,.6),0 1px 0 rgba(255,255,255,.3) inset;flex-shrink:0;}
+.app-tile::after{content:"";position:absolute;inset:0;border-radius:24px;background:linear-gradient(180deg,rgba(255,255,255,.2),transparent 45%);}
+.app-tile svg{width:46px;height:46px;position:relative;z-index:2;}
 .g-green{background:linear-gradient(160deg,#3ddc6e,#159a4a);}
 .g-blue{background:linear-gradient(160deg,#3aa0ff,#1666e8);}
 .g-orange{background:linear-gradient(160deg,#ffb44a,#ff7a2f);}
 .g-teal{background:linear-gradient(160deg,#34e3c8,#0fb39c);}
 .g-purple{background:linear-gradient(160deg,#c06bff,#7b3fff);}
+.app-name{font-size:14px;font-weight:600;letter-spacing:-.1px;}
+.app-desc{font-size:12px;color:rgba(255,255,255,.4);margin-top:3px;}
 
-.app-name{font-size:15px;font-weight:600;letter-spacing:-.1px;line-height:1.2;}
-.app-desc{font-size:12px;color:rgba(255,255,255,.45);margin-top:3px;font-weight:400;line-height:1.4;}
-.app-arrow{
-  position:absolute;bottom:14px;right:14px;
-  width:22px;height:22px;border-radius:50%;
-  background:rgba(255,255,255,.1);
-  display:flex;align-items:center;justify-content:center;
-  opacity:0;transition:opacity .2s;
-}
-.app-card:hover .app-arrow{opacity:1;}
+.portal-footer{width:100%;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(255,255,255,.05);margin-top:auto;}
+.footer-copy{font-size:12px;color:rgba(255,255,255,.22);}
+.footer-powered{font-size:12px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:5px;}
+.footer-powered span{background:linear-gradient(135deg,#c0a0ff,#7bc8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700;}
 
-/* Launch flash */
-#launch-flash{
-  position:fixed;inset:0;z-index:200;pointer-events:none;opacity:0;
-  background:linear-gradient(135deg,#7b3fff,#3aa0ff);
-  transition:opacity .35s;
-}
+#launch-flash{position:fixed;inset:0;z-index:200;pointer-events:none;opacity:0;background:linear-gradient(135deg,#7b3fff,#3aa0ff);transition:opacity .3s;}
 #launch-flash.go{opacity:1;}
 
-/* Footer */
-.portal-footer{
-  width:100%;padding:18px 40px;
-  display:flex;align-items:center;justify-content:space-between;
-  border-top:1px solid rgba(255,255,255,.06);
-  flex-shrink:0;margin-top:auto;
-}
-.footer-copy{font-size:12px;color:rgba(255,255,255,.28);}
-.footer-powered{font-size:12px;color:rgba(255,255,255,.35);display:flex;align-items:center;gap:6px;}
-.footer-powered span{
-  background:linear-gradient(135deg,#c0a0ff,#7bc8ff);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:600;}
-
-/* Scrollable home wrapper */
-.home-scroll{width:100%;display:flex;flex-direction:column;align-items:center;min-height:calc(100vh - 70px);overflow-y:auto;}
-
 @media(max-width:640px){
+  .lock-time{font-size:80px;}
+  .auth-card{margin:0 16px;padding:32px 24px;}
   .apps-grid{grid-template-columns:repeat(2,1fr);}
-  .home-hero{padding:36px 20px 24px;}
-  .hero-greeting{font-size:28px;}
-  .apps-section{padding:0 20px 50px;}
+  .home-hero,.apps-section{padding-left:20px;padding-right:20px;}
   .portal-nav{padding:0 20px;}
-  .portal-footer{padding:14px 20px;}
-  .auth-card{margin:0 16px;}
 }
 </style>
 </head>
 <body>
-<div class="bg">
-  <div class="blob b1"></div>
-  <div class="blob b2"></div>
-  <div class="blob b3"></div>
-  <div class="blob b4"></div>
+
+<!-- ===== ANIMATED SCENE ===== -->
+<div class="scene">
+  <div class="sky"></div>
+  <div class="aurora">
+    <div class="aurora-band"></div>
+    <div class="aurora-band"></div>
+    <div class="aurora-band"></div>
+  </div>
+  <div class="stars-layer" id="stars"></div>
+  <div class="skyline"></div>
+  <div class="city-glow"></div>
+
+  <div class="road-wrap">
+    <div class="road"></div>
+    <div class="road-surface"></div>
+    <div class="road-edge left"></div>
+    <div class="road-edge right"></div>
+    <div class="lane-wrap"><div class="lane-dashes" id="lane-dashes"></div></div>
+    <div class="road-reflection"></div>
+    <div class="trucks" id="trucks"></div>
+  </div>
+
+  <div class="particles" id="particles"></div>
 </div>
 
 <!-- ===== LOCK SCREEN ===== -->
 <div class="view" id="lock">
-  <div class="lock-header">
-    <div class="lock-logo">
-      <div class="lock-logo-icon">H</div>
-      <div class="lock-logo-text">
-        <div class="lock-logo-brand">Harmik AI</div>
-        <div class="lock-logo-sub">MegaFleet Portal</div>
-      </div>
-    </div>
-    <div class="lock-time-big" id="lock-time">9:41</div>
-    <div class="lock-date-str" id="lock-date">Tuesday, June 9</div>
+  <div class="lock-chip">
+    <div class="lock-chip-icon">H</div>
+    <div class="lock-chip-name">Harmik AI</div>
   </div>
 
+  <div class="lock-time" id="lock-time">9:41</div>
+  <div class="lock-date" id="lock-date">Tuesday, June 9</div>
+
   <div class="auth-card">
-    <div class="auth-title">Welcome back</div>
-    <div class="auth-sub">Enter your password to access the portal</div>
-    <form id="pwd-form" autocomplete="off">
-      <div class="pwd-hint" id="pwd-hint"></div>
-      <div class="pwd-wrap">
-        <input class="pwd" id="pwd" type="password" placeholder="Enter password" autocomplete="new-password">
-        <button class="pwd-go" id="pwd-go" type="submit" aria-label="Unlock">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h13M13 6l6 6-6 6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
-    </form>
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div style="position:relative;z-index:1;">
+      <div class="auth-greeting">Welcome back,<br><span style="background:linear-gradient(135deg,#ff9f44,#ff6bda,#7b3fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Master Harmik</span> 👋</div>
+      <div class="auth-sub">Enter your password to access the portal</div>
+      <form id="pwd-form" autocomplete="off">
+        <div class="pwd-hint" id="pwd-hint"></div>
+        <div class="pwd-wrap">
+          <input class="pwd" id="pwd" type="password" placeholder="Enter password" autocomplete="new-password">
+          <button class="pwd-go" type="submit" aria-label="Unlock">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h13M13 6l6 6-6 6" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
 
 <!-- ===== HOME SCREEN ===== -->
 <div class="view hidden" id="home" style="justify-content:flex-start;overflow:hidden;">
-  <!-- Nav -->
   <nav class="portal-nav">
     <div class="nav-brand">
       <div class="nav-brand-icon">H</div>
       <div class="nav-brand-name">Harmik AI</div>
-      <div class="nav-brand-sep"></div>
-      <div class="nav-portal-label">MegaFleet Portal</div>
+      <div class="nav-sep"></div>
+      <div class="nav-portal">MegaFleet Portal</div>
     </div>
     <div class="nav-right">
       <div class="nav-time" id="home-time">9:41</div>
       <button class="nav-lock" onclick="lockNow()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M7 10V7a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="5" y="10" width="14" height="10" rx="3" fill="currentColor"/></svg>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M7 10V7a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><rect x="5" y="10" width="14" height="10" rx="3" fill="currentColor"/></svg>
         Lock
       </button>
     </div>
   </nav>
-
-  <!-- Scrollable body -->
   <div class="home-scroll">
-    <!-- Hero -->
     <div class="home-hero">
       <div>
-        <div class="hero-greeting">Good <span id="greeting-part">morning</span>,<br>Master Harmik 👋</div>
-        <div class="hero-sub" id="hero-date">Tuesday, June 9 &nbsp;·&nbsp; All systems operational</div>
+        <div class="hero-greeting">Good <span id="greeting-part">morning</span>, <span class="name">Master Harmik</span> 👋</div>
+        <div class="hero-sub" id="hero-date">Tuesday, June 9 · All systems operational</div>
       </div>
       <div class="hero-badge">All Systems Online</div>
     </div>
-
-    <!-- Apps -->
     <div class="apps-section">
-      <div class="apps-section-label">Your Applications</div>
+      <div class="apps-label">Your Applications</div>
       <div class="apps-grid" id="apps-grid"></div>
     </div>
-
-    <!-- Footer -->
     <div class="portal-footer">
       <div class="footer-copy">© 2025 Mega Fleet Logistics Corp. All rights reserved.</div>
       <div class="footer-powered">Powered by <span>Harmik AI</span></div>
@@ -340,107 +419,154 @@ body{min-height:100vh;color:#fff;overflow:hidden;}
   </div>
 </div>
 
-<!-- Launch flash -->
 <div id="launch-flash"></div>
 
 <script>
 const PASSWORD = "Megafleet424$";
 
-const ICONS = {
+// ===== SCENE GENERATION =====
+// Stars
+(function(){
+  const c = document.getElementById('stars');
+  for(let i=0;i<180;i++){
+    const s=document.createElement('div');
+    s.className='star';
+    const size=Math.random()*2.5+.5;
+    s.style.cssText=`width:${size}px;height:${size}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--t:${2+Math.random()*5}s;--a:${.2+Math.random()*.8};animation-delay:${Math.random()*6}s`;
+    c.appendChild(s);
+  }
+})();
+
+// Lane dashes
+(function(){
+  const c=document.getElementById('lane-dashes');
+  for(let i=0;i<20;i++){const d=document.createElement('div');d.className='lane-dash';c.appendChild(d);}
+})();
+
+// Trucks SVG (simple side-view freight truck)
+function makeTruck(color1,color2,cabColor){
+  return `<svg viewBox="0 0 220 60" fill="none" xmlns="http://www.w3.org/2000/svg" width="220" height="60">
+  <!-- Trailer -->
+  <rect x="0" y="8" width="148" height="40" rx="4" fill="${color1}"/>
+  <rect x="0" y="8" width="148" height="6" rx="2" fill="${color2}"/>
+  <!-- Cab -->
+  <rect x="148" y="14" width="52" height="34" rx="4" fill="${cabColor}"/>
+  <rect x="155" y="18" width="28" height="18" rx="3" fill="rgba(150,220,255,.45)"/>
+  <line x1="168" y1="18" x2="168" y2="36" stroke="rgba(255,255,255,.25)" stroke-width="1.5"/>
+  <!-- Headlights -->
+  <rect x="196" y="20" width="6" height="10" rx="2" fill="#ffe066"/>
+  <rect x="196" y="32" width="6" height="6" rx="2" fill="#ff4444"/>
+  <!-- Exhaust stack -->
+  <rect x="176" y="4" width="5" height="14" rx="2" fill="${cabColor}"/>
+  <!-- Wheels trailer -->
+  <circle cx="28" cy="52" r="8" fill="#1a1a2e" stroke="#444" stroke-width="2"/>
+  <circle cx="28" cy="52" r="4" fill="#333"/>
+  <circle cx="68" cy="52" r="8" fill="#1a1a2e" stroke="#444" stroke-width="2"/>
+  <circle cx="68" cy="52" r="4" fill="#333"/>
+  <circle cx="108" cy="52" r="8" fill="#1a1a2e" stroke="#444" stroke-width="2"/>
+  <circle cx="108" cy="52" r="4" fill="#333"/>
+  <!-- Wheels cab -->
+  <circle cx="162" cy="52" r="8" fill="#1a1a2e" stroke="#444" stroke-width="2"/>
+  <circle cx="162" cy="52" r="4" fill="#333"/>
+  <circle cx="192" cy="52" r="8" fill="#1a1a2e" stroke="#444" stroke-width="2"/>
+  <circle cx="192" cy="52" r="4" fill="#333"/>
+  <!-- Logo strip -->
+  <rect x="50" y="24" width="60" height="12" rx="3" fill="${color2}" opacity=".7"/>
+  </svg>`;
+}
+
+const truckConfigs=[
+  {colors:['#1a3a6e','#2255aa','#1a4080'],y:'28%',spd:9,dir:'right',delay:0},
+  {colors:['#2a1a4e','#5a3a9e','#3a2a6e'],y:'18%',spd:13,dir:'right',delay:-4},
+  {colors:['#1a4e2a','#2a8a4a','#1a6030'],y:'22%',spd:7,dir:'right',delay:-7},
+  {colors:['#4e2a1a','#9a5530','#6a3a1a'],y:'32%',spd:11,dir:'right',delay:-2},
+];
+(function(){
+  const c=document.getElementById('trucks');
+  truckConfigs.forEach(t=>{
+    const div=document.createElement('div');
+    div.className='truck right';
+    div.style.cssText=`bottom:${t.y};--spd:${t.spd}s;animation-delay:${t.delay}s;filter:drop-shadow(0 4px 12px rgba(0,0,0,.6));`;
+    div.innerHTML=makeTruck(t.colors[0],t.colors[1],t.colors[2]);
+    // headlight glow
+    const glow=document.createElement('div');glow.className='truck-glow';div.appendChild(glow);
+    c.appendChild(div);
+  });
+})();
+
+// Floating particles (exhaust/dust)
+(function(){
+  const c=document.getElementById('particles');
+  const colors=['rgba(180,140,255,.6)','rgba(100,160,255,.5)','rgba(255,150,100,.4)','rgba(80,220,180,.4)'];
+  for(let i=0;i<30;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    const size=Math.random()*4+2;
+    p.style.cssText=`width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};bottom:${Math.random()*40}%;left:${Math.random()*100}%;--ft:${4+Math.random()*8}s;--dx:${(Math.random()-0.5)*60}px;animation-delay:${Math.random()*8}s;filter:blur(${Math.random()*1}px);`;
+    c.appendChild(p);
+  }
+})();
+
+// ===== APPS =====
+const ICONS={
   auto:`<svg viewBox="0 0 24 24" fill="none"><path d="M5 16l1.5-4.5A2 2 0 0 1 8.4 10h7.2a2 2 0 0 1 1.9 1.5L19 16M5 16h14M5 16v2.5A1.5 1.5 0 0 0 6.5 20H7a1.5 1.5 0 0 0 1.5-1.5V18M19 16v2.5A1.5 1.5 0 0 1 17.5 20H17a1.5 1.5 0 0 1-1.5-1.5V18" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7.5" cy="16" r="1.1" fill="#fff"/><circle cx="16.5" cy="16" r="1.1" fill="#fff"/></svg>`,
   track:`<svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11Z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.6" fill="#fff"/></svg>`,
   pct:`<svg viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7" stroke="#fff" stroke-width="1.9" stroke-linecap="round"/><circle cx="8" cy="8" r="2.2" stroke="#fff" stroke-width="1.8"/><circle cx="16" cy="16" r="2.2" stroke="#fff" stroke-width="1.8"/></svg>`,
   pay:`<svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="6" width="17" height="12" rx="2.5" stroke="#fff" stroke-width="1.8"/><path d="M3.5 10h17" stroke="#fff" stroke-width="1.8"/><path d="M6.5 14.5h3" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>`,
   crm:`<svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="9" r="3" stroke="#fff" stroke-width="1.8"/><path d="M4 19a5 5 0 0 1 10 0" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><path d="M16 7.5a2.6 2.6 0 0 1 0 5M17.5 18.5a4.6 4.6 0 0 0-2.2-3.9" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>`
 };
-
-const APPS = [
-  {name:"O'Reilly's Auto",  desc:"Parts & inventory",      url:"https://megafleet-6g26tnah.manus.space", cls:"g-green",  icon:ICONS.auto},
-  {name:"LINX Tracking",    desc:"Live load tracking",      url:"https://megafleet-6g26tnah.manus.space", cls:"g-blue",   icon:ICONS.track},
-  {name:"Agent Commission", desc:"Freight broker calc",     url:"https://freightcalc-jrksoq4b.manus.space",                             cls:"g-orange", icon:ICONS.pct},
-  {name:"Payables",         desc:"AP & billing",            url:"https://megafleetpay-aijaerxz.manus.space", cls:"g-teal",   icon:ICONS.pay},
-  {name:"CRM Outreach",     desc:"Leads & contacts",        url:"https://megafleet-dhzsbjcq.manus.space", cls:"g-purple", icon:ICONS.crm}
+const APPS=[
+  {name:"O'Reilly's Auto",desc:"Parts & inventory",url:"https://megafleet-6g26tnah.manus.space",cls:"g-green",icon:ICONS.auto},
+  {name:"LINX Tracking",desc:"Live load tracking",url:"https://megafleet-6g26tnah.manus.space",cls:"g-blue",icon:ICONS.track},
+  {name:"Agent Commission",desc:"Freight broker calc",url:"https://freightcalc-jrksoq4b.manus.space",cls:"g-orange",icon:ICONS.pct},
+  {name:"Payables",desc:"AP & billing",url:"https://megafleetpay-aijaerxz.manus.space",cls:"g-teal",icon:ICONS.pay},
+  {name:"CRM Outreach",desc:"Leads & contacts",url:"https://megafleet-dhzsbjcq.manus.space",cls:"g-purple",icon:ICONS.crm}
 ];
-
-// Build app grid
-const grid = document.getElementById('apps-grid');
-APPS.forEach(a => {
-  const btn = document.createElement('button');
-  btn.className = 'app-card';
-  btn.innerHTML = `
-    <div class="app-tile ${a.cls}">${a.icon}</div>
-    <div>
-      <div class="app-name">${a.name}</div>
-      <div class="app-desc">${a.desc}</div>
-    </div>
-    <div class="app-arrow">
-      <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </div>
-  `;
-  btn.addEventListener('click', () => launchApp(a));
+const grid=document.getElementById('apps-grid');
+APPS.forEach(a=>{
+  const btn=document.createElement('button');btn.className='app-card';
+  btn.innerHTML=`<div class="app-tile ${a.cls}">${a.icon}</div><div><div class="app-name">${a.name}</div><div class="app-desc">${a.desc}</div></div>`;
+  btn.addEventListener('click',()=>{
+    const f=document.getElementById('launch-flash');f.classList.add('go');
+    setTimeout(()=>{window.location.href=a.url;},300);
+  });
   grid.appendChild(btn);
 });
 
-function launchApp(a) {
-  const flash = document.getElementById('launch-flash');
-  flash.classList.add('go');
-  setTimeout(() => { window.location.href = a.url; }, 320);
+// ===== CLOCK =====
+function tick(){
+  const d=new Date(),h=d.getHours(),m=String(d.getMinutes()).padStart(2,'0');
+  const h12=((h+11)%12)+1,t=h12+':'+m;
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const mons=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const ds=days[d.getDay()]+', '+mons[d.getMonth()]+' '+d.getDate();
+  document.getElementById('lock-time').textContent=t;
+  document.getElementById('lock-date').textContent=ds;
+  document.getElementById('home-time').textContent=t;
+  document.getElementById('hero-date').textContent=ds+' · All systems operational';
+  document.getElementById('greeting-part').textContent=h<12?'morning':h<17?'afternoon':'evening';
 }
+tick();setInterval(tick,1000);
 
-// Clock & greeting
-function tick() {
-  const d = new Date();
-  const h = d.getHours(), m = String(d.getMinutes()).padStart(2,'0');
-  const h12 = ((h + 11) % 12) + 1;
-  const t = h12 + ':' + m;
-  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const mons = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  const dateStr = days[d.getDay()] + ', ' + mons[d.getMonth()] + ' ' + d.getDate();
-  document.getElementById('lock-time').textContent = t;
-  document.getElementById('lock-date').textContent = dateStr;
-  document.getElementById('home-time').textContent = t;
-  document.getElementById('hero-date').textContent = dateStr + ' · All systems operational';
-  const greet = h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening';
-  document.getElementById('greeting-part').textContent = greet;
-}
-tick(); setInterval(tick, 1000);
-
-// Auth
-const lock = document.getElementById('lock');
-const home = document.getElementById('home');
-const pwd = document.getElementById('pwd');
-const hint = document.getElementById('pwd-hint');
-
-function unlock() {
-  lock.classList.add('hidden');
-  home.classList.remove('hidden');
-  sessionStorage.setItem('mf_unlocked','1');
-}
-function lockNow() {
-  home.classList.add('hidden');
-  lock.classList.remove('hidden');
-  pwd.value = ''; hint.textContent = '';
-  sessionStorage.removeItem('mf_unlocked');
-  setTimeout(() => pwd.focus(), 500);
-}
-
-document.getElementById('pwd-form').addEventListener('submit', e => {
+// ===== AUTH =====
+const lock=document.getElementById('lock'),home=document.getElementById('home');
+const pwd=document.getElementById('pwd'),hint=document.getElementById('pwd-hint');
+function unlock(){lock.classList.add('hidden');home.classList.remove('hidden');sessionStorage.setItem('mf_unlocked','1');}
+function lockNow(){home.classList.add('hidden');lock.classList.remove('hidden');pwd.value='';hint.textContent='';sessionStorage.removeItem('mf_unlocked');setTimeout(()=>pwd.focus(),500);}
+document.getElementById('pwd-form').addEventListener('submit',e=>{
   e.preventDefault();
-  if (pwd.value === PASSWORD) {
-    hint.textContent = ''; unlock();
-  } else {
-    hint.textContent = 'Incorrect password. Try again.';
-    const wrap = document.querySelector('.pwd-wrap');
-    wrap.classList.remove('shake'); void wrap.offsetWidth; wrap.classList.add('shake');
-    pwd.value = ''; pwd.focus();
-  }
+  if(pwd.value===PASSWORD){hint.textContent='';unlock();}
+  else{hint.textContent='Incorrect password. Try again.';const w=document.querySelector('.pwd-wrap');w.classList.remove('shake');void w.offsetWidth;w.classList.add('shake');pwd.value='';pwd.focus();}
 });
+if(sessionStorage.getItem('mf_unlocked')==='1'){unlock();}else{setTimeout(()=>pwd.focus(),400);}
 
-if (sessionStorage.getItem('mf_unlocked') === '1') {
-  unlock();
-} else {
-  setTimeout(() => pwd.focus(), 400);
-}
+// ===== INTERACTIVE MOUSE PARALLAX =====
+document.addEventListener('mousemove',e=>{
+  const cx=e.clientX/window.innerWidth-.5,cy=e.clientY/window.innerHeight-.5;
+  document.querySelector('.sky').style.transform=`translate(${cx*8}px,${cy*6}px)`;
+  document.querySelector('.skyline').style.transform=`translateX(${cx*14}px)`;
+  document.querySelector('.aurora').style.transform=`translate(${cx*20}px,${cy*10}px)`;
+});
 </script>
 </body>
 </html>
