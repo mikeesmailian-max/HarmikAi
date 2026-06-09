@@ -5,317 +5,289 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MegaFleet Portal — Harmik AI</title>
 <style>
-:root{--ease:cubic-bezier(.22,1,.36,1);}
+:root{
+  --ease:cubic-bezier(.22,1,.36,1);
+  --fire1:#ff6b00;
+  --fire2:#ff3d00;
+  --gold:#ffcc00;
+  --ember:#ff9500;
+}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;overflow:hidden;}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;overflow:hidden;cursor:none;}
+
+/* ===== CUSTOM CURSOR ===== */
+#cursor{position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:screen;}
+#cursor-ring{width:36px;height:36px;border:2px solid rgba(255,150,0,.7);border-radius:50%;position:fixed;transform:translate(-50%,-50%);pointer-events:none;z-index:9998;transition:width .2s,height .2s,border-color .2s;mix-blend-mode:screen;}
+#cursor-dot{width:8px;height:8px;background:var(--gold);border-radius:50%;position:fixed;transform:translate(-50%,-50%);pointer-events:none;z-index:9999;box-shadow:0 0 12px var(--gold),0 0 24px var(--ember);transition:transform .1s;}
 
 /* ===== SCENE ===== */
-.scene{position:fixed;inset:0;z-index:0;background:#03030a;}
-
-/* Sky gradient */
+.scene{position:fixed;inset:0;z-index:0;}
 .sky{
-  position:absolute;inset:0;bottom:38%;
+  position:absolute;inset:0;bottom:36%;
   background:linear-gradient(180deg,
-    #03030a 0%,
-    #07052a 25%,
-    #120845 50%,
-    #1a0d5e 75%,
-    #2b1280 100%);
+    #050200 0%,
+    #1a0500 20%,
+    #2d0a00 45%,
+    #3d1200 70%,
+    #4a1800 100%);
+}
+
+/* Fire horizon glow */
+.horizon-glow{
+  position:absolute;bottom:36%;left:0;right:0;height:80px;
+  background:linear-gradient(180deg,transparent,rgba(255,80,0,.25),rgba(255,140,0,.4));
+  filter:blur(8px);
+  pointer-events:none;
 }
 
 /* Stars */
-.stars-layer{position:absolute;inset:0;bottom:38%;overflow:hidden;}
+.stars-layer{position:absolute;inset:0;bottom:36%;overflow:hidden;}
 .star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--t,3s) ease-in-out infinite alternate;}
-@keyframes twinkle{from{opacity:var(--a,.3);transform:scale(1);}to{opacity:.05;transform:scale(.5);}}
+@keyframes twinkle{from{opacity:var(--a,.4);}to{opacity:.02;}}
 
-/* Aurora ribbons */
-.aurora{position:absolute;top:0;left:0;right:0;bottom:38%;overflow:hidden;pointer-events:none;}
+/* Fire/ember aurora */
+.aurora{position:absolute;top:0;left:0;right:0;bottom:36%;overflow:hidden;pointer-events:none;}
 .aurora-band{
-  position:absolute;left:-20%;width:140%;height:180px;border-radius:50%;
-  filter:blur(50px);opacity:.25;animation:aurora-drift 14s ease-in-out infinite alternate;
+  position:absolute;left:-20%;width:140%;height:160px;border-radius:50%;
+  filter:blur(55px);opacity:.3;animation:aurora-drift 12s ease-in-out infinite alternate;
 }
-.aurora-band:nth-child(1){top:15%;background:linear-gradient(90deg,transparent,#6a00ff,#0077ff,transparent);animation-delay:0s;}
-.aurora-band:nth-child(2){top:30%;background:linear-gradient(90deg,transparent,#ff00c8,#7b00ff,transparent);animation-delay:-5s;opacity:.18;}
-.aurora-band:nth-child(3){top:45%;background:linear-gradient(90deg,transparent,#00c8ff,#0044ff,transparent);animation-delay:-9s;opacity:.2;}
-@keyframes aurora-drift{from{transform:translateX(-8%) skewY(-1deg);}to{transform:translateX(8%) skewY(1deg);}}
+.aurora-band:nth-child(1){top:20%;background:linear-gradient(90deg,transparent,#ff4400,#ff8800,transparent);animation-delay:0s;}
+.aurora-band:nth-child(2){top:40%;background:linear-gradient(90deg,transparent,#ff6600,#ffaa00,transparent);animation-delay:-4s;opacity:.22;}
+.aurora-band:nth-child(3){top:60%;background:linear-gradient(90deg,transparent,#cc2200,#ff4400,transparent);animation-delay:-8s;opacity:.18;}
+@keyframes aurora-drift{from{transform:translateX(-10%) skewY(-1.5deg);}to{transform:translateX(10%) skewY(1.5deg);}}
 
-/* City skyline silhouette */
+/* City skyline */
 .skyline{
-  position:absolute;bottom:38%;left:0;right:0;height:160px;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 160' preserveAspectRatio='none'%3E%3Cpath fill='%230a0520' d='M0 160V90l30-5 10-30 10 30 15-50 15 50 10-40 10 40 20-60 8 20 8-20 10 60 12-35 10-10 10 10 10-15 10 15 15-45 10 25 8-25 8 25 12-55 8 30 8-30 12 55 10-20 8 5 8-5 10 20 12-40 8 10 8-10 12 40 15-60 10 35 10-35 15 60 8-25 8 10 8-10 8 25 12-45 10 20 10-20 12 45 10-30 8 8 8-8 10 30 15-50 10 25 10-25 15 50 8-20 8 5 8-5 8 20 12-35 10 15 10-15 12 35 15-55 10 30 10-30 15 55 8-22 8 8 8-8 8 22 12-40 10 18 10-18 12 40 10-28 8 10 8-10 10 28 15-48 10 22 10-22 15 48 8-18 8 6 8-6 8 18V160z'/%3E%3C/svg%3E") no-repeat bottom/cover;
+  position:absolute;bottom:36%;left:0;right:0;height:170px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 170' preserveAspectRatio='none'%3E%3Cpath fill='%230d0400' d='M0 170V95l30-5 10-35 10 35 15-55 15 55 10-45 10 45 20-65 8 22 8-22 10 65 12-40 10-12 10 12 10-18 10 18 15-50 10 28 8-28 8 28 12-60 8 32 8-32 12 60 10-22 8 6 8-6 10 22 12-44 8 12 8-12 12 44 15-65 10 38 10-38 15 65 8-28 8 12 8-12 8 28 12-50 10 22 10-22 12 50 10-32 8 10 8-10 10 32 15-55 10 28 10-28 15 55 8-24 8 10 8-10 8 24 12-42 10 20 10-20 12 42 10-30 8 12 8-12 10 30 15-52 10 25 10-25 15 52 8-20 8 8 8-8 8 20V170z'/%3E%3C/svg%3E") no-repeat bottom/cover;
 }
-
-/* City windows glow */
+/* City window glow — warm orange */
 .city-glow{
-  position:absolute;bottom:38%;left:0;right:0;height:130px;
-  background:linear-gradient(180deg,transparent 0%,rgba(80,40,180,.08) 60%,rgba(120,60,255,.12) 100%);
-  pointer-events:none;
+  position:absolute;bottom:36%;left:0;right:0;height:140px;
+  background:linear-gradient(180deg,transparent 0%,rgba(255,80,0,.06) 60%,rgba(255,140,0,.14) 100%);
 }
+/* Scattered window lights */
+.city-windows{position:absolute;bottom:36%;left:0;right:0;height:140px;overflow:hidden;}
+.win{position:absolute;border-radius:1px;animation:win-blink var(--wb,4s) ease-in-out infinite alternate;}
+@keyframes win-blink{from{opacity:var(--wo,.8);}to{opacity:.1;}}
 
 /* Road */
-.road-wrap{position:absolute;bottom:0;left:0;right:0;height:38%;overflow:hidden;}
-.road{
-  position:absolute;inset:0;
-  background:linear-gradient(180deg,#0e0828 0%,#140c32 40%,#1a1040 100%);
-}
-/* Perspective road surface */
-.road-surface{
-  position:absolute;bottom:0;left:0;right:0;height:100%;
-  background:
-    linear-gradient(180deg,#080518 0%,#0d0a28 100%);
-  clip-path:polygon(30% 0%,70% 0%,100% 100%,0% 100%);
-}
-/* Road lanes */
-.lane-wrap{
-  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
-  width:4px;height:100%;overflow:hidden;
-}
-.lane-dashes{
-  position:absolute;top:0;left:0;width:100%;
-  animation:lane-scroll 1.2s linear infinite;
-}
-.lane-dash{
-  width:4px;height:40px;background:linear-gradient(180deg,#ff9f00,#ffcc44);
-  margin-bottom:40px;border-radius:2px;
-  box-shadow:0 0 8px #ff9f0088;
-}
-@keyframes lane-scroll{from{transform:translateY(-80px);}to{transform:translateY(80px);}}
-
-/* Road glow lines */
-.road-edge{
-  position:absolute;bottom:0;height:100%;width:3px;
-  background:linear-gradient(180deg,transparent,#ff6b00,#ff9f00);
-  filter:blur(2px);opacity:.6;
-}
-.road-edge.left{left:20%;}
-.road-edge.right{right:20%;}
-
-/* Road reflection */
-.road-reflection{
-  position:absolute;bottom:0;left:0;right:0;height:50%;
-  background:linear-gradient(180deg,transparent,rgba(123,63,255,.06));
-}
+.road-wrap{position:absolute;bottom:0;left:0;right:0;height:36%;overflow:hidden;}
+.road{position:absolute;inset:0;background:linear-gradient(180deg,#0e0600 0%,#160900 50%,#1c0b00 100%);}
+/* Lane dashes */
+.lane-wrap{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:4px;height:100%;overflow:hidden;}
+.lane-dashes{position:absolute;top:0;left:0;width:100%;animation:lane-scroll 1s linear infinite;}
+.lane-dash{width:4px;height:36px;background:linear-gradient(180deg,#ff8800,#ffcc00);margin-bottom:36px;border-radius:2px;box-shadow:0 0 10px #ff880088;}
+@keyframes lane-scroll{from{transform:translateY(-72px);}to{transform:translateY(72px);}}
+/* Road edges — orange/amber */
+.road-edge{position:absolute;bottom:0;height:100%;width:3px;background:linear-gradient(180deg,transparent,#ff6600,#ffaa00);filter:blur(2px);opacity:.7;}
+.road-edge.left{left:18%;}
+.road-edge.right{right:18%;}
+/* Road surface sheen */
+.road-sheen{position:absolute;bottom:0;left:0;right:0;height:40%;background:linear-gradient(180deg,transparent,rgba(255,100,0,.04));}
 
 /* Trucks */
 .trucks{position:absolute;bottom:0;left:0;right:0;height:100%;}
-.truck{position:absolute;bottom:28%;animation:drive var(--spd,8s) linear infinite;}
+.truck{position:absolute;animation:drive-right var(--spd,9s) linear infinite;}
+@keyframes drive-right{from{left:-280px;}to{left:calc(100% + 50px);}}
+.truck-glow{position:absolute;top:40%;right:-130px;transform:translateY(-50%);width:150px;height:60px;background:radial-gradient(ellipse at left,rgba(255,200,80,.55),transparent 70%);pointer-events:none;}
 
-/* Truck going right */
-.truck.right{left:-300px;animation-name:drive-right;}
-@keyframes drive-right{from{left:-300px;}to{left:calc(100% + 50px);}}
-
-/* Truck going left */
-.truck.left-dir{right:-300px;animation-name:drive-left;transform:scaleX(-1);}
-@keyframes drive-left{from{right:-300px;}to{right:calc(100% + 50px);}}
-
-/* Headlight glow */
-.truck-glow{
-  position:absolute;top:50%;right:-120px;transform:translateY(-50%);
-  width:140px;height:50px;
-  background:radial-gradient(ellipse at left,rgba(255,220,100,.5),transparent 70%);
-  pointer-events:none;
-}
-.truck.left-dir .truck-glow{left:-120px;right:auto;background:radial-gradient(ellipse at right,rgba(255,220,100,.5),transparent 70%);}
-
-/* Road ground glow from headlights */
-.truck-road-glow{
-  position:absolute;bottom:-10px;right:-80px;
-  width:160px;height:20px;
-  background:radial-gradient(ellipse,rgba(255,200,50,.3),transparent 70%);
+/* Road ground cone of light */
+.headlight-beam{
+  position:absolute;bottom:0;right:-60px;
+  width:200px;height:30px;
+  background:radial-gradient(ellipse at 20% 50%,rgba(255,200,80,.2),transparent 70%);
+  transform:skewX(-15deg);
 }
 
-/* Floating particles */
-.particles{position:absolute;inset:0;pointer-events:none;}
-.particle{
-  position:absolute;border-radius:50%;
-  animation:float-up var(--ft,6s) linear infinite;
+/* Shooting stars */
+.shoot{
+  position:absolute;height:2px;
+  background:linear-gradient(90deg,rgba(255,200,100,0),#ffcc00,white);
+  border-radius:2px;
+  animation:shoot var(--sd,1.2s) ease-out forwards;
   opacity:0;
 }
-@keyframes float-up{
-  0%{transform:translateY(0) translateX(0);opacity:0;}
-  10%{opacity:.7;}
-  90%{opacity:.2;}
-  100%{transform:translateY(-400px) translateX(var(--dx,20px));opacity:0;}
+@keyframes shoot{
+  0%{opacity:0;transform:translateX(0) translateY(0);}
+  10%{opacity:1;}
+  100%{opacity:0;transform:translateX(var(--sx,-300px)) translateY(var(--sy,150px));}
 }
+
+/* Click explosion */
+.explosion{
+  position:fixed;pointer-events:none;z-index:500;
+}
+.spark{
+  position:absolute;width:var(--sw,4px);height:var(--sh,4px);border-radius:50%;
+  background:var(--sc,#ffcc00);
+  animation:spark-fly var(--sf,0.8s) ease-out forwards;
+}
+@keyframes spark-fly{
+  0%{transform:translate(0,0) scale(1);opacity:1;}
+  100%{transform:translate(var(--dx,0px),var(--dy,0px)) scale(0);opacity:0;}
+}
+
+/* Rain streaks */
+.rain-layer{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.18;}
+.rain-drop{
+  position:absolute;width:1px;background:linear-gradient(180deg,transparent,rgba(255,140,0,.6));
+  animation:rain-fall var(--rf,0.8s) linear infinite;
+}
+@keyframes rain-fall{from{transform:translateY(-100px);}to{transform:translateY(110vh);}}
+
+/* Particles */
+.particles{position:absolute;inset:0;pointer-events:none;}
+.particle{position:absolute;border-radius:50%;animation:float-up var(--ft,6s) linear infinite;opacity:0;}
+@keyframes float-up{0%{transform:translateY(0) translateX(0);opacity:0;}10%{opacity:.8;}90%{opacity:.1;}100%{transform:translateY(-350px) translateX(var(--dx,20px));opacity:0;}}
 
 /* ===== VIEWS ===== */
 .view{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .65s var(--ease),transform .65s var(--ease),filter .65s var(--ease);}
 .view.hidden{opacity:0;transform:translateY(-24px) scale(1.04);filter:blur(10px);pointer-events:none;}
 
 /* ===== LOCK SCREEN ===== */
-#lock{gap:0;}
-
-/* Logo chip */
 .lock-chip{
   display:inline-flex;align-items:center;gap:12px;
-  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);
-  border-radius:50px;padding:10px 20px 10px 10px;margin-bottom:28px;
+  background:rgba(20,8,0,.6);border:1px solid rgba(255,130,0,.3);
+  border-radius:50px;padding:10px 22px 10px 10px;margin-bottom:26px;
   backdrop-filter:blur(20px);
-  box-shadow:0 8px 32px rgba(123,63,255,.2);
-  cursor:default;
+  box-shadow:0 8px 32px rgba(255,100,0,.2),0 0 0 1px rgba(255,180,0,.1) inset;
 }
 .lock-chip-icon{
   width:36px;height:36px;border-radius:50%;
-  background:linear-gradient(135deg,#7b3fff,#3aa0ff);
+  background:linear-gradient(135deg,#ff6b00,#ffcc00);
   display:flex;align-items:center;justify-content:center;
-  font-size:16px;font-weight:800;letter-spacing:-1px;
-  box-shadow:0 4px 16px rgba(123,63,255,.55);
+  font-size:16px;font-weight:800;color:#1a0500;
+  box-shadow:0 4px 16px rgba(255,120,0,.6);
 }
-.lock-chip-name{
-  font-size:15px;font-weight:700;letter-spacing:-.2px;
-  background:linear-gradient(135deg,#c4a8ff,#7bcaff);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
+.lock-chip-name{font-size:15px;font-weight:700;background:linear-gradient(135deg,#ffcc00,#ff8800);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 
-/* Big time */
 .lock-time{
   font-size:108px;font-weight:100;letter-spacing:-6px;line-height:.88;text-align:center;
-  background:linear-gradient(180deg,#ffffff 30%,rgba(160,130,255,.8) 100%);
+  background:linear-gradient(180deg,#fff 30%,rgba(255,180,80,.85) 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  text-shadow:none;margin-bottom:10px;
-  filter:drop-shadow(0 0 40px rgba(160,100,255,.35));
+  filter:drop-shadow(0 0 40px rgba(255,140,0,.45));
+  margin-bottom:10px;
 }
-.lock-date{font-size:18px;font-weight:400;color:rgba(255,255,255,.55);text-align:center;letter-spacing:.5px;margin-bottom:48px;}
+.lock-date{font-size:18px;font-weight:400;color:rgba(255,200,120,.65);text-align:center;letter-spacing:.5px;margin-bottom:44px;}
 
 /* Auth card */
 .auth-card{
   width:100%;max-width:420px;
-  background:rgba(10,5,30,.55);
-  border:1px solid rgba(160,100,255,.25);
+  background:rgba(15,5,0,.65);
+  border:1px solid rgba(255,120,0,.25);
   border-radius:32px;
   padding:42px 38px 38px;
   backdrop-filter:blur(40px) saturate(200%);
   box-shadow:
-    0 50px 100px rgba(0,0,0,.6),
-    0 0 0 1px rgba(255,255,255,.06) inset,
-    0 1px 0 rgba(255,255,255,.12) inset,
-    inset 0 0 80px rgba(80,40,180,.08);
+    0 50px 100px rgba(0,0,0,.7),
+    0 0 0 1px rgba(255,255,255,.05) inset,
+    0 1px 0 rgba(255,200,100,.1) inset,
+    inset 0 0 80px rgba(200,80,0,.06);
   position:relative;overflow:hidden;
 }
 .auth-card::before{
   content:"";position:absolute;top:-1px;left:10%;right:10%;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(180,130,255,.6),transparent);
+  background:linear-gradient(90deg,transparent,rgba(255,180,0,.6),transparent);
 }
 .auth-card::after{
   content:"";position:absolute;inset:0;border-radius:32px;
-  background:radial-gradient(ellipse 80% 50% at 50% -20%,rgba(100,50,220,.15),transparent);
+  background:radial-gradient(ellipse 80% 50% at 50% -20%,rgba(220,80,0,.12),transparent);
   pointer-events:none;
 }
+.orb{position:absolute;border-radius:50%;filter:blur(30px);pointer-events:none;z-index:0;}
+.orb1{width:130px;height:130px;background:rgba(255,100,0,.25);top:-40px;right:-30px;}
+.orb2{width:90px;height:90px;background:rgba(255,200,0,.2);bottom:-20px;left:-20px;}
 
 .auth-greeting{
-  font-size:28px;font-weight:700;letter-spacing:-.5px;margin-bottom:5px;
-  background:linear-gradient(135deg,#fff 0%,rgba(200,170,255,.95) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  font-size:28px;font-weight:700;letter-spacing:-.5px;margin-bottom:6px;
+  color:#fff;line-height:1.3;
 }
-.auth-sub{font-size:14px;color:rgba(255,255,255,.42);margin-bottom:30px;font-weight:400;letter-spacing:.2px;}
+.auth-greeting .name{background:linear-gradient(135deg,#ff9f44,#ffdd00,#ff6b00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.auth-sub{font-size:14px;color:rgba(255,200,120,.45);margin-bottom:28px;font-weight:400;}
 
-/* Input */
 .pwd-wrap{position:relative;margin-bottom:10px;}
 .pwd{
   width:100%;height:56px;border:none;outline:none;border-radius:18px;
-  background:rgba(255,255,255,.07);
-  border:1.5px solid rgba(160,100,255,.2);
-  color:#fff;font-size:17px;text-align:left;letter-spacing:3px;
+  background:rgba(255,255,255,.06);border:1.5px solid rgba(255,130,0,.2);
+  color:#fff;font-size:17px;letter-spacing:3px;
   padding:0 64px 0 22px;
-  transition:border-color .3s,background .3s,box-shadow .3s;
-  font-family:inherit;
+  transition:border-color .3s,background .3s,box-shadow .3s;font-family:inherit;
 }
-.pwd::placeholder{color:rgba(255,255,255,.3);letter-spacing:.4px;font-size:14px;}
-.pwd:focus{
-  background:rgba(120,70,255,.1);
-  border-color:rgba(160,100,255,.55);
-  box-shadow:0 0 0 4px rgba(123,63,255,.18),0 8px 30px rgba(123,63,255,.15);
-}
+.pwd::placeholder{color:rgba(255,200,120,.3);letter-spacing:.4px;font-size:14px;}
+.pwd:focus{background:rgba(255,100,0,.08);border-color:rgba(255,150,0,.55);box-shadow:0 0 0 4px rgba(255,120,0,.15),0 8px 30px rgba(255,100,0,.1);}
 .pwd-go{
   position:absolute;right:8px;top:8px;width:40px;height:40px;border:none;border-radius:14px;
-  background:linear-gradient(135deg,#8b4fff,#4a90ff);
-  color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#ff6b00,#ffcc00);
+  color:#1a0500;cursor:none;display:flex;align-items:center;justify-content:center;
   transition:transform .18s,box-shadow .2s;
-  box-shadow:0 4px 18px rgba(123,63,255,.5);
+  box-shadow:0 4px 18px rgba(255,120,0,.55);
+  font-weight:700;
 }
-.pwd-go:hover{transform:scale(1.08);box-shadow:0 6px 24px rgba(123,63,255,.7);}
+.pwd-go:hover{transform:scale(1.08);box-shadow:0 6px 26px rgba(255,150,0,.7);}
 .pwd-go:active{transform:scale(.9);}
-
-.pwd-hint{height:18px;font-size:13px;color:rgba(255,130,130,.9);font-weight:500;margin-bottom:6px;letter-spacing:.1px;}
+.pwd-hint{height:18px;font-size:13px;color:rgba(255,130,100,.9);font-weight:500;margin-bottom:6px;}
 .shake{animation:shake .45s var(--ease);}
 @keyframes shake{10%,90%{transform:translateX(-3px)}20%,80%{transform:translateX(6px)}30%,50%,70%{transform:translateX(-10px)}40%,60%{transform:translateX(10px)}}
 
-/* Decorative orbs on card */
-.orb{position:absolute;border-radius:50%;filter:blur(30px);pointer-events:none;z-index:0;}
-.orb1{width:120px;height:120px;background:rgba(123,63,255,.3);top:-40px;right:-30px;}
-.orb2{width:80px;height:80px;background:rgba(58,160,255,.25);bottom:-20px;left:-20px;}
-
-/* ===== HOME SCREEN ===== */
+/* ===== HOME ===== */
 #home{justify-content:flex-start;overflow:hidden;}
 .portal-nav{
-  width:100%;padding:0 40px;height:68px;flex-shrink:0;
+  width:100%;padding:0 40px;height:66px;flex-shrink:0;
   display:flex;align-items:center;justify-content:space-between;
-  background:rgba(5,2,20,.7);
-  border-bottom:1px solid rgba(160,100,255,.15);
-  backdrop-filter:blur(24px);
-  position:sticky;top:0;z-index:50;
+  background:rgba(8,3,0,.75);border-bottom:1px solid rgba(255,120,0,.15);
+  backdrop-filter:blur(24px);position:sticky;top:0;z-index:50;
 }
 .nav-brand{display:flex;align-items:center;gap:12px;}
-.nav-brand-icon{
-  width:36px;height:36px;border-radius:10px;
-  background:linear-gradient(135deg,#7b3fff,#3aa0ff);
-  display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;
-  box-shadow:0 3px 12px rgba(123,63,255,.45);
-}
-.nav-brand-name{font-size:16px;font-weight:700;background:linear-gradient(135deg,#c0a0ff,#7bc8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.nav-sep{width:1px;height:18px;background:rgba(255,255,255,.15);margin:0 4px;}
-.nav-portal{font-size:13px;font-weight:500;color:rgba(255,255,255,.45);}
+.nav-brand-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#ff6b00,#ffcc00);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#1a0500;box-shadow:0 3px 12px rgba(255,120,0,.5);}
+.nav-brand-name{font-size:16px;font-weight:700;background:linear-gradient(135deg,#ffcc00,#ff8800);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-sep{width:1px;height:18px;background:rgba(255,120,0,.2);margin:0 4px;}
+.nav-portal{font-size:13px;font-weight:500;color:rgba(255,180,80,.5);}
 .nav-right{display:flex;align-items:center;gap:14px;}
-.nav-time{font-size:15px;font-weight:600;color:rgba(255,255,255,.65);}
-.nav-lock{
-  padding:8px 15px;border-radius:10px;border:1px solid rgba(160,100,255,.25);
-  background:rgba(120,60,255,.12);color:rgba(255,255,255,.65);
-  font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;
-  display:flex;align-items:center;gap:6px;
-}
-.nav-lock:hover{background:rgba(120,60,255,.25);color:#fff;border-color:rgba(160,100,255,.5);}
+.nav-time{font-size:15px;font-weight:600;color:rgba(255,200,120,.7);}
+.nav-lock{padding:8px 15px;border-radius:10px;border:1px solid rgba(255,130,0,.25);background:rgba(255,100,0,.1);color:rgba(255,200,120,.7);font-size:13px;font-weight:600;cursor:none;transition:all .2s;display:flex;align-items:center;gap:6px;}
+.nav-lock:hover{background:rgba(255,100,0,.22);color:#fff;border-color:rgba(255,150,0,.5);}
 
-.home-scroll{width:100%;display:flex;flex-direction:column;align-items:center;height:calc(100vh - 68px);overflow-y:auto;}
-.home-hero{width:100%;max-width:1100px;padding:52px 40px 32px;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.home-scroll{width:100%;display:flex;flex-direction:column;align-items:center;height:calc(100vh - 66px);overflow-y:auto;}
+.home-hero{width:100%;max-width:1100px;padding:52px 40px 28px;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;}
 .hero-greeting{font-size:36px;font-weight:700;letter-spacing:-.7px;line-height:1.15;}
-.hero-greeting .name{background:linear-gradient(135deg,#c0a0ff 0%,#7bc8ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.hero-sub{font-size:15px;color:rgba(255,255,255,.45);margin-top:8px;}
-.hero-badge{display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:14px;background:rgba(61,220,110,.1);border:1px solid rgba(61,220,110,.22);font-size:13px;font-weight:600;color:rgba(61,220,110,.9);}
-.hero-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:#3ddc6e;animation:blink 2s infinite;}
-@keyframes blink{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(61,220,110,.4);}50%{opacity:.8;box-shadow:0 0 0 6px transparent;}}
+.hero-greeting .name{background:linear-gradient(135deg,#ff9f44,#ffdd00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-sub{font-size:15px;color:rgba(255,200,120,.45);margin-top:8px;}
+.hero-badge{display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:14px;background:rgba(255,150,0,.1);border:1px solid rgba(255,150,0,.25);font-size:13px;font-weight:600;color:rgba(255,180,80,.9);}
+.hero-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:#ff9500;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,150,0,.5);}50%{opacity:.7;box-shadow:0 0 0 6px transparent;}}
 
 .apps-section{width:100%;max-width:1100px;padding:0 40px 60px;}
-.apps-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.3);margin-bottom:22px;}
+.apps-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,180,80,.35);margin-bottom:22px;}
 .apps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;}
 .app-card{
-  cursor:pointer;border:none;background:none;color:inherit;
+  cursor:none;border:none;background:none;color:inherit;
   display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;
   padding:28px 16px 22px;border-radius:26px;
-  background:rgba(255,255,255,.045);
-  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,130,0,.1);
   transition:transform .24s var(--ease),background .22s,box-shadow .22s,border-color .22s;
   position:relative;overflow:hidden;
 }
-.app-card::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.05),transparent 50%);border-radius:26px;}
-.app-card:hover{transform:translateY(-6px) scale(1.03);background:rgba(160,100,255,.1);border-color:rgba(160,100,255,.3);box-shadow:0 24px 60px rgba(0,0,0,.45),0 0 30px rgba(123,63,255,.15);}
+.app-card::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.04),transparent 50%);border-radius:26px;}
+.app-card:hover{transform:translateY(-6px) scale(1.03);background:rgba(255,120,0,.1);border-color:rgba(255,150,0,.35);box-shadow:0 24px 60px rgba(0,0,0,.5),0 0 30px rgba(255,120,0,.12);}
 .app-card:active{transform:scale(.94);}
-.app-tile{width:86px;height:86px;border-radius:24px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 14px 30px -8px rgba(0,0,0,.6),0 1px 0 rgba(255,255,255,.3) inset;flex-shrink:0;}
+.app-tile{width:86px;height:86px;border-radius:24px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 14px 30px -8px rgba(0,0,0,.7),0 1px 0 rgba(255,255,255,.3) inset;flex-shrink:0;}
 .app-tile::after{content:"";position:absolute;inset:0;border-radius:24px;background:linear-gradient(180deg,rgba(255,255,255,.2),transparent 45%);}
 .app-tile svg{width:46px;height:46px;position:relative;z-index:2;}
-.g-green{background:linear-gradient(160deg,#3ddc6e,#159a4a);}
-.g-blue{background:linear-gradient(160deg,#3aa0ff,#1666e8);}
-.g-orange{background:linear-gradient(160deg,#ffb44a,#ff7a2f);}
-.g-teal{background:linear-gradient(160deg,#34e3c8,#0fb39c);}
-.g-purple{background:linear-gradient(160deg,#c06bff,#7b3fff);}
+.g-orange{background:linear-gradient(160deg,#ff8c00,#e63900);}
+.g-amber{background:linear-gradient(160deg,#ffd000,#ff7700);}
+.g-red{background:linear-gradient(160deg,#ff4444,#cc1100);}
+.g-warm{background:linear-gradient(160deg,#ff6b35,#c0392b);}
+.g-gold{background:linear-gradient(160deg,#f7c948,#e07b00);}
 .app-name{font-size:14px;font-weight:600;letter-spacing:-.1px;}
-.app-desc{font-size:12px;color:rgba(255,255,255,.4);margin-top:3px;}
+.app-desc{font-size:12px;color:rgba(255,200,120,.4);margin-top:3px;}
 
-.portal-footer{width:100%;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(255,255,255,.05);margin-top:auto;}
-.footer-copy{font-size:12px;color:rgba(255,255,255,.22);}
-.footer-powered{font-size:12px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:5px;}
-.footer-powered span{background:linear-gradient(135deg,#c0a0ff,#7bc8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700;}
+.portal-footer{width:100%;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(255,120,0,.07);margin-top:auto;}
+.footer-copy{font-size:12px;color:rgba(255,200,120,.22);}
+.footer-powered{font-size:12px;color:rgba(255,200,120,.3);display:flex;align-items:center;gap:5px;}
+.footer-powered span{background:linear-gradient(135deg,#ffcc00,#ff8800);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700;}
 
-#launch-flash{position:fixed;inset:0;z-index:200;pointer-events:none;opacity:0;background:linear-gradient(135deg,#7b3fff,#3aa0ff);transition:opacity .3s;}
+#launch-flash{position:fixed;inset:0;z-index:200;pointer-events:none;opacity:0;background:linear-gradient(135deg,#ff6b00,#ffcc00);transition:opacity .3s;}
 #launch-flash.go{opacity:1;}
 
 @media(max-width:640px){
@@ -323,13 +295,19 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Displ
   .auth-card{margin:0 16px;padding:32px 24px;}
   .apps-grid{grid-template-columns:repeat(2,1fr);}
   .home-hero,.apps-section{padding-left:20px;padding-right:20px;}
-  .portal-nav{padding:0 20px;}
+  .portal-nav,.portal-footer{padding-left:20px;padding-right:20px;}
+  html,body{cursor:auto;}
+  #cursor-ring,#cursor-dot{display:none;}
 }
 </style>
 </head>
 <body>
 
-<!-- ===== ANIMATED SCENE ===== -->
+<!-- Custom cursor -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- ===== SCENE ===== -->
 <div class="scene">
   <div class="sky"></div>
   <div class="aurora">
@@ -337,20 +315,22 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Displ
     <div class="aurora-band"></div>
     <div class="aurora-band"></div>
   </div>
+  <div class="horizon-glow"></div>
   <div class="stars-layer" id="stars"></div>
   <div class="skyline"></div>
   <div class="city-glow"></div>
+  <div class="city-windows" id="city-windows"></div>
 
   <div class="road-wrap">
     <div class="road"></div>
-    <div class="road-surface"></div>
     <div class="road-edge left"></div>
     <div class="road-edge right"></div>
     <div class="lane-wrap"><div class="lane-dashes" id="lane-dashes"></div></div>
-    <div class="road-reflection"></div>
+    <div class="road-sheen"></div>
     <div class="trucks" id="trucks"></div>
   </div>
 
+  <div class="rain-layer" id="rain"></div>
   <div class="particles" id="particles"></div>
 </div>
 
@@ -360,22 +340,20 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Displ
     <div class="lock-chip-icon">H</div>
     <div class="lock-chip-name">Harmik AI</div>
   </div>
-
   <div class="lock-time" id="lock-time">9:41</div>
   <div class="lock-date" id="lock-date">Tuesday, June 9</div>
-
   <div class="auth-card">
     <div class="orb orb1"></div>
     <div class="orb orb2"></div>
     <div style="position:relative;z-index:1;">
-      <div class="auth-greeting">Welcome back,<br><span style="background:linear-gradient(135deg,#ff9f44,#ff6bda,#7b3fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Master Harmik</span> 👋</div>
+      <div class="auth-greeting">Welcome back,<br><span class="name">Master Harmik</span> 🔥</div>
       <div class="auth-sub">Enter your password to access the portal</div>
       <form id="pwd-form" autocomplete="off">
         <div class="pwd-hint" id="pwd-hint"></div>
         <div class="pwd-wrap">
           <input class="pwd" id="pwd" type="password" placeholder="Enter password" autocomplete="new-password">
           <button class="pwd-go" type="submit" aria-label="Unlock">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h13M13 6l6 6-6 6" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h13M13 6l6 6-6 6" stroke="#1a0500" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
         </div>
       </form>
@@ -403,7 +381,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Displ
   <div class="home-scroll">
     <div class="home-hero">
       <div>
-        <div class="hero-greeting">Good <span id="greeting-part">morning</span>, <span class="name">Master Harmik</span> 👋</div>
+        <div class="hero-greeting">Good <span id="greeting-part">morning</span>, <span class="name">Master Harmik</span> 🔥</div>
         <div class="hero-sub" id="hero-date">Tuesday, June 9 · All systems operational</div>
       </div>
       <div class="hero-badge">All Systems Online</div>
@@ -422,87 +400,155 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Displ
 <div id="launch-flash"></div>
 
 <script>
-const PASSWORD = "Megafleet424$";
+const PASSWORD="Megafleet424$";
+
+// ===== CUSTOM CURSOR =====
+const cursorDot=document.getElementById('cursor-dot');
+const cursorRing=document.getElementById('cursor-ring');
+let mouseX=0,mouseY=0,ringX=0,ringY=0;
+document.addEventListener('mousemove',e=>{
+  mouseX=e.clientX;mouseY=e.clientY;
+  cursorDot.style.left=mouseX+'px';cursorDot.style.top=mouseY+'px';
+  // Parallax
+  const cx=e.clientX/window.innerWidth-.5,cy=e.clientY/window.innerHeight-.5;
+  document.querySelector('.sky').style.transform=`translate(${cx*10}px,${cy*7}px)`;
+  document.querySelector('.skyline').style.transform=`translateX(${cx*18}px)`;
+  document.querySelector('.aurora').style.transform=`translate(${cx*24}px,${cy*12}px)`;
+  document.getElementById('city-windows').style.transform=`translateX(${cx*14}px)`;
+});
+// Smooth ring follow
+function animRing(){ringX+=(mouseX-ringX)*.12;ringY+=(mouseY-ringY)*.12;cursorRing.style.left=ringX+'px';cursorRing.style.top=ringY+'px';requestAnimationFrame(animRing);}
+animRing();
+document.querySelectorAll('button,input,.app-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cursorRing.style.width='52px';cursorRing.style.height='52px';cursorRing.style.borderColor='rgba(255,200,0,.9)';});
+  el.addEventListener('mouseleave',()=>{cursorRing.style.width='36px';cursorRing.style.height='36px';cursorRing.style.borderColor='rgba(255,150,0,.7)';});
+});
+
+// ===== CLICK EXPLOSIONS =====
+document.addEventListener('click',e=>{
+  if(e.target.closest('button')||e.target.closest('input'))return;
+  spawnExplosion(e.clientX,e.clientY);
+  spawnShootingStar();
+});
+function spawnExplosion(x,y){
+  const container=document.createElement('div');
+  container.className='explosion';container.style.left=x+'px';container.style.top=y+'px';
+  const colors=['#ffcc00','#ff8800','#ff4400','#ffee88','#ff6600','#fff'];
+  for(let i=0;i<18;i++){
+    const spark=document.createElement('div');
+    spark.className='spark';
+    const angle=Math.random()*Math.PI*2;
+    const dist=40+Math.random()*80;
+    const size=2+Math.random()*4;
+    spark.style.cssText=`--dx:${Math.cos(angle)*dist}px;--dy:${Math.sin(angle)*dist}px;--sf:${.5+Math.random()*.6}s;--sw:${size}px;--sh:${size}px;--sc:${colors[Math.floor(Math.random()*colors.length)]};animation-delay:${Math.random()*.08}s;box-shadow:0 0 6px ${colors[Math.floor(Math.random()*colors.length)]};`;
+    container.appendChild(spark);
+  }
+  document.body.appendChild(container);
+  setTimeout(()=>container.remove(),900);
+}
+
+// ===== SHOOTING STARS =====
+function spawnShootingStar(){
+  const starEl=document.createElement('div');
+  starEl.className='shoot';
+  const w=60+Math.random()*140;
+  starEl.style.cssText=`width:${w}px;top:${Math.random()*55}%;left:${20+Math.random()*60}%;--sd:${.8+Math.random()*.6}s;--sx:${-(150+Math.random()*200)}px;--sy:${80+Math.random()*120}px;`;
+  document.querySelector('.stars-layer').appendChild(starEl);
+  setTimeout(()=>starEl.remove(),1600);
+}
+// Auto shooting stars
+setInterval(()=>{if(Math.random()>.4)spawnShootingStar();},2800);
 
 // ===== SCENE GENERATION =====
 // Stars
 (function(){
-  const c = document.getElementById('stars');
-  for(let i=0;i<180;i++){
-    const s=document.createElement('div');
-    s.className='star';
-    const size=Math.random()*2.5+.5;
-    s.style.cssText=`width:${size}px;height:${size}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--t:${2+Math.random()*5}s;--a:${.2+Math.random()*.8};animation-delay:${Math.random()*6}s`;
+  const c=document.getElementById('stars');
+  for(let i=0;i<200;i++){
+    const s=document.createElement('div');s.className='star';
+    const sz=Math.random()*2.5+.5;
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;background:${Math.random()>.7?'#ffddaa':'#ffffff'};--t:${1.5+Math.random()*5}s;--a:${.25+Math.random()*.75};animation-delay:${Math.random()*6}s`;
     c.appendChild(s);
   }
 })();
 
-// Lane dashes
+// City windows
 (function(){
-  const c=document.getElementById('lane-dashes');
-  for(let i=0;i<20;i++){const d=document.createElement('div');d.className='lane-dash';c.appendChild(d);}
+  const c=document.getElementById('city-windows');
+  for(let i=0;i<80;i++){
+    const w=document.createElement('div');w.className='win';
+    const ww=2+Math.random()*5,wh=3+Math.random()*8;
+    const warm=Math.random()>.3;
+    const clr=warm?`rgba(255,${140+Math.floor(Math.random()*80)},${Math.floor(Math.random()*40)},1)`:`rgba(255,${200+Math.floor(Math.random()*55)},${100+Math.floor(Math.random()*80)},1)`;
+    w.style.cssText=`width:${ww}px;height:${wh}px;bottom:${8+Math.random()*90}px;left:${Math.random()*100}%;background:${clr};--wb:${2+Math.random()*6}s;--wo:${.5+Math.random()*.5};animation-delay:${Math.random()*6}s;`;
+    c.appendChild(w);
+  }
 })();
 
-// Trucks SVG (simple side-view freight truck)
-function makeTruck(color1,color2,cabColor){
-  return `<svg viewBox="0 0 220 60" fill="none" xmlns="http://www.w3.org/2000/svg" width="220" height="60">
-  <!-- Trailer -->
-  <rect x="0" y="8" width="148" height="40" rx="4" fill="${color1}"/>
-  <rect x="0" y="8" width="148" height="6" rx="2" fill="${color2}"/>
-  <!-- Cab -->
-  <rect x="148" y="14" width="52" height="34" rx="4" fill="${cabColor}"/>
-  <rect x="155" y="18" width="28" height="18" rx="3" fill="rgba(150,220,255,.45)"/>
-  <line x1="168" y1="18" x2="168" y2="36" stroke="rgba(255,255,255,.25)" stroke-width="1.5"/>
-  <!-- Headlights -->
-  <rect x="196" y="20" width="6" height="10" rx="2" fill="#ffe066"/>
-  <rect x="196" y="32" width="6" height="6" rx="2" fill="#ff4444"/>
-  <!-- Exhaust stack -->
-  <rect x="176" y="4" width="5" height="14" rx="2" fill="${cabColor}"/>
-  <!-- Wheels trailer -->
-  <circle cx="28" cy="52" r="8" fill="#1a1a2e" stroke="#444" stroke-width="2"/>
-  <circle cx="28" cy="52" r="4" fill="#333"/>
-  <circle cx="68" cy="52" r="8" fill="#1a1a2e" stroke="#444" stroke-width="2"/>
-  <circle cx="68" cy="52" r="4" fill="#333"/>
-  <circle cx="108" cy="52" r="8" fill="#1a1a2e" stroke="#444" stroke-width="2"/>
-  <circle cx="108" cy="52" r="4" fill="#333"/>
-  <!-- Wheels cab -->
-  <circle cx="162" cy="52" r="8" fill="#1a1a2e" stroke="#444" stroke-width="2"/>
-  <circle cx="162" cy="52" r="4" fill="#333"/>
-  <circle cx="192" cy="52" r="8" fill="#1a1a2e" stroke="#444" stroke-width="2"/>
-  <circle cx="192" cy="52" r="4" fill="#333"/>
-  <!-- Logo strip -->
-  <rect x="50" y="24" width="60" height="12" rx="3" fill="${color2}" opacity=".7"/>
+// Lane dashes
+(function(){const c=document.getElementById('lane-dashes');for(let i=0;i<20;i++){const d=document.createElement('div');d.className='lane-dash';c.appendChild(d);}})();
+
+// Rain
+(function(){
+  const c=document.getElementById('rain');
+  for(let i=0;i<60;i++){
+    const d=document.createElement('div');d.className='rain-drop';
+    const h=40+Math.random()*60;
+    d.style.cssText=`height:${h}px;left:${Math.random()*100}%;top:${Math.random()*-100}px;--rf:${.5+Math.random()*.5}s;animation-delay:${Math.random()*2}s;opacity:${.3+Math.random()*.5};`;
+    c.appendChild(d);
+  }
+})();
+
+// Trucks
+function makeTruck(c1,c2,cab){
+  return`<svg viewBox="0 0 220 60" fill="none" xmlns="http://www.w3.org/2000/svg" width="220" height="60">
+  <rect x="0" y="8" width="148" height="40" rx="4" fill="${c1}"/>
+  <rect x="0" y="8" width="148" height="5" rx="2" fill="${c2}"/>
+  <rect x="148" y="14" width="52" height="34" rx="4" fill="${cab}"/>
+  <rect x="155" y="18" width="28" height="18" rx="3" fill="rgba(255,200,100,.3)"/>
+  <line x1="168" y1="18" x2="168" y2="36" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+  <rect x="196" y="20" width="6" height="10" rx="2" fill="#ffdd00"/>
+  <rect x="196" y="32" width="6" height="6" rx="2" fill="#ff3300"/>
+  <rect x="176" y="4" width="5" height="14" rx="2" fill="${cab}"/>
+  <circle cx="28" cy="52" r="8" fill="#0d0500" stroke="#332200" stroke-width="2"/>
+  <circle cx="28" cy="52" r="4" fill="#221100"/>
+  <circle cx="68" cy="52" r="8" fill="#0d0500" stroke="#332200" stroke-width="2"/>
+  <circle cx="68" cy="52" r="4" fill="#221100"/>
+  <circle cx="108" cy="52" r="8" fill="#0d0500" stroke="#332200" stroke-width="2"/>
+  <circle cx="108" cy="52" r="4" fill="#221100"/>
+  <circle cx="162" cy="52" r="8" fill="#0d0500" stroke="#332200" stroke-width="2"/>
+  <circle cx="162" cy="52" r="4" fill="#221100"/>
+  <circle cx="192" cy="52" r="8" fill="#0d0500" stroke="#332200" stroke-width="2"/>
+  <circle cx="192" cy="52" r="4" fill="#221100"/>
+  <rect x="40" y="22" width="70" height="14" rx="3" fill="${c2}" opacity=".5"/>
   </svg>`;
 }
-
-const truckConfigs=[
-  {colors:['#1a3a6e','#2255aa','#1a4080'],y:'28%',spd:9,dir:'right',delay:0},
-  {colors:['#2a1a4e','#5a3a9e','#3a2a6e'],y:'18%',spd:13,dir:'right',delay:-4},
-  {colors:['#1a4e2a','#2a8a4a','#1a6030'],y:'22%',spd:7,dir:'right',delay:-7},
-  {colors:['#4e2a1a','#9a5530','#6a3a1a'],y:'32%',spd:11,dir:'right',delay:-2},
+const TRUCKS_CFG=[
+  {c:['#5c1a00','#ff6600','#3d1100'],y:'30%',spd:9,delay:0},
+  {c:['#2a1500','#a05000','#1f1000'],y:'20%',spd:14,delay:-5},
+  {c:['#1a0800','#cc3300','#110500'],y:'24%',spd:7.5,delay:-3},
+  {c:['#3d2000','#e07000','#2a1500'],y:'34%',spd:11,delay:-8},
+  {c:['#1a1a00','#886600','#111100'],y:'16%',spd:16,delay:-1},
 ];
 (function(){
   const c=document.getElementById('trucks');
-  truckConfigs.forEach(t=>{
-    const div=document.createElement('div');
-    div.className='truck right';
-    div.style.cssText=`bottom:${t.y};--spd:${t.spd}s;animation-delay:${t.delay}s;filter:drop-shadow(0 4px 12px rgba(0,0,0,.6));`;
-    div.innerHTML=makeTruck(t.colors[0],t.colors[1],t.colors[2]);
-    // headlight glow
+  TRUCKS_CFG.forEach(t=>{
+    const div=document.createElement('div');div.className='truck';
+    div.style.cssText=`bottom:${t.y};--spd:${t.spd}s;animation-delay:${t.delay}s;filter:drop-shadow(0 6px 16px rgba(0,0,0,.7));`;
+    div.innerHTML=makeTruck(t.c[0],t.c[1],t.c[2]);
     const glow=document.createElement('div');glow.className='truck-glow';div.appendChild(glow);
+    const beam=document.createElement('div');beam.className='headlight-beam';div.appendChild(beam);
     c.appendChild(div);
   });
 })();
 
-// Floating particles (exhaust/dust)
+// Particles
 (function(){
   const c=document.getElementById('particles');
-  const colors=['rgba(180,140,255,.6)','rgba(100,160,255,.5)','rgba(255,150,100,.4)','rgba(80,220,180,.4)'];
-  for(let i=0;i<30;i++){
-    const p=document.createElement('div');
-    p.className='particle';
-    const size=Math.random()*4+2;
-    p.style.cssText=`width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};bottom:${Math.random()*40}%;left:${Math.random()*100}%;--ft:${4+Math.random()*8}s;--dx:${(Math.random()-0.5)*60}px;animation-delay:${Math.random()*8}s;filter:blur(${Math.random()*1}px);`;
+  const clrs=['rgba(255,160,0,.7)','rgba(255,80,0,.6)','rgba(255,220,80,.5)','rgba(255,50,0,.4)','rgba(255,200,100,.5)'];
+  for(let i=0;i<35;i++){
+    const p=document.createElement('div');p.className='particle';
+    const sz=Math.random()*4+2;
+    p.style.cssText=`width:${sz}px;height:${sz}px;background:${clrs[Math.floor(Math.random()*clrs.length)]};bottom:${Math.random()*38}%;left:${Math.random()*100}%;--ft:${4+Math.random()*9}s;--dx:${(Math.random()-.5)*60}px;animation-delay:${Math.random()*9}s;filter:blur(${Math.random()}px);`;
     c.appendChild(p);
   }
 })();
@@ -516,19 +562,20 @@ const ICONS={
   crm:`<svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="9" r="3" stroke="#fff" stroke-width="1.8"/><path d="M4 19a5 5 0 0 1 10 0" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><path d="M16 7.5a2.6 2.6 0 0 1 0 5M17.5 18.5a4.6 4.6 0 0 0-2.2-3.9" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>`
 };
 const APPS=[
-  {name:"O'Reilly's Auto",desc:"Parts & inventory",url:"https://megafleet-6g26tnah.manus.space",cls:"g-green",icon:ICONS.auto},
-  {name:"LINX Tracking",desc:"Live load tracking",url:"https://megafleet-6g26tnah.manus.space",cls:"g-blue",icon:ICONS.track},
-  {name:"Agent Commission",desc:"Freight broker calc",url:"https://freightcalc-jrksoq4b.manus.space",cls:"g-orange",icon:ICONS.pct},
-  {name:"Payables",desc:"AP & billing",url:"https://megafleetpay-aijaerxz.manus.space",cls:"g-teal",icon:ICONS.pay},
-  {name:"CRM Outreach",desc:"Leads & contacts",url:"https://megafleet-dhzsbjcq.manus.space",cls:"g-purple",icon:ICONS.crm}
+  {name:"O'Reilly's Auto",desc:"Parts & inventory",url:"https://megafleet-6g26tnah.manus.space",cls:"g-orange",icon:ICONS.auto},
+  {name:"LINX Tracking",desc:"Live load tracking",url:"https://megafleet-6g26tnah.manus.space",cls:"g-amber",icon:ICONS.track},
+  {name:"Agent Commission",desc:"Freight broker calc",url:"https://freightcalc-jrksoq4b.manus.space",cls:"g-gold",icon:ICONS.pct},
+  {name:"Payables",desc:"AP & billing",url:"https://megafleetpay-aijaerxz.manus.space",cls:"g-warm",icon:ICONS.pay},
+  {name:"CRM Outreach",desc:"Leads & contacts",url:"https://megafleet-dhzsbjcq.manus.space",cls:"g-red",icon:ICONS.crm}
 ];
 const grid=document.getElementById('apps-grid');
 APPS.forEach(a=>{
   const btn=document.createElement('button');btn.className='app-card';
   btn.innerHTML=`<div class="app-tile ${a.cls}">${a.icon}</div><div><div class="app-name">${a.name}</div><div class="app-desc">${a.desc}</div></div>`;
   btn.addEventListener('click',()=>{
+    spawnExplosion(btn.getBoundingClientRect().left+btn.offsetWidth/2,btn.getBoundingClientRect().top+btn.offsetHeight/2);
     const f=document.getElementById('launch-flash');f.classList.add('go');
-    setTimeout(()=>{window.location.href=a.url;},300);
+    setTimeout(()=>{window.location.href=a.url;},320);
   });
   grid.appendChild(btn);
 });
@@ -551,7 +598,12 @@ tick();setInterval(tick,1000);
 // ===== AUTH =====
 const lock=document.getElementById('lock'),home=document.getElementById('home');
 const pwd=document.getElementById('pwd'),hint=document.getElementById('pwd-hint');
-function unlock(){lock.classList.add('hidden');home.classList.remove('hidden');sessionStorage.setItem('mf_unlocked','1');}
+function unlock(){
+  spawnExplosion(window.innerWidth/2,window.innerHeight/2);
+  setTimeout(()=>{spawnExplosion(window.innerWidth/2-80,window.innerHeight/2+40);},120);
+  setTimeout(()=>{spawnExplosion(window.innerWidth/2+80,window.innerHeight/2+40);},200);
+  lock.classList.add('hidden');home.classList.remove('hidden');sessionStorage.setItem('mf_unlocked','1');
+}
 function lockNow(){home.classList.add('hidden');lock.classList.remove('hidden');pwd.value='';hint.textContent='';sessionStorage.removeItem('mf_unlocked');setTimeout(()=>pwd.focus(),500);}
 document.getElementById('pwd-form').addEventListener('submit',e=>{
   e.preventDefault();
@@ -559,14 +611,6 @@ document.getElementById('pwd-form').addEventListener('submit',e=>{
   else{hint.textContent='Incorrect password. Try again.';const w=document.querySelector('.pwd-wrap');w.classList.remove('shake');void w.offsetWidth;w.classList.add('shake');pwd.value='';pwd.focus();}
 });
 if(sessionStorage.getItem('mf_unlocked')==='1'){unlock();}else{setTimeout(()=>pwd.focus(),400);}
-
-// ===== INTERACTIVE MOUSE PARALLAX =====
-document.addEventListener('mousemove',e=>{
-  const cx=e.clientX/window.innerWidth-.5,cy=e.clientY/window.innerHeight-.5;
-  document.querySelector('.sky').style.transform=`translate(${cx*8}px,${cy*6}px)`;
-  document.querySelector('.skyline').style.transform=`translateX(${cx*14}px)`;
-  document.querySelector('.aurora').style.transform=`translate(${cx*20}px,${cy*10}px)`;
-});
 </script>
 </body>
 </html>
