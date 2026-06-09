@@ -6,142 +6,226 @@
 <title>MegaFleet Portal — Harmik AI</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:#111418;color:#E8EAF0;overflow:hidden;}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:#EEF1F6;color:#1a1d2e;overflow:hidden;}
 
-/* ===== SCENE ===== */
-.scene{position:fixed;inset:0;z-index:0;}
-.sky{position:absolute;inset:0;bottom:32%;background:linear-gradient(180deg,#0c0e14 0%,#141820 60%,#1c2230 100%);}
-.stars-layer{position:absolute;inset:0;bottom:32%;overflow:hidden;}
-.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--t,3s) ease-in-out infinite alternate;}
-@keyframes twinkle{from{opacity:var(--a,.5);}to{opacity:.05;}}
-.skyline{position:absolute;bottom:32%;left:0;right:0;height:150px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 150' preserveAspectRatio='none'%3E%3Cpath fill='%230e1016' d='M0 150V88l25-4 8-28 8 28 12-46 12 46 8-38 8 38 18-56 7 18 7-18 8 56 10-34 8-9 8 9 8-15 8 15 12-42 8 22 7-22 7 22 10-52 7 26 7-26 10 52 8-18 6 4 6-4 8 18 10-38 7 9 7-9 10 38 12-56 8 30 8-30 12 56 6-22 6 8 6-8 6 22 10-42 8 18 8-18 10 42 8-26 6 8 6-8 8 26 12-46 8 22 8-22 12 46 6-16 6 6 6-6 6 16 10-36 8 16 8-16 10 36 8-26 6 9 6-9 8 26 12-44 8 20 8-20 12 44V150z'/%3E%3C/svg%3E") no-repeat bottom/cover;}
-.road-wrap{position:absolute;bottom:0;left:0;right:0;height:32%;background:#111316;overflow:hidden;}
-.road-line{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:3px;height:100%;overflow:hidden;}
-.dashes{position:absolute;top:0;width:100%;animation:dash-scroll 1s linear infinite;}
-.dash{width:3px;height:28px;background:rgba(255,255,255,.25);margin-bottom:28px;border-radius:2px;}
-@keyframes dash-scroll{from{transform:translateY(-56px);}to{transform:translateY(56px);}}
-.edge{position:absolute;bottom:0;top:0;width:2px;background:rgba(255,255,255,.12);}
-.edge.l{left:15%;}
-.edge.r{right:15%;}
-.trucks{position:absolute;inset:0;}
-.truck{position:absolute;animation:drive var(--s,10s) linear infinite;}
-@keyframes drive{from{left:-240px;}to{left:calc(100% + 40px);}}
+/* ===== ANIMATED BACKGROUND ===== */
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden;}
+
+/* Soft gradient blobs */
+.blob{position:absolute;border-radius:50%;filter:blur(80px);animation:blob-float var(--bt,14s) ease-in-out infinite alternate;}
+.blob1{width:500px;height:500px;background:rgba(196,30,58,.08);top:-100px;left:-100px;--bt:14s;}
+.blob2{width:400px;height:400px;background:rgba(21,101,192,.08);bottom:-80px;right:-80px;--bt:18s;animation-delay:-6s;}
+.blob3{width:350px;height:350px;background:rgba(196,30,58,.05);top:40%;left:50%;transform:translate(-50%,-50%);--bt:12s;animation-delay:-3s;}
+@keyframes blob-float{from{transform:translate(0,0) scale(1);}to{transform:translate(30px,20px) scale(1.08);}}
+.blob3{animation:blob-float3 12s ease-in-out infinite alternate;}
+@keyframes blob-float3{from{transform:translate(-50%,-50%) scale(1);}to{transform:translate(calc(-50% + 20px),calc(-50% + 15px)) scale(1.06);}}
+
+/* Grid lines */
+.grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(21,101,192,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(21,101,192,.04) 1px,transparent 1px);background-size:60px 60px;animation:grid-shift 20s linear infinite;}
+@keyframes grid-shift{from{background-position:0 0;}to{background-position:60px 60px;}}
+
+/* Floating dots */
+.dot{position:absolute;border-radius:50%;animation:dot-rise var(--dr,8s) linear infinite;opacity:0;}
+@keyframes dot-rise{0%{transform:translateY(0) translateX(0);opacity:0;}10%{opacity:.7;}90%{opacity:.1;}100%{transform:translateY(-60vh) translateX(var(--dx,20px));opacity:0;}}
+
+/* Stars/sparkles */
+.sparkle{position:absolute;animation:sparkle-pop var(--sp,2s) ease-in-out infinite;}
+@keyframes sparkle-pop{0%,100%{transform:scale(0) rotate(0deg);opacity:0;}50%{transform:scale(1) rotate(180deg);opacity:.8;}}
 
 /* ===== VIEWS ===== */
-.view{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s,transform .5s,filter .5s;}
-.view.hidden{opacity:0;transform:scale(1.03);filter:blur(6px);pointer-events:none;}
+.view{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .55s cubic-bezier(.22,1,.36,1),transform .55s cubic-bezier(.22,1,.36,1),filter .55s;}
+.view.hidden{opacity:0;transform:scale(.97) translateY(-16px);filter:blur(6px);pointer-events:none;}
 
-/* ===== LOCK ===== */
-.brand-pill{display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:40px;padding:8px 18px 8px 8px;margin-bottom:28px;}
-.brand-icon{width:30px;height:30px;border-radius:50%;background:#2D9E5F;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;}
-.brand-label{font-size:14px;font-weight:600;color:#E8EAF0;}
+/* ===== LOCK SCREEN ===== */
+.lock-brand{display:inline-flex;align-items:center;gap:10px;margin-bottom:30px;}
+.lb-icon{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#C41E3A,#8B0000);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff;box-shadow:0 6px 20px rgba(196,30,58,.35);}
+.lb-name{font-size:22px;font-weight:700;color:#1a1d2e;letter-spacing:-.3px;}
+.lb-ai{font-size:22px;font-weight:300;color:#1565C0;}
 
-.clock{font-size:96px;font-weight:200;letter-spacing:-4px;color:#fff;line-height:.9;text-align:center;margin-bottom:8px;}
-.date-str{font-size:16px;color:rgba(232,234,240,.45);text-align:center;margin-bottom:40px;}
+.clock-display{font-size:100px;font-weight:200;letter-spacing:-5px;color:#1a1d2e;line-height:.9;text-align:center;margin-bottom:8px;animation:clock-breathe 4s ease-in-out infinite;}
+@keyframes clock-breathe{0%,100%{filter:drop-shadow(0 2px 8px rgba(196,30,58,.15));}50%{filter:drop-shadow(0 4px 20px rgba(21,101,192,.2));}}
+.date-display{font-size:16px;color:rgba(26,29,46,.45);text-align:center;margin-bottom:40px;letter-spacing:.3px;}
 
-.card{width:100%;max-width:380px;background:#1C1F26;border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:32px;box-shadow:0 30px 80px rgba(0,0,0,.6);}
-.card-title{font-size:22px;font-weight:600;margin-bottom:4px;}
-.card-title span{color:#2D9E5F;}
-.card-sub{font-size:13px;color:rgba(232,234,240,.4);margin-bottom:22px;}
+.auth-card{
+  width:100%;max-width:400px;
+  background:#fff;
+  border-radius:24px;
+  box-shadow:0 20px 60px rgba(26,29,46,.12),0 4px 20px rgba(196,30,58,.06),0 1px 3px rgba(0,0,0,.08);
+  overflow:hidden;
+  animation:card-rise .7s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes card-rise{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+
+.card-banner{height:6px;background:linear-gradient(90deg,#C41E3A 0%,#8B0000 35%,#1565C0 65%,#0D47A1 100%);position:relative;overflow:hidden;}
+.card-banner::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);animation:shimmer 2.5s ease-in-out infinite;}
+@keyframes shimmer{from{transform:translateX(-100%);}to{transform:translateX(100%);}}
+
+.card-body{padding:36px 32px 32px;}
+.card-title{font-size:22px;font-weight:700;color:#1a1d2e;margin-bottom:4px;}
+.card-title .hi{color:#C41E3A;}
+.card-sub{font-size:13px;color:rgba(26,29,46,.4);margin-bottom:24px;}
+
 .pwd-wrap{position:relative;margin-bottom:8px;}
-.pwd{width:100%;height:48px;background:#252830;border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#E8EAF0;font-size:15px;letter-spacing:2px;padding:0 52px 0 16px;outline:none;font-family:inherit;transition:border-color .2s,box-shadow .2s;}
-.pwd::placeholder{color:rgba(232,234,240,.25);letter-spacing:.3px;font-size:13px;}
-.pwd:focus{border-color:#2D9E5F;box-shadow:0 0 0 3px rgba(45,158,95,.15);}
-.pwd-btn{position:absolute;right:6px;top:6px;width:36px;height:36px;background:#2D9E5F;border:none;border-radius:9px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,transform .15s;}
-.pwd-btn:hover{background:#34b870;}
-.pwd-btn:active{transform:scale(.9);}
-.err{height:16px;font-size:12px;color:#e05555;margin-bottom:4px;}
+.pwd{width:100%;height:50px;background:#F4F6FA;border:1.5px solid #E2E6EF;border-radius:12px;color:#1a1d2e;font-size:15px;letter-spacing:2px;padding:0 54px 0 18px;outline:none;font-family:inherit;transition:border-color .2s,box-shadow .2s;}
+.pwd::placeholder{color:rgba(26,29,46,.3);letter-spacing:.3px;font-size:13px;}
+.pwd:focus{border-color:#1565C0;box-shadow:0 0 0 3px rgba(21,101,192,.1);background:#fff;}
+.pwd-go{position:absolute;right:7px;top:7px;width:36px;height:36px;background:linear-gradient(135deg,#C41E3A,#8B0000);border:none;border-radius:10px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s,box-shadow .2s;box-shadow:0 3px 10px rgba(196,30,58,.3);}
+.pwd-go:hover{transform:scale(1.06);box-shadow:0 5px 16px rgba(196,30,58,.4);}
+.pwd-go:active{transform:scale(.9);}
+.err{height:16px;font-size:12px;color:#C41E3A;font-weight:500;margin-bottom:5px;}
 .shake{animation:shake .4s ease;}
-@keyframes shake{10%,90%{transform:translateX(-3px)}20%,80%{transform:translateX(5px)}30%,50%,70%{transform:translateX(-7px)}40%,60%{transform:translateX(7px)}}
+@keyframes shake{10%,90%{transform:translateX(-3px)}20%,80%{transform:translateX(5px)}30%,50%,70%{transform:translateX(-8px)}40%,60%{transform:translateX(8px)}}
+
+.card-footer{display:flex;align-items:center;justify-content:center;gap:6px;padding:14px;border-top:1px solid #F0F2F7;font-size:11px;color:rgba(26,29,46,.3);}
+.card-footer span{width:5px;height:5px;border-radius:50%;background:#C41E3A;animation:dot-pulse 1.5s ease-in-out infinite;}
+.card-footer span:nth-child(2){background:#1565C0;animation-delay:.3s;}
+.card-footer span:nth-child(3){background:#C41E3A;animation-delay:.6s;}
+@keyframes dot-pulse{0%,100%{transform:scale(1);opacity:.4;}50%{transform:scale(1.5);opacity:1;}}
 
 /* ===== HOME ===== */
 #home{justify-content:flex-start;}
-.topbar{width:100%;height:60px;background:#1C1F26;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;padding:0 36px;justify-content:space-between;flex-shrink:0;}
-.tb-left{display:flex;align-items:center;gap:10px;}
-.tb-icon{width:30px;height:30px;border-radius:8px;background:#2D9E5F;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;}
-.tb-name{font-size:15px;font-weight:600;color:#E8EAF0;}
-.tb-div{width:1px;height:14px;background:rgba(255,255,255,.1);margin:0 4px;}
-.tb-sub{font-size:12px;color:rgba(232,234,240,.3);}
-.tb-right{display:flex;align-items:center;gap:10px;}
-.tb-time{font-size:14px;color:rgba(232,234,240,.5);}
-.lock-btn{padding:6px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:rgba(232,234,240,.5);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px;}
-.lock-btn:hover{background:rgba(255,255,255,.08);color:#E8EAF0;border-color:rgba(255,255,255,.18);}
+.topbar{
+  width:100%;height:62px;flex-shrink:0;
+  background:linear-gradient(90deg,#0D1B3E 0%,#1565C0 50%,#C41E3A 100%);
+  display:flex;align-items:center;padding:0 36px;justify-content:space-between;
+  box-shadow:0 2px 20px rgba(13,27,62,.25);
+  animation:bar-in .6s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes bar-in{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+.tb-brand{display:flex;align-items:center;gap:10px;}
+.tb-icon{width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;}
+.tb-name{font-size:15px;font-weight:700;color:#fff;}
+.tb-sep{width:1px;height:14px;background:rgba(255,255,255,.2);margin:0 4px;}
+.tb-sub{font-size:12px;color:rgba(255,255,255,.5);}
+.tb-right{display:flex;align-items:center;gap:12px;}
+.tb-time{font-size:14px;color:rgba(255,255,255,.7);font-weight:500;}
+.lock-btn{padding:7px 14px;border-radius:9px;border:1.5px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px;}
+.lock-btn:hover{background:rgba(255,255,255,.2);color:#fff;}
 
-.main{width:100%;height:calc(100vh - 60px);overflow-y:auto;display:flex;flex-direction:column;align-items:center;}
-.hero{width:100%;max-width:1000px;padding:44px 36px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
-.hero-left h2{font-size:28px;font-weight:600;color:#E8EAF0;}
-.hero-left h2 span{color:#2D9E5F;}
-.hero-left p{font-size:13px;color:rgba(232,234,240,.35);margin-top:5px;}
-.status-badge{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:10px;background:#1C1F26;border:1px solid rgba(255,255,255,.08);font-size:12px;font-weight:500;color:rgba(232,234,240,.6);}
-.status-dot{width:6px;height:6px;border-radius:50%;background:#2D9E5F;animation:blink 2s infinite;}
-@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+.main{width:100%;height:calc(100vh - 62px);overflow-y:auto;display:flex;flex-direction:column;align-items:center;}
 
-.apps-area{width:100%;max-width:1000px;padding:0 36px 50px;}
-.section-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(232,234,240,.25);margin-bottom:16px;}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;}
-.app-btn{background:#1C1F26;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:22px 16px 18px;display:flex;flex-direction:column;align-items:center;gap:12px;cursor:pointer;text-align:center;transition:background .2s,border-color .2s,transform .2s;color:inherit;}
-.app-btn:hover{background:#22262E;border-color:rgba(45,158,95,.4);transform:translateY(-3px);}
-.app-btn:active{transform:scale(.96);}
-.tile{width:72px;height:72px;border-radius:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(0,0,0,.5);}
-.tile svg{width:36px;height:36px;}
-.t-green{background:#1E4D35;}
-.t-slate{background:#2A3140;}
-.t-brown{background:#3D2B1F;}
-.t-teal{background:#1B3D3D;}
-.t-olive{background:#2E3420;}
-.app-name{font-size:13px;font-weight:600;color:#E8EAF0;}
-.app-desc{font-size:11px;color:rgba(232,234,240,.35);margin-top:2px;}
+.hero{width:100%;max-width:1040px;padding:48px 36px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;animation:fade-up .6s .1s cubic-bezier(.22,1,.36,1) both;}
+@keyframes fade-up{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.hero-h{font-size:30px;font-weight:700;color:#1a1d2e;letter-spacing:-.4px;}
+.hero-h .name{background:linear-gradient(90deg,#C41E3A,#1565C0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-p{font-size:13px;color:rgba(26,29,46,.4);margin-top:6px;}
+.badge{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:50px;background:#fff;border:1.5px solid #E2E6EF;font-size:12px;font-weight:600;color:#1a1d2e;box-shadow:0 2px 8px rgba(26,29,46,.06);}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;animation:pulse-dot 2s infinite;}
+@keyframes pulse-dot{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.4);}50%{box-shadow:0 0 0 5px rgba(34,197,94,0);}}
 
-.footer{width:100%;padding:14px 36px;border-top:1px solid rgba(255,255,255,.05);display:flex;justify-content:space-between;margin-top:auto;}
-.footer span{font-size:11px;color:rgba(232,234,240,.2);}
-.footer strong{font-size:11px;color:rgba(232,234,240,.3);}
+/* Stats row */
+.stats-row{width:100%;max-width:1040px;padding:0 36px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:8px;animation:fade-up .6s .15s cubic-bezier(.22,1,.36,1) both;}
+.stat-card{background:#fff;border-radius:16px;padding:18px 20px;border:1.5px solid #E8EBF2;box-shadow:0 2px 8px rgba(26,29,46,.04);transition:transform .2s,box-shadow .2s;}
+.stat-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(26,29,46,.08);}
+.stat-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:rgba(26,29,46,.35);margin-bottom:6px;}
+.stat-val{font-size:22px;font-weight:700;color:#1a1d2e;}
+.stat-val.red{color:#C41E3A;}
+.stat-val.blue{color:#1565C0;}
+.stat-change{font-size:11px;color:#22c55e;font-weight:500;margin-top:3px;}
+
+.apps-area{width:100%;max-width:1040px;padding:0 36px 50px;animation:fade-up .6s .2s cubic-bezier(.22,1,.36,1) both;}
+.sec-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(26,29,46,.3);margin-bottom:14px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;}
+
+.app-card{
+  background:#fff;border:1.5px solid #E8EBF2;border-radius:20px;
+  padding:24px 16px 20px;display:flex;flex-direction:column;align-items:center;
+  gap:12px;cursor:pointer;text-align:center;
+  transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .25s;
+  position:relative;overflow:hidden;
+  animation:card-pop .5s var(--cd,.2s) cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes card-pop{from{opacity:0;transform:translateY(24px) scale(.97);}to{opacity:1;transform:translateY(0) scale(1);}}
+.app-card::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.8),transparent);border-radius:20px;pointer-events:none;}
+.app-card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 20px 50px rgba(26,29,46,.12),0 4px 12px rgba(196,30,58,.06);border-color:rgba(21,101,192,.2);}
+.app-card:active{transform:scale(.96);}
+
+/* Animated top bar on card */
+.app-card-bar{position:absolute;top:0;left:0;right:0;height:4px;transform:scaleX(0);transform-origin:left;transition:transform .3s cubic-bezier(.22,1,.36,1);}
+.app-card:hover .app-card-bar{transform:scaleX(1);}
+.bar-red{background:linear-gradient(90deg,#C41E3A,#FF4444);}
+.bar-blue{background:linear-gradient(90deg,#1565C0,#42A5F5);}
+.bar-red2{background:linear-gradient(90deg,#8B0000,#C41E3A);}
+.bar-navy{background:linear-gradient(90deg,#0D1B3E,#1565C0);}
+.bar-mixed{background:linear-gradient(90deg,#C41E3A,#1565C0);}
+
+.tile{width:76px;height:76px;border-radius:20px;display:flex;align-items:center;justify-content:center;position:relative;transition:transform .25s;box-shadow:0 8px 24px rgba(0,0,0,.12);}
+.app-card:hover .tile{transform:scale(1.08) rotate(-2deg);}
+.tile::after{content:"";position:absolute;inset:0;border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.25),transparent 50%);pointer-events:none;}
+.tile svg{width:38px;height:38px;position:relative;z-index:2;}
+
+.t-red{background:linear-gradient(135deg,#C41E3A,#8B0000);}
+.t-blue{background:linear-gradient(135deg,#1565C0,#0D47A1);}
+.t-dkred{background:linear-gradient(135deg,#991430,#660D20);}
+.t-navy{background:linear-gradient(135deg,#0D1B3E,#1A237E);}
+.t-mixed{background:linear-gradient(135deg,#C41E3A 0%,#1565C0 100%);}
+
+.app-name{font-size:13px;font-weight:700;color:#1a1d2e;}
+.app-desc{font-size:11px;color:rgba(26,29,46,.4);margin-top:2px;}
+
+.footer{width:100%;padding:14px 36px;display:flex;justify-content:space-between;border-top:1.5px solid #E8EBF2;background:#fff;margin-top:auto;}
+.footer-l{font-size:11px;color:rgba(26,29,46,.3);}
+.footer-r{font-size:11px;display:flex;align-items:center;gap:5px;color:rgba(26,29,46,.4);}
+.footer-r span{font-weight:700;background:linear-gradient(90deg,#C41E3A,#1565C0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+
+@media(max-width:640px){
+  .stats-row{grid-template-columns:repeat(2,1fr);}
+  .clock-display{font-size:72px;}
+  .auth-card{margin:0 16px;}
+  .hero,.apps-area,.stats-row{padding-left:16px;padding-right:16px;}
+  .topbar{padding:0 16px;}
+}
 </style>
 </head>
 <body>
 
-<!-- SCENE -->
-<div class="scene">
-  <div class="sky"></div>
-  <div class="stars-layer" id="stars"></div>
-  <div class="skyline"></div>
-  <div class="road-wrap">
-    <div class="edge l"></div>
-    <div class="edge r"></div>
-    <div class="road-line"><div class="dashes" id="dashes"></div></div>
-    <div class="trucks" id="trucks"></div>
-  </div>
+<!-- BACKGROUND -->
+<div class="bg">
+  <div class="grid-lines"></div>
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+  <div id="dots"></div>
+  <div id="sparkles"></div>
 </div>
 
 <!-- LOCK -->
 <div class="view" id="lock">
-  <div class="brand-pill">
-    <div class="brand-icon">H</div>
-    <div class="brand-label">Harmik AI</div>
+  <div class="lock-brand">
+    <div class="lb-icon">H</div>
+    <div class="lb-name">Harmik <span class="lb-ai">AI</span></div>
   </div>
-  <div class="clock" id="lock-clock">9:41</div>
-  <div class="date-str" id="lock-date">Tuesday, June 9</div>
-  <div class="card">
-    <div class="card-title">Welcome back, <span>Master Harmik</span></div>
-    <div class="card-sub">Enter your password to continue</div>
-    <form id="pwd-form" autocomplete="off">
-      <div class="err" id="err"></div>
-      <div class="pwd-wrap">
-        <input class="pwd" id="pwd" type="password" placeholder="Password" autocomplete="new-password">
-        <button class="pwd-btn" type="submit">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h13M13 6l6 6-6 6" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
-    </form>
+  <div class="clock-display" id="lock-clock">9:41</div>
+  <div class="date-display" id="lock-date">Tuesday, June 9</div>
+  <div class="auth-card">
+    <div class="card-banner"></div>
+    <div class="card-body">
+      <div class="card-title"><span class="hi">Welcome back,</span><br>Master Harmik</div>
+      <div class="card-sub">Sign in to access MegaFleet Portal</div>
+      <form id="pwd-form" autocomplete="off">
+        <div class="err" id="err"></div>
+        <div class="pwd-wrap">
+          <input class="pwd" id="pwd" type="password" placeholder="Enter your password" autocomplete="new-password">
+          <button class="pwd-go" type="submit">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h13M13 6l6 6-6 6" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="card-footer">
+      <span></span><span></span><span></span>
+      &nbsp;Secured by Harmik AI
+    </div>
   </div>
 </div>
 
 <!-- HOME -->
 <div class="view hidden" id="home" style="justify-content:flex-start;">
   <div class="topbar">
-    <div class="tb-left">
+    <div class="tb-brand">
       <div class="tb-icon">H</div>
       <div class="tb-name">Harmik AI</div>
-      <div class="tb-div"></div>
+      <div class="tb-sep"></div>
       <div class="tb-sub">MegaFleet Portal</div>
     </div>
     <div class="tb-right">
@@ -154,19 +238,25 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",He
   </div>
   <div class="main">
     <div class="hero">
-      <div class="hero-left">
-        <h2>Good <span id="greeting">morning</span>, Master Harmik</h2>
-        <p id="hero-date">Tuesday, June 9 · All systems operational</p>
+      <div>
+        <div class="hero-h">Good <span id="greeting">morning</span>, <span class="name">Master Harmik</span></div>
+        <div class="hero-p" id="hero-date">Tuesday, June 9 · All systems operational</div>
       </div>
-      <div class="status-badge"><div class="status-dot"></div> All Systems Online</div>
+      <div class="badge"><div class="badge-dot"></div> All Systems Online</div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-label">Fleet Status</div><div class="stat-val blue">Active</div><div class="stat-change">↑ All running</div></div>
+      <div class="stat-card"><div class="stat-label">Portal Apps</div><div class="stat-val">5</div><div class="stat-change">↑ All online</div></div>
+      <div class="stat-card"><div class="stat-label">System</div><div class="stat-val red">Live</div><div class="stat-change">↑ 99.9% uptime</div></div>
+      <div class="stat-card"><div class="stat-label">Last Login</div><div class="stat-val" style="font-size:14px;" id="last-login">Just now</div><div class="stat-change">Successful</div></div>
     </div>
     <div class="apps-area">
-      <div class="section-label">Your Applications</div>
+      <div class="sec-label">Your Applications</div>
       <div class="grid" id="grid"></div>
     </div>
     <div class="footer">
-      <span>© 2025 Mega Fleet Logistics Corp.</span>
-      <strong>Powered by Harmik AI</strong>
+      <div class="footer-l">© 2025 Mega Fleet Logistics Corp. All rights reserved.</div>
+      <div class="footer-r">Powered by <span>Harmik AI</span></div>
     </div>
   </div>
 </div>
@@ -174,72 +264,51 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",He
 <script>
 const PASSWORD = "Megafleet424$";
 
-// Stars
+// Floating dots
 (function(){
-  const c = document.getElementById('stars');
-  for(let i=0;i<160;i++){
-    const s = document.createElement('div'); s.className='star';
-    const sz = Math.random()*2+.4;
-    s.style.cssText = `width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--t:${2+Math.random()*5}s;--a:${.2+Math.random()*.6};animation-delay:${Math.random()*6}s;`;
+  const c = document.getElementById('dots');
+  const cols = ['rgba(196,30,58,.5)','rgba(21,101,192,.5)','rgba(196,30,58,.3)','rgba(21,101,192,.3)','#fff'];
+  for(let i=0;i<30;i++){
+    const d=document.createElement('div');d.className='dot';
+    const sz=2+Math.random()*4;
+    d.style.cssText=`width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:50%;position:absolute;bottom:${Math.random()*40}%;left:${Math.random()*100}%;--dr:${5+Math.random()*10}s;--dx:${(Math.random()-.5)*80}px;animation-delay:${Math.random()*10}s;filter:blur(${Math.random()*.5}px);`;
+    c.appendChild(d);
+  }
+})();
+
+// Sparkles
+(function(){
+  const c = document.getElementById('sparkles');
+  for(let i=0;i<12;i++){
+    const s=document.createElement('div');s.className='sparkle';
+    const sz=4+Math.random()*6;
+    const col=Math.random()>.5?'#C41E3A':'#1565C0';
+    s.style.cssText=`width:${sz}px;height:${sz}px;background:${col};border-radius:1px;position:absolute;top:${Math.random()*80}%;left:${Math.random()*90}%;--sp:${2+Math.random()*4}s;animation-delay:${Math.random()*4}s;opacity:.6;`;
     c.appendChild(s);
   }
 })();
 
-// Dashes
-(function(){
-  const c = document.getElementById('dashes');
-  for(let i=0;i<12;i++){ const d=document.createElement('div'); d.className='dash'; c.appendChild(d); }
-})();
-
-// Trucks
-function truck(bc, tc){
-  return `<svg viewBox="0 0 200 55" fill="none" xmlns="http://www.w3.org/2000/svg" width="200" height="55">
-  <rect x="0" y="10" width="132" height="34" rx="3" fill="${bc}"/>
-  <rect x="132" y="14" width="48" height="30" rx="3" fill="${tc}"/>
-  <rect x="138" y="18" width="25" height="14" rx="2" fill="rgba(255,255,255,.12)"/>
-  <rect x="176" y="19" width="4" height="8" rx="1" fill="rgba(255,255,210,.7)"/>
-  <circle cx="24" cy="47" r="7" fill="#0c0d10" stroke="#1e2028" stroke-width="1.5"/>
-  <circle cx="60" cy="47" r="7" fill="#0c0d10" stroke="#1e2028" stroke-width="1.5"/>
-  <circle cx="96" cy="47" r="7" fill="#0c0d10" stroke="#1e2028" stroke-width="1.5"/>
-  <circle cx="150" cy="47" r="7" fill="#0c0d10" stroke="#1e2028" stroke-width="1.5"/>
-  <circle cx="176" cy="47" r="7" fill="#0c0d10" stroke="#1e2028" stroke-width="1.5"/>
-  </svg>`;
-}
-const TDATA = [
-  {bc:'#1a2030',tc:'#141820',y:'26%',s:10,d:0},
-  {bc:'#1e1a18',tc:'#16120f',y:'18%',s:15,d:-5},
-  {bc:'#1a2018',tc:'#141810',y:'22%',s:8,d:-3},
-  {bc:'#20181a',tc:'#181012',y:'30%',s:13,d:-8},
-];
-(function(){
-  const c = document.getElementById('trucks');
-  TDATA.forEach(t => {
-    const div = document.createElement('div'); div.className='truck';
-    div.style.cssText = `bottom:${t.y};--s:${t.s}s;animation-delay:${t.d}s;filter:drop-shadow(0 3px 10px rgba(0,0,0,.7));`;
-    div.innerHTML = truck(t.bc, t.tc);
-    c.appendChild(div);
-  });
-})();
-
 // Apps
 const ICONS = {
-  auto: `<svg viewBox="0 0 24 24" fill="none"><path d="M5 16l1.5-4.5A2 2 0 0 1 8.4 10h7.2a2 2 0 0 1 1.9 1.5L19 16M5 16h14M5 16v2.5A1.5 1.5 0 0 0 6.5 20H7a1.5 1.5 0 0 0 1.5-1.5V18M19 16v2.5A1.5 1.5 0 0 1 17.5 20H17a1.5 1.5 0 0 1-1.5-1.5V18" stroke="rgba(232,234,240,.8)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7.5" cy="16" r="1" fill="rgba(232,234,240,.8)"/><circle cx="16.5" cy="16" r="1" fill="rgba(232,234,240,.8)"/></svg>`,
-  track: `<svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11Z" stroke="rgba(232,234,240,.8)" stroke-width="1.7"/><circle cx="12" cy="10" r="2.5" fill="rgba(232,234,240,.8)"/></svg>`,
-  pct: `<svg viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7" stroke="rgba(232,234,240,.8)" stroke-width="1.8" stroke-linecap="round"/><circle cx="8" cy="8" r="2" stroke="rgba(232,234,240,.8)" stroke-width="1.7"/><circle cx="16" cy="16" r="2" stroke="rgba(232,234,240,.8)" stroke-width="1.7"/></svg>`,
-  pay: `<svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="6" width="17" height="12" rx="2.5" stroke="rgba(232,234,240,.8)" stroke-width="1.7"/><path d="M3.5 10h17" stroke="rgba(232,234,240,.8)" stroke-width="1.7"/><path d="M6.5 14.5h3" stroke="rgba(232,234,240,.8)" stroke-width="1.7" stroke-linecap="round"/></svg>`,
-  crm: `<svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="9" r="3" stroke="rgba(232,234,240,.8)" stroke-width="1.7"/><path d="M4 19a5 5 0 0 1 10 0" stroke="rgba(232,234,240,.8)" stroke-width="1.7" stroke-linecap="round"/><path d="M16 7.5a2.6 2.6 0 0 1 0 5M17.5 18.5a4.6 4.6 0 0 0-2.2-3.9" stroke="rgba(232,234,240,.8)" stroke-width="1.7" stroke-linecap="round"/></svg>`
+  auto:`<svg viewBox="0 0 24 24" fill="none"><path d="M5 16l1.5-4.5A2 2 0 0 1 8.4 10h7.2a2 2 0 0 1 1.9 1.5L19 16M5 16h14M5 16v2.5A1.5 1.5 0 0 0 6.5 20H7a1.5 1.5 0 0 0 1.5-1.5V18M19 16v2.5A1.5 1.5 0 0 1 17.5 20H17a1.5 1.5 0 0 1-1.5-1.5V18" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7.5" cy="16" r="1" fill="#fff"/><circle cx="16.5" cy="16" r="1" fill="#fff"/></svg>`,
+  track:`<svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11Z" stroke="#fff" stroke-width="1.7"/><circle cx="12" cy="10" r="2.5" fill="#fff"/></svg>`,
+  pct:`<svg viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><circle cx="8" cy="8" r="2" stroke="#fff" stroke-width="1.7"/><circle cx="16" cy="16" r="2" stroke="#fff" stroke-width="1.7"/></svg>`,
+  pay:`<svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="6" width="17" height="12" rx="2.5" stroke="#fff" stroke-width="1.7"/><path d="M3.5 10h17" stroke="#fff" stroke-width="1.7"/><path d="M6.5 14.5h3" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/></svg>`,
+  crm:`<svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="9" r="3" stroke="#fff" stroke-width="1.7"/><path d="M4 19a5 5 0 0 1 10 0" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/><path d="M16 7.5a2.6 2.6 0 0 1 0 5M17.5 18.5a4.6 4.6 0 0 0-2.2-3.9" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/></svg>`
 };
 const APPS = [
-  {name:"O'Reilly's Auto", desc:"Parts & inventory", url:"https://megafleet-6g26tnah.manus.space", cls:"t-green", icon:ICONS.auto},
-  {name:"LINX Tracking", desc:"Live load tracking", url:"https://megafleet-6g26tnah.manus.space", cls:"t-slate", icon:ICONS.track},
-  {name:"Agent Commission", desc:"Freight broker calc", url:"https://freightcalc-jrksoq4b.manus.space", cls:"t-brown", icon:ICONS.pct},
-  {name:"Payables", desc:"AP & billing", url:"https://megafleetpay-aijaerxz.manus.space", cls:"t-teal", icon:ICONS.pay},
-  {name:"CRM Outreach", desc:"Leads & contacts", url:"https://megafleet-dhzsbjcq.manus.space", cls:"t-olive", icon:ICONS.crm}
+  {name:"O'Reilly's Auto",desc:"Parts & inventory",url:"https://megafleet-6g26tnah.manus.space",tile:"t-red",bar:"bar-red"},
+  {name:"LINX Tracking",desc:"Live load tracking",url:"https://megafleet-6g26tnah.manus.space",tile:"t-blue",bar:"bar-blue"},
+  {name:"Agent Commission",desc:"Freight broker calc",url:"https://freightcalc-jrksoq4b.manus.space",tile:"t-dkred",bar:"bar-red2"},
+  {name:"Payables",desc:"AP & billing",url:"https://megafleetpay-aijaerxz.manus.space",tile:"t-navy",bar:"bar-navy"},
+  {name:"CRM Outreach",desc:"Leads & contacts",url:"https://megafleet-dhzsbjcq.manus.space",tile:"t-mixed",bar:"bar-mixed"}
 ];
 const grid = document.getElementById('grid');
-APPS.forEach(a => {
-  const btn = document.createElement('button'); btn.className='app-btn';
-  btn.innerHTML = `<div class="tile ${a.cls}">${a.icon}</div><div><div class="app-name">${a.name}</div><div class="app-desc">${a.desc}</div></div>`;
+APPS.forEach((a,i) => {
+  const btn = document.createElement('button');
+  btn.className = 'app-card';
+  btn.style.setProperty('--cd', (0.2 + i*0.07)+'s');
+  btn.innerHTML = `<div class="app-card-bar ${a.bar}"></div><div class="tile ${a.tile}">${ICONS[Object.keys(ICONS)[i]]}</div><div><div class="app-name">${a.name}</div><div class="app-desc">${a.desc}</div></div>`;
   btn.addEventListener('click', () => { window.location.href = a.url; });
   grid.appendChild(btn);
 });
@@ -251,24 +320,29 @@ function tick(){
   const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   const mons=['January','February','March','April','May','June','July','August','September','October','November','December'];
   const ds = days[d.getDay()]+', '+mons[d.getMonth()]+' '+d.getDate();
-  document.getElementById('lock-clock').textContent = t;
-  document.getElementById('lock-date').textContent = ds;
-  document.getElementById('home-clock').textContent = t;
-  document.getElementById('hero-date').textContent = ds+' · All systems operational';
-  document.getElementById('greeting').textContent = h<12?'morning':h<17?'afternoon':'evening';
+  document.getElementById('lock-clock').textContent=t;
+  document.getElementById('lock-date').textContent=ds;
+  document.getElementById('home-clock').textContent=t;
+  document.getElementById('hero-date').textContent=ds+' · All systems operational';
+  document.getElementById('greeting').textContent=h<12?'morning':h<17?'afternoon':'evening';
 }
-tick(); setInterval(tick, 1000);
+tick(); setInterval(tick,1000);
 
 // Auth
 const lockV=document.getElementById('lock'), homeV=document.getElementById('home');
 const pwd=document.getElementById('pwd'), err=document.getElementById('err');
-function unlock(){ lockV.classList.add('hidden'); homeV.classList.remove('hidden'); sessionStorage.setItem('mf_unlocked','1'); }
+function unlock(){
+  lockV.classList.add('hidden'); homeV.classList.remove('hidden');
+  sessionStorage.setItem('mf_unlocked','1');
+  const now=new Date();
+  document.getElementById('last-login').textContent=((now.getHours()+11)%12+1)+':'+String(now.getMinutes()).padStart(2,'0');
+}
 function lockNow(){ homeV.classList.add('hidden'); lockV.classList.remove('hidden'); pwd.value=''; err.textContent=''; sessionStorage.removeItem('mf_unlocked'); setTimeout(()=>pwd.focus(),400); }
-document.getElementById('pwd-form').addEventListener('submit', e => {
+document.getElementById('pwd-form').addEventListener('submit',e=>{
   e.preventDefault();
-  if(pwd.value === PASSWORD){ err.textContent=''; unlock(); }
+  if(pwd.value===PASSWORD){ err.textContent=''; unlock(); }
   else{
-    err.textContent = 'Incorrect password.';
+    err.textContent='Incorrect password — please try again.';
     const w=document.querySelector('.pwd-wrap'); w.classList.remove('shake'); void w.offsetWidth; w.classList.add('shake');
     pwd.value=''; pwd.focus();
   }
