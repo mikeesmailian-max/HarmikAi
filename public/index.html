@@ -6,84 +6,46 @@
 <title>Harmik AI Portal</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden;background:#040810;}
-
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden;background:#6EC6FF;}
 canvas#highway{position:fixed;inset:0;z-index:0;display:block;}
-
 .view{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1),filter .6s;}
 .view.hidden{opacity:0;transform:scale(.97) translateY(-18px);filter:blur(8px);pointer-events:none;}
 
 /* ===== LOCK SCREEN ===== */
 .lock-wrap{display:flex;flex-direction:column;align-items:center;gap:0;}
 
-/* Truck hero */
-.truck-hero{margin-bottom:18px;filter:drop-shadow(0 8px 30px rgba(240,30,44,.25)) drop-shadow(0 2px 8px rgba(21,101,192,.3));transition:filter .3s;}
-.truck-hero:hover{filter:drop-shadow(0 12px 40px rgba(240,30,44,.45)) drop-shadow(0 4px 16px rgba(21,101,192,.5));}
+.truck-hero{margin-bottom:14px;filter:drop-shadow(0 10px 28px rgba(0,0,0,.18)) drop-shadow(0 2px 6px rgba(0,0,0,.12));transition:filter .3s,transform .3s;}
+.truck-hero:hover{filter:drop-shadow(0 16px 40px rgba(240,30,44,.3)) drop-shadow(0 4px 12px rgba(0,0,0,.15));transform:translateY(-4px);}
 
-/* Logo row */
-.lock-logo{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
-.logo-mark{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#F01E2C,#A80D17);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(240,30,44,.4);}
-.logo-text{font-size:34px;font-weight:700;color:#fff;letter-spacing:-.5px;text-shadow:0 2px 20px rgba(0,0,0,.5);}
-.logo-text em{color:rgba(100,160,255,.85);font-style:normal;font-weight:300;}
+.lock-logo{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.logo-mark{width:50px;height:50px;border-radius:15px;background:linear-gradient(135deg,#F01E2C,#A80D17);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(240,30,44,.38);}
+.logo-text{font-size:33px;font-weight:800;color:#0D2B6E;letter-spacing:-1px;text-shadow:0 1px 0 rgba(255,255,255,.6);}
+.logo-text em{color:#F01E2C;font-style:normal;}
 
-/* Clock */
-.lock-clock{font-size:124px;font-weight:100;letter-spacing:-7px;color:#fff;line-height:.88;text-align:center;text-shadow:0 4px 40px rgba(0,0,0,.6);margin-bottom:8px;}
-.lock-date{font-size:18px;color:rgba(255,255,255,.45);text-align:center;letter-spacing:.3px;margin-bottom:36px;}
+.lock-clock{font-size:128px;font-weight:100;letter-spacing:-7px;color:#0D2B6E;line-height:.88;text-align:center;text-shadow:0 2px 20px rgba(255,255,255,.8),0 1px 0 rgba(255,255,255,.5);margin-bottom:6px;}
+.lock-date{font-size:17px;color:rgba(13,43,110,.65);text-align:center;letter-spacing:.3px;font-weight:500;margin-bottom:30px;}
 
-/* Login card */
-.login-card{
-  width:480px;
-  background:rgba(255,255,255,.09);
-  backdrop-filter:blur(40px) saturate(180%);
-  -webkit-backdrop-filter:blur(40px) saturate(180%);
-  border:1.5px solid rgba(255,255,255,.14);
-  border-radius:30px;overflow:hidden;
-  box-shadow:0 30px 90px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06) inset;
-  transition:box-shadow .3s,transform .3s;
-}
-.login-card:hover{box-shadow:0 40px 110px rgba(0,0,0,.6),0 0 60px rgba(240,30,44,.08),0 0 0 1px rgba(255,255,255,.09) inset;}
-.login-stripe{height:6px;background:linear-gradient(90deg,#F01E2C 0%,#A80D17 35%,#1565C0 65%,#0D47A1 100%);position:relative;overflow:hidden;}
-.login-stripe::after{content:"";position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);transition:left .7s ease;}
+.login-card{width:480px;background:rgba(255,255,255,.82);backdrop-filter:blur(36px) saturate(200%);-webkit-backdrop-filter:blur(36px) saturate(200%);border:2px solid rgba(255,255,255,.9);border-radius:30px;overflow:hidden;box-shadow:0 24px 80px rgba(0,80,200,.18),0 4px 16px rgba(0,0,0,.08),0 0 0 1px rgba(255,255,255,.5) inset;}
+.login-stripe{height:7px;background:linear-gradient(90deg,#F01E2C 0%,#C01020 40%,#1565C0 60%,#0D47A1 100%);position:relative;overflow:hidden;}
+.login-stripe::after{content:"";position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);transition:left .65s ease;}
 .login-card:hover .login-stripe::after{left:150%;}
 
-.login-body{padding:36px 42px 30px;}
-.login-title{font-size:26px;font-weight:700;color:#fff;margin-bottom:4px;letter-spacing:-.3px;}
-.login-sub{font-size:14px;color:rgba(255,255,255,.4);margin-bottom:26px;}
-.login-err{height:18px;font-size:13px;color:#FF6070;font-weight:600;margin-bottom:8px;}
-
+.login-body{padding:34px 40px 28px;}
+.login-title{font-size:25px;font-weight:800;color:#0D2B6E;margin-bottom:3px;letter-spacing:-.3px;}
+.login-sub{font-size:14px;color:rgba(13,43,110,.45);margin-bottom:24px;font-weight:500;}
+.login-err{height:18px;font-size:13px;color:#D01020;font-weight:700;margin-bottom:7px;}
 .pwd-wrap{position:relative;}
-.pwd{
-  width:100%;height:60px;
-  background:rgba(255,255,255,.07);
-  border:2px solid rgba(255,255,255,.1);
-  border-radius:16px;
-  color:#fff;font-size:17px;letter-spacing:3px;
-  padding:0 70px 0 22px;outline:none;font-family:inherit;
-  transition:border-color .25s,box-shadow .25s,background .25s;
-}
-.pwd::placeholder{color:rgba(255,255,255,.22);letter-spacing:.3px;font-size:14px;}
-.pwd:focus{border-color:rgba(21,101,192,.7);box-shadow:0 0 0 4px rgba(21,101,192,.15);background:rgba(255,255,255,.1);}
-.pwd-btn{
-  position:absolute;right:8px;top:9px;
-  width:44px;height:42px;
-  background:linear-gradient(135deg,#F01E2C,#A80D17);
-  border:none;border-radius:12px;color:#fff;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  transition:transform .15s,box-shadow .2s;
-  box-shadow:0 4px 16px rgba(240,30,44,.45);
-}
-.pwd-btn:hover{transform:scale(1.1);box-shadow:0 6px 24px rgba(240,30,44,.65);}
+.pwd{width:100%;height:58px;background:rgba(13,43,110,.06);border:2px solid rgba(13,43,110,.15);border-radius:16px;color:#0D2B6E;font-size:17px;letter-spacing:3px;padding:0 68px 0 20px;outline:none;font-family:inherit;transition:border-color .25s,box-shadow .25s,background .25s;}
+.pwd::placeholder{color:rgba(13,43,110,.3);letter-spacing:.2px;font-size:14px;}
+.pwd:focus{border-color:rgba(21,101,192,.5);box-shadow:0 0 0 4px rgba(21,101,192,.12);background:rgba(255,255,255,.9);}
+.pwd-btn{position:absolute;right:8px;top:8px;width:42px;height:42px;background:linear-gradient(135deg,#F01E2C,#A80D17);border:none;border-radius:12px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s,box-shadow .2s;box-shadow:0 4px 16px rgba(240,30,44,.42);}
+.pwd-btn:hover{transform:scale(1.1);box-shadow:0 6px 22px rgba(240,30,44,.6);}
 .pwd-btn:active{transform:scale(.88);}
 
-.login-footer{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 42px;
-  background:rgba(0,0,0,.18);
-  border-top:1px solid rgba(255,255,255,.07);
-}
-.lf-secure{display:flex;align-items:center;gap:7px;font-size:12px;color:rgba(255,255,255,.3);font-weight:500;}
-.lf-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px #22c55e;}
-.lf-brand{font-size:12px;font-weight:700;background:linear-gradient(90deg,#F01E2C,#1565C0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.login-footer{display:flex;align-items:center;justify-content:space-between;padding:13px 40px;background:rgba(13,43,110,.04);border-top:1.5px solid rgba(13,43,110,.08);}
+.lf-secure{display:flex;align-items:center;gap:7px;font-size:12px;color:rgba(13,43,110,.45);font-weight:600;}
+.lf-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 7px #22c55e;}
+.lf-brand{font-size:12px;font-weight:800;background:linear-gradient(90deg,#F01E2C,#1565C0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 
 .shake{animation:shake .4s ease;}
 @keyframes shake{10%,90%{transform:translateX(-5px)}20%,80%{transform:translateX(7px)}30%,50%,70%{transform:translateX(-11px)}40%,60%{transform:translateX(11px)}}
@@ -123,125 +85,115 @@ canvas#highway{position:fixed;inset:0;z-index:0;display:block;}
 </head>
 <body>
 
-<!-- HIGHWAY CANVAS -->
 <canvas id="highway"></canvas>
 
 <!-- LOCK SCREEN -->
 <div class="view" id="lock">
   <div class="lock-wrap">
 
-    <!-- Truck hero graphic -->
+    <!-- Truck hero -->
     <div class="truck-hero">
-      <svg viewBox="0 0 420 108" width="420" height="108" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Trailer body -->
-        <rect x="8" y="16" width="244" height="72" rx="7" fill="#141E38" stroke="#253060" stroke-width="1.5"/>
-        <!-- Red brand stripe on trailer -->
-        <rect x="8" y="16" width="244" height="9" rx="7" fill="url(#trailerStripe)"/>
-        <rect x="8" y="16" width="244" height="9" fill="url(#trailerStripe)"/>
-        <!-- Trailer rib lines -->
-        <line x1="55" y1="25" x2="55" y2="88" stroke="#1E2C50" stroke-width="1.5"/>
-        <line x1="102" y1="25" x2="102" y2="88" stroke="#1E2C50" stroke-width="1.5"/>
-        <line x1="149" y1="25" x2="149" y2="88" stroke="#1E2C50" stroke-width="1.5"/>
-        <line x1="196" y1="25" x2="196" y2="88" stroke="#1E2C50" stroke-width="1.5"/>
-        <!-- HARMIK text on trailer -->
-        <text x="128" y="68" fill="rgba(255,255,255,0.55)" font-size="18" font-family="system-ui,-apple-system,sans-serif" font-weight="800" text-anchor="middle" letter-spacing="6">HARMIK</text>
-        <!-- Rear lights -->
-        <rect x="9" y="20" width="10" height="14" rx="3" fill="#F01E2C"/>
-        <rect x="9" y="62" width="10" height="14" rx="3" fill="#F01E2C"/>
-        <rect x="9" y="20" width="10" height="14" rx="3" fill="url(#redGlow)" opacity="0.6"/>
-        <!-- Trailer rear bottom -->
-        <rect x="8" y="88" width="244" height="0" stroke="#253060" stroke-width="1"/>
-        <!-- Undercarriage bar -->
-        <rect x="15" y="88" width="230" height="4" rx="2" fill="#0C1220"/>
-        <!-- Fifth wheel / connection -->
-        <rect x="246" y="75" width="20" height="6" rx="2" fill="#1A2540"/>
-        <!-- CAB -->
-        <!-- Cab body -->
-        <path d="M262 88 L262 28 Q264 14 280 8 L340 8 Q358 8 368 24 L408 72 L408 88 Z" fill="#141E38" stroke="#253060" stroke-width="1.5"/>
-        <!-- Cab top air deflector -->
-        <path d="M264 16 Q296 0 348 8 L280 8 Q268 10 264 16 Z" fill="#1A2540" stroke="#253060" stroke-width="1"/>
-        <!-- Windshield -->
-        <path d="M267 32 L267 70 L345 70 L345 30 L330 14 L284 14 Q272 16 267 32 Z" fill="#1B3060" stroke="#253280" stroke-width="1"/>
+      <svg viewBox="0 0 420 110" width="440" height="115" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Trailer body - vibrant red -->
+        <rect x="8" y="14" width="248" height="74" rx="8" fill="#F01E2C"/>
+        <!-- Trailer top lighter panel -->
+        <rect x="8" y="14" width="248" height="22" rx="8" fill="#FF3A47"/>
+        <rect x="8" y="28" width="248" height="8" fill="#FF3A47"/>
+        <!-- Trailer side white stripe -->
+        <rect x="8" y="36" width="248" height="5" fill="rgba(255,255,255,0.5)"/>
+        <!-- Trailer panel ribs -->
+        <line x1="60" y1="41" x2="60" y2="88" stroke="rgba(180,0,10,0.4)" stroke-width="1.5"/>
+        <line x1="112" y1="41" x2="112" y2="88" stroke="rgba(180,0,10,0.4)" stroke-width="1.5"/>
+        <line x1="164" y1="41" x2="164" y2="88" stroke="rgba(180,0,10,0.4)" stroke-width="1.5"/>
+        <line x1="216" y1="41" x2="216" y2="88" stroke="rgba(180,0,10,0.4)" stroke-width="1.5"/>
+        <!-- HARMIK text -->
+        <text x="130" y="72" fill="rgba(255,255,255,0.95)" font-size="20" font-family="system-ui,-apple-system,sans-serif" font-weight="900" text-anchor="middle" letter-spacing="8">HARMIK</text>
+        <!-- Rear red lights -->
+        <rect x="9" y="18" width="11" height="16" rx="3" fill="#FFD700"/>
+        <rect x="9" y="64" width="11" height="18" rx="3" fill="#FF0000"/>
+        <!-- Trailer underrail -->
+        <rect x="14" y="88" width="234" height="5" rx="2" fill="rgba(120,0,5,0.6)"/>
+        <!-- Fifth wheel link -->
+        <rect x="248" y="75" width="22" height="7" rx="3" fill="#E0E0E0"/>
+        <!-- CAB - vivid navy blue -->
+        <path d="M268 90 L268 28 Q270 13 286 7 L344 7 Q362 7 374 22 L412 72 L412 90 Z" fill="#1565C0"/>
+        <!-- Cab top lighter gradient -->
+        <path d="M270 15 Q302 3 352 7 L286 7 Q274 9 270 15 Z" fill="#1976D2"/>
+        <!-- Cab air deflector (top) - bright blue -->
+        <path d="M268 18 Q300 2 356 7 L286 7 Q272 11 268 18 Z" fill="#1976D2"/>
+        <!-- Windshield - clear bright blue-tint -->
+        <path d="M272 32 L272 72 L350 72 L350 30 L334 13 L290 13 Q277 15 272 32 Z" fill="#90CAF9" opacity="0.85"/>
         <!-- Windshield sheen -->
-        <path d="M270 34 L284 16 L302 16 L270 44 Z" fill="rgba(255,255,255,0.07)"/>
-        <!-- Cab door line -->
-        <line x1="322" y1="30" x2="322" y2="87" stroke="#1E2C50" stroke-width="1.5"/>
+        <path d="M275 34 L290 15 L308 15 L275 44 Z" fill="rgba(255,255,255,0.3)"/>
+        <!-- Cab door panel line -->
+        <line x1="328" y1="30" x2="328" y2="89" stroke="rgba(10,80,180,0.6)" stroke-width="1.5"/>
         <!-- Door handle -->
-        <rect x="328" y="60" width="14" height="4" rx="2" fill="#2A3C68"/>
-        <!-- Exhaust pipes -->
-        <rect x="336" y="0" width="7" height="16" rx="3" fill="#9AA0B0"/>
-        <rect x="347" y="2" width="7" height="14" rx="3" fill="#9AA0B0"/>
+        <rect x="334" y="60" width="15" height="4" rx="2" fill="#42A5F5"/>
+        <!-- Cab brand badge -->
+        <rect x="276" y="76" width="44" height="13" rx="4" fill="#F01E2C"/>
+        <text x="298" y="86" fill="white" font-size="7.5" font-family="system-ui,-apple-system,sans-serif" font-weight="900" text-anchor="middle" letter-spacing="1">MEGAFLEET</text>
+        <!-- Exhaust stacks - silver/chrome -->
+        <rect x="342" y="0" width="8" height="16" rx="3.5" fill="#BDBDBD" stroke="#E0E0E0" stroke-width="1"/>
+        <rect x="354" y="2" width="8" height="14" rx="3.5" fill="#BDBDBD" stroke="#E0E0E0" stroke-width="1"/>
         <!-- Exhaust caps -->
-        <ellipse cx="339.5" cy="0" rx="3.5" ry="2" fill="#7A8090"/>
-        <ellipse cx="350.5" cy="2" rx="3.5" ry="2" fill="#7A8090"/>
-        <!-- Headlights -->
-        <rect x="394" y="34" width="14" height="16" rx="3" fill="#FFE490"/>
-        <rect x="394" y="34" width="14" height="16" rx="3" fill="url(#headlightGlow)" opacity="0.8"/>
-        <!-- Running light -->
-        <rect x="394" y="54" width="14" height="10" rx="2" fill="#1565C0"/>
-        <!-- Grille -->
-        <rect x="390" y="68" width="18" height="18" rx="3" fill="#0C1220" stroke="#253060" stroke-width="1"/>
-        <line x1="391" y1="72" x2="407" y2="72" stroke="#253060" stroke-width="1.5"/>
-        <line x1="391" y1="76" x2="407" y2="76" stroke="#253060" stroke-width="1.5"/>
-        <line x1="391" y1="80" x2="407" y2="80" stroke="#253060" stroke-width="1.5"/>
-        <line x1="397" y1="68" x2="397" y2="86" stroke="#253060" stroke-width="1.5"/>
-        <line x1="403" y1="68" x2="403" y2="86" stroke="#253060" stroke-width="1.5"/>
-        <!-- Front bumper -->
-        <rect x="386" y="84" width="32" height="7" rx="3" fill="#9AA0B0"/>
-        <!-- Mirror arm + mirror -->
-        <rect x="388" y="26" width="4" height="16" rx="1" fill="#253060"/>
-        <rect x="384" y="24" width="8" height="12" rx="3" fill="#1E2C50" stroke="#253060" stroke-width="1"/>
-        <!-- WHEELS -->
+        <ellipse cx="346" cy="0" rx="4" ry="2.5" fill="#E0E0E0"/>
+        <ellipse cx="358" cy="2" rx="4" ry="2.5" fill="#E0E0E0"/>
+        <!-- Headlights - bright amber -->
+        <rect x="398" y="32" width="15" height="18" rx="3" fill="#FFD740"/>
+        <rect x="398" y="32" width="15" height="18" rx="3" fill="url(#hl)"/>
+        <!-- Fog/running light -->
+        <rect x="398" y="54" width="15" height="10" rx="2" fill="#42A5F5"/>
+        <!-- Grille - white with blue -->
+        <rect x="394" y="66" width="19" height="22" rx="3" fill="white" stroke="#90CAF9" stroke-width="1.5"/>
+        <line x1="395" y1="70" x2="412" y2="70" stroke="#90CAF9" stroke-width="1.5"/>
+        <line x1="395" y1="74" x2="412" y2="74" stroke="#90CAF9" stroke-width="1.5"/>
+        <line x1="395" y1="78" x2="412" y2="78" stroke="#90CAF9" stroke-width="1.5"/>
+        <line x1="395" y1="82" x2="412" y2="82" stroke="#90CAF9" stroke-width="1.5"/>
+        <line x1="401" y1="66" x2="401" y2="88" stroke="#90CAF9" stroke-width="1.5"/>
+        <line x1="407" y1="66" x2="407" y2="88" stroke="#90CAF9" stroke-width="1.5"/>
+        <!-- Front bumper chrome -->
+        <rect x="390" y="86" width="33" height="8" rx="3" fill="#E0E0E0" stroke="#BDBDBD" stroke-width="1"/>
+        <!-- Mirror -->
+        <rect x="390" y="24" width="5" height="18" rx="1" fill="#1565C0"/>
+        <rect x="385" y="22" width="9" height="13" rx="3" fill="#42A5F5" stroke="#1565C0" stroke-width="1"/>
+        <!-- WHEELS - bright with chrome rims -->
         <!-- Trailer wheels -->
-        <circle cx="58" cy="95" r="13" fill="#0C1020" stroke="#253060" stroke-width="1.5"/>
-        <circle cx="58" cy="95" r="7" fill="#141828" stroke="#334"/>
-        <circle cx="58" cy="95" r="2.5" fill="#9AA0B0"/>
-        <circle cx="85" cy="95" r="13" fill="#0C1020" stroke="#253060" stroke-width="1.5"/>
-        <circle cx="85" cy="95" r="7" fill="#141828" stroke="#334"/>
-        <circle cx="85" cy="95" r="2.5" fill="#9AA0B0"/>
-        <circle cx="165" cy="95" r="13" fill="#0C1020" stroke="#253060" stroke-width="1.5"/>
-        <circle cx="165" cy="95" r="7" fill="#141828" stroke="#334"/>
-        <circle cx="165" cy="95" r="2.5" fill="#9AA0B0"/>
-        <circle cx="192" cy="95" r="13" fill="#0C1020" stroke="#253060" stroke-width="1.5"/>
-        <circle cx="192" cy="95" r="7" fill="#141828" stroke="#334"/>
-        <circle cx="192" cy="95" r="2.5" fill="#9AA0B0"/>
+        <circle cx="56" cy="97" r="14" fill="#424242" stroke="#9E9E9E" stroke-width="2"/>
+        <circle cx="56" cy="97" r="8" fill="#616161"/>
+        <circle cx="56" cy="97" r="3" fill="#BDBDBD"/>
+        <circle cx="84" cy="97" r="14" fill="#424242" stroke="#9E9E9E" stroke-width="2"/>
+        <circle cx="84" cy="97" r="8" fill="#616161"/>
+        <circle cx="84" cy="97" r="3" fill="#BDBDBD"/>
+        <circle cx="166" cy="97" r="14" fill="#424242" stroke="#9E9E9E" stroke-width="2"/>
+        <circle cx="166" cy="97" r="8" fill="#616161"/>
+        <circle cx="166" cy="97" r="3" fill="#BDBDBD"/>
+        <circle cx="194" cy="97" r="14" fill="#424242" stroke="#9E9E9E" stroke-width="2"/>
+        <circle cx="194" cy="97" r="8" fill="#616161"/>
+        <circle cx="194" cy="97" r="3" fill="#BDBDBD"/>
         <!-- Cab drive wheels -->
-        <circle cx="310" cy="95" r="14" fill="#0C1020" stroke="#253060" stroke-width="1.5"/>
-        <circle cx="310" cy="95" r="7.5" fill="#141828" stroke="#334"/>
-        <circle cx="310" cy="95" r="3" fill="#9AA0B0"/>
-        <circle cx="337" cy="95" r="14" fill="#0C1020" stroke="#253060" stroke-width="1.5"/>
-        <circle cx="337" cy="95" r="7.5" fill="#141828" stroke="#334"/>
-        <circle cx="337" cy="95" r="3" fill="#9AA0B0"/>
-        <!-- Steer axle -->
-        <circle cx="375" cy="95" r="12" fill="#0C1020" stroke="#253060" stroke-width="1.5"/>
-        <circle cx="375" cy="95" r="6" fill="#141828" stroke="#334"/>
-        <circle cx="375" cy="95" r="2" fill="#9AA0B0"/>
-        <!-- Cab side logo badge -->
-        <rect x="270" y="76" width="44" height="12" rx="4" fill="#F01E2C" opacity="0.9"/>
-        <text x="292" y="86" fill="#fff" font-size="8" font-family="system-ui,-apple-system,sans-serif" font-weight="900" text-anchor="middle" letter-spacing="1.5">MEGAFLEET</text>
-        <!-- Defs for gradients -->
+        <circle cx="316" cy="97" r="15" fill="#424242" stroke="#9E9E9E" stroke-width="2"/>
+        <circle cx="316" cy="97" r="8.5" fill="#616161"/>
+        <circle cx="316" cy="97" r="3.5" fill="#BDBDBD"/>
+        <circle cx="344" cy="97" r="15" fill="#424242" stroke="#9E9E9E" stroke-width="2"/>
+        <circle cx="344" cy="97" r="8.5" fill="#616161"/>
+        <circle cx="344" cy="97" r="3.5" fill="#BDBDBD"/>
+        <!-- Steer wheel -->
+        <circle cx="382" cy="97" r="13" fill="#424242" stroke="#9E9E9E" stroke-width="2"/>
+        <circle cx="382" cy="97" r="7" fill="#616161"/>
+        <circle cx="382" cy="97" r="2.5" fill="#BDBDBD"/>
         <defs>
-          <linearGradient id="trailerStripe" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stop-color="#F01E2C"/>
-            <stop offset="50%" stop-color="#A80D17"/>
-            <stop offset="100%" stop-color="#1565C0"/>
-          </linearGradient>
-          <radialGradient id="redGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#FF4455" stop-opacity="1"/>
-            <stop offset="100%" stop-color="#F01E2C" stop-opacity="0"/>
-          </radialGradient>
-          <radialGradient id="headlightGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#FFFACC" stop-opacity="1"/>
-            <stop offset="100%" stop-color="#FFE490" stop-opacity="0"/>
+          <radialGradient id="hl" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#FFFDE7"/>
+            <stop offset="100%" stop-color="#FFD740" stop-opacity="0"/>
           </radialGradient>
         </defs>
       </svg>
     </div>
 
-    <!-- Logo row -->
+    <!-- Logo -->
     <div class="lock-logo">
       <div class="logo-mark">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M1 17l2-6h12l2 6M13 11V5h4l3 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.5" cy="18.5" r="1.5" fill="#fff"/><circle cx="17.5" cy="18.5" r="1.5" fill="#fff"/></svg>
+        <svg width="25" height="25" viewBox="0 0 24 24" fill="none"><path d="M1 17l2-6h12l2 6M13 11V5h4l3 6" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.5" cy="18.5" r="1.5" fill="#fff"/><circle cx="17.5" cy="18.5" r="1.5" fill="#fff"/></svg>
       </div>
       <div class="logo-text">Harmik <em>AI</em></div>
     </div>
@@ -269,7 +221,6 @@ canvas#highway{position:fixed;inset:0;z-index:0;display:block;}
         <div class="lf-brand">Harmik AI</div>
       </div>
     </div>
-
   </div>
 </div>
 
@@ -277,19 +228,14 @@ canvas#highway{position:fixed;inset:0;z-index:0;display:block;}
 <div class="view hidden" id="home">
   <div class="topbar">
     <div class="tb-left">
-      <div class="tb-logo">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M1 17l2-6h12l2 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 11V5h4l3 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.5" cy="18.5" r="1.5" fill="#fff"/><circle cx="17.5" cy="18.5" r="1.5" fill="#fff"/></svg>
-      </div>
+      <div class="tb-logo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M1 17l2-6h12l2 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 11V5h4l3 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.5" cy="18.5" r="1.5" fill="#fff"/><circle cx="17.5" cy="18.5" r="1.5" fill="#fff"/></svg></div>
       <div class="tb-name">Harmik AI</div>
       <div class="tb-sep"></div>
       <div class="tb-sub">MegaFleet Portal</div>
     </div>
     <div class="tb-right">
       <div class="tb-time" id="home-clock">9:41</div>
-      <button class="lock-btn" onclick="lockNow()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M7 10V7a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><rect x="5" y="10" width="14" height="10" rx="3" fill="currentColor"/></svg>
-        Lock
-      </button>
+      <button class="lock-btn" onclick="lockNow()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M7 10V7a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><rect x="5" y="10" width="14" height="10" rx="3" fill="currentColor"/></svg>Lock</button>
     </div>
   </div>
   <div class="main">
@@ -302,211 +248,199 @@ canvas#highway{position:fixed;inset:0;z-index:0;display:block;}
 </div>
 
 <script>
-/* ===================== HIGHWAY CANVAS ===================== */
+/* ===================== BRIGHT HIGHWAY CANVAS ===================== */
 const canvas = document.getElementById('highway');
-let mx = 0, my = 0;
-let stars = [];
+let mx = window.innerWidth/2, my = window.innerHeight/2;
+let cloudData = [];
 
-function initStars(W, H) {
-  stars = [];
-  const HZ = H * 0.58;
-  for (let i = 0; i < 140; i++) {
-    stars.push({
-      x: ((i * 137.508) % 1) * W,
-      y: ((i * 97.334) % 1) * HZ * 0.9,
-      r: 0.4 + ((i * 53.7) % 1) * 1.6,
-      a: 0.25 + ((i * 71.1) % 1) * 0.75
-    });
-  }
+function initClouds(W) {
+  cloudData = [];
+  const clouds = [
+    [0.1,0.12,55], [0.28,0.08,42], [0.45,0.15,65], [0.62,0.1,50],
+    [0.78,0.07,38], [0.9,0.13,48], [0.2,0.22,35], [0.55,0.19,44],
+    [0.85,0.24,40], [0.07,0.28,30], [0.72,0.2,36]
+  ];
+  clouds.forEach(([fx,fy,r]) => cloudData.push({fx,fy,r}));
+}
+
+function drawCloud(ctx, x, y, r) {
+  ctx.save();
+  ctx.fillStyle = 'rgba(255,255,255,0.88)';
+  ctx.shadowColor = 'rgba(200,220,255,0.4)';
+  ctx.shadowBlur = 12;
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, Math.PI*2);
+  ctx.arc(x + r*0.85, y + r*0.12, r*0.72, 0, Math.PI*2);
+  ctx.arc(x + r*1.55, y, r*0.62, 0, Math.PI*2);
+  ctx.arc(x + r*0.9, y - r*0.45, r*0.58, 0, Math.PI*2);
+  ctx.arc(x + r*0.35, y - r*0.35, r*0.5, 0, Math.PI*2);
+  ctx.fill();
+  ctx.restore();
 }
 
 function drawHighway() {
   const W = canvas.width = window.innerWidth;
   const H = canvas.height = window.innerHeight;
   const ctx = canvas.getContext('2d');
-  const HZ = H * 0.58; // horizon y
-  // Vanishing point follows mouse subtly
-  const VX = W / 2 + (mx - W / 2) * 0.045;
-  const VY = HZ + (my - H / 2) * 0.018;
+  const HZ = H * 0.52; // horizon
+  const VX = W/2 + (mx - W/2) * 0.04;
+  const VY = HZ + (my - H/2) * 0.015;
 
-  if (!stars.length) initStars(W, H);
+  if (!cloudData.length) initClouds(W);
 
-  /* 1. Sky */
-  const sky = ctx.createLinearGradient(0, 0, 0, HZ + 20);
-  sky.addColorStop(0, '#020610');
-  sky.addColorStop(0.55, '#0A1228');
-  sky.addColorStop(1, '#0F1C42');
+  /* 1. Sky - vibrant bright blue gradient */
+  const sky = ctx.createLinearGradient(0, 0, 0, HZ + 30);
+  sky.addColorStop(0, '#1A78E8');
+  sky.addColorStop(0.45, '#3D9EFF');
+  sky.addColorStop(0.75, '#72C0FF');
+  sky.addColorStop(1, '#B8E0FF');
   ctx.fillStyle = sky;
-  ctx.fillRect(0, 0, W, HZ + 20);
+  ctx.fillRect(0, 0, W, HZ + 30);
 
-  /* 2. Stars */
-  stars.forEach(s => {
-    const px = s.x + (mx - W/2) * 0.008;
-    const py = s.y + (my - H/2) * 0.006;
-    ctx.beginPath();
-    ctx.arc(px, py, s.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(255,255,255,${s.a})`;
-    ctx.fill();
-  });
-
-  /* 3. City glow on horizon */
-  const cg = ctx.createRadialGradient(W/2, HZ, 0, W/2, HZ, W * 0.55);
-  cg.addColorStop(0, 'rgba(25,65,200,0.22)');
-  cg.addColorStop(0.35, 'rgba(15,40,140,0.12)');
-  cg.addColorStop(1, 'transparent');
-  ctx.fillStyle = cg;
+  /* 2. Sun glow on horizon */
+  const sunX = W * 0.5 + (mx - W/2) * 0.02;
+  const sg = ctx.createRadialGradient(sunX, HZ, 0, sunX, HZ, W * 0.45);
+  sg.addColorStop(0, 'rgba(255,240,100,0.55)');
+  sg.addColorStop(0.18, 'rgba(255,200,60,0.25)');
+  sg.addColorStop(0.5, 'rgba(255,160,40,0.1)');
+  sg.addColorStop(1, 'transparent');
+  ctx.fillStyle = sg;
   ctx.fillRect(0, HZ - 100, W, 200);
 
-  /* 4. Distant city skyline */
-  ctx.fillStyle = '#080E1E';
-  const blds = [.06,.12,.09,.16,.08,.2,.11,.14,.07,.18,.1,.22,.13,.08,.17,.1,.15,.09,.12,.07,.19,.11];
-  blds.forEach((h, i) => {
-    const bx = (i / (blds.length - 1)) * W;
-    const bh = h * HZ * 0.38;
-    const bw = (W / blds.length) * 0.72;
-    ctx.fillRect(bx - bw/2, HZ - bh, bw, bh + 2);
-  });
-  // Building windows
-  blds.forEach((h, i) => {
-    const bx = (i / (blds.length - 1)) * W;
-    const bh = h * HZ * 0.38;
-    const bw = (W / blds.length) * 0.72;
-    for (let r = 0; r < 4; r++) {
-      for (let c = 0; c < 3; c++) {
-        if (((i*7+r*3+c*11) % 3) !== 0) {
-          ctx.fillStyle = `rgba(255,200,80,${0.3 + ((i+r+c) % 5) * 0.1})`;
-          ctx.fillRect(bx - bw/2 + c*(bw/3) + 3, HZ - bh + r*(bh/4.5) + 4, 3, 4);
-        }
-      }
-    }
-  });
-
-  /* 5. Horizon line glow */
-  const hl = ctx.createLinearGradient(0, HZ - 2, 0, HZ + 4);
-  hl.addColorStop(0, 'rgba(50,100,255,0.18)');
-  hl.addColorStop(1, 'transparent');
-  ctx.fillStyle = hl;
-  ctx.fillRect(0, HZ - 2, W, 6);
-
-  /* 6. Road surface */
+  /* 3. Sun disc */
+  const sun = ctx.createRadialGradient(sunX, HZ, 0, sunX, HZ, 36);
+  sun.addColorStop(0, 'rgba(255,252,200,1)');
+  sun.addColorStop(0.35, 'rgba(255,220,80,0.9)');
+  sun.addColorStop(1, 'transparent');
+  ctx.fillStyle = sun;
   ctx.beginPath();
-  ctx.moveTo(0, H);
-  ctx.lineTo(VX - 50, VY);
-  ctx.lineTo(VX + 50, VY);
-  ctx.lineTo(W, H);
-  const road = ctx.createLinearGradient(0, VY, 0, H);
-  road.addColorStop(0, '#0A0C12');
-  road.addColorStop(1, '#0E1018');
-  ctx.fillStyle = road;
+  ctx.arc(sunX, HZ, 36, 0, Math.PI * 2);
   ctx.fill();
 
-  /* 7. Road center lane line (subtle) */
+  /* 4. Clouds (parallax with mouse) */
+  cloudData.forEach((c, i) => {
+    const px = c.fx * W + (mx - W/2) * (0.01 + i % 3 * 0.005);
+    const py = c.fy * HZ + (my - H/2) * (0.008 + i % 2 * 0.004);
+    drawCloud(ctx, px, py, c.r);
+  });
+
+  /* 5. Distant green hills */
+  ctx.fillStyle = '#5CBF4A';
   ctx.beginPath();
-  ctx.moveTo(W * 0.33, H);
-  ctx.lineTo(VX - 16, VY + 5);
-  ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+  ctx.moveTo(0, HZ + 5);
+  for (let x = 0; x <= W; x += 80) {
+    const hv = 18 + ((x * 37 + 13) % 40);
+    ctx.quadraticCurveTo(x + 40, HZ - hv, x + 80, HZ + 5);
+  }
+  ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
+  ctx.fill();
+
+  /* 6. Green shoulder areas */
+  const gLeft = ctx.createLinearGradient(0, HZ, 0, H);
+  gLeft.addColorStop(0, '#6DD45A');
+  gLeft.addColorStop(1, '#4BA83C');
+  ctx.fillStyle = gLeft;
+  // Left shoulder
+  ctx.beginPath();
+  ctx.moveTo(0, H);
+  ctx.lineTo(VX - 90, VY + 5);
+  ctx.lineTo(0, HZ + 5);
+  ctx.closePath();
+  ctx.fill();
+  // Right shoulder
+  ctx.beginPath();
+  ctx.moveTo(W, H);
+  ctx.lineTo(VX + 90, VY + 5);
+  ctx.lineTo(W, HZ + 5);
+  ctx.closePath();
+  ctx.fill();
+
+  /* 7. Road surface - bright concrete */
+  ctx.beginPath();
+  ctx.moveTo(0, H);
+  ctx.lineTo(VX - 90, VY + 5);
+  ctx.lineTo(VX + 90, VY + 5);
+  ctx.lineTo(W, H);
+  const roadG = ctx.createLinearGradient(0, VY, 0, H);
+  roadG.addColorStop(0, '#C8CED8');
+  roadG.addColorStop(0.3, '#D4D8E4');
+  roadG.addColorStop(1, '#B8BEC8');
+  ctx.fillStyle = roadG;
+  ctx.fill();
+
+  /* 8. Road center divider stripe */
+  ctx.beginPath();
+  ctx.moveTo(W * 0.35, H);
+  ctx.lineTo(VX - 28, VY + 6);
+  ctx.strokeStyle = 'rgba(255,255,255,0.5)';
   ctx.lineWidth = 1.5;
   ctx.stroke();
   ctx.beginPath();
-  ctx.moveTo(W * 0.67, H);
-  ctx.lineTo(VX + 16, VY + 5);
+  ctx.moveTo(W * 0.65, H);
+  ctx.lineTo(VX + 28, VY + 6);
   ctx.stroke();
 
-  /* 8. White edge lines */
-  ctx.lineWidth = 2.5;
-  ctx.strokeStyle = 'rgba(255,255,255,0.45)';
+  /* 9. White edge lines */
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = 'rgba(255,255,255,0.85)';
   ctx.beginPath();
-  ctx.moveTo(W * 0.02, H);
-  ctx.lineTo(VX - 45, VY + 2);
+  ctx.moveTo(W * 0.04, H);
+  ctx.lineTo(VX - 84, VY + 6);
   ctx.stroke();
   ctx.beginPath();
-  ctx.moveTo(W * 0.98, H);
-  ctx.lineTo(VX + 45, VY + 2);
+  ctx.moveTo(W * 0.96, H);
+  ctx.lineTo(VX + 84, VY + 6);
   ctx.stroke();
 
-  /* 9. Perspective dashed center line */
+  /* 10. Yellow dashed center line - perspective */
   for (let t = 0; t < 0.97; t += 0.085) {
-    const t1 = t, t2 = Math.min(t + 0.048, 0.97);
-    const x1 = W/2 + (VX - W/2) * (1 - t1);
-    const y1 = H + (VY - H) * (1 - t1);
+    const t2 = Math.min(t + 0.052, 0.97);
+    const x1 = W/2 + (VX - W/2) * (1 - t);
+    const y1 = H + (VY + 6 - H) * (1 - t);
     const x2 = W/2 + (VX - W/2) * (1 - t2);
-    const y2 = H + (VY - H) * (1 - t2);
-    const alpha = 0.22 + t * 0.55;
-    const lw = 0.8 + t1 * 2.5;
-    ctx.strokeStyle = `rgba(255,240,120,${alpha})`;
-    ctx.lineWidth = lw;
+    const y2 = H + (VY + 6 - H) * (1 - t2);
+    ctx.strokeStyle = `rgba(255,200,0,${0.5 + t * 0.45})`;
+    ctx.lineWidth = 0.8 + t * 3;
     ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
+    ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
     ctx.stroke();
   }
 
-  /* 10. Road reflectors on edges */
-  for (let t = 0.05; t < 0.95; t += 0.11) {
-    const lx = W*0.02 + (VX - 45 - W*0.02) * t;
-    const ly = H + (VY + 2 - H) * t;
-    const rx = W*0.98 + (VX + 45 - W*0.98) * t;
-    const ry = H + (VY + 2 - H) * t;
-    const sz = 1.5 + t * 2;
-    ctx.fillStyle = `rgba(255,200,80,${0.4 + t * 0.5})`;
-    ctx.beginPath(); ctx.arc(lx, ly, sz, 0, Math.PI*2); ctx.fill();
-    ctx.beginPath(); ctx.arc(rx, ry, sz, 0, Math.PI*2); ctx.fill();
-  }
-
-  /* 11. Headlight beams (from bottom, track mouse X) */
-  const lbx = W * 0.38 + (mx - W/2) * 0.06;
-  const rbx = W * 0.62 + (mx - W/2) * 0.06;
-  const lbeam = ctx.createLinearGradient(lbx, H, VX - 10, VY + 60);
-  lbeam.addColorStop(0, 'rgba(255,235,120,0.22)');
-  lbeam.addColorStop(0.6, 'rgba(255,235,120,0.06)');
-  lbeam.addColorStop(1, 'transparent');
-  ctx.fillStyle = lbeam;
+  /* 11. Road surface shine */
+  const shine = ctx.createLinearGradient(W*0.3, VY+10, W*0.7, H);
+  shine.addColorStop(0, 'transparent');
+  shine.addColorStop(0.5, 'rgba(255,255,255,0.12)');
+  shine.addColorStop(1, 'transparent');
+  ctx.fillStyle = shine;
   ctx.beginPath();
-  ctx.moveTo(lbx - 60, H);
-  ctx.lineTo(lbx + 60, H);
-  ctx.lineTo(VX + 10, VY + 60);
-  ctx.closePath();
-  ctx.fill();
+  ctx.moveTo(VX - 100, H);
+  ctx.lineTo(VX - 4, VY + 20);
+  ctx.lineTo(VX + 4, VY + 20);
+  ctx.lineTo(VX + 100, H);
+  ctx.closePath(); ctx.fill();
 
-  const rbeam = ctx.createLinearGradient(rbx, H, VX + 10, VY + 60);
-  rbeam.addColorStop(0, 'rgba(255,235,120,0.22)');
-  rbeam.addColorStop(0.6, 'rgba(255,235,120,0.06)');
-  rbeam.addColorStop(1, 'transparent');
-  ctx.fillStyle = rbeam;
+  /* 12. Distance haze over road */
+  const haze = ctx.createLinearGradient(0, VY, 0, VY + 60);
+  haze.addColorStop(0, 'rgba(180,210,255,0.45)');
+  haze.addColorStop(1, 'transparent');
+  ctx.fillStyle = haze;
   ctx.beginPath();
-  ctx.moveTo(rbx - 60, H);
-  ctx.lineTo(rbx + 60, H);
-  ctx.lineTo(VX - 10, VY + 60);
-  ctx.closePath();
-  ctx.fill();
+  ctx.moveTo(0, VY + 60);
+  ctx.lineTo(VX - 90, VY + 5);
+  ctx.lineTo(VX + 90, VY + 5);
+  ctx.lineTo(W, VY + 60);
+  ctx.closePath(); ctx.fill();
 
-  /* 12. Road surface sheen (center strip of lighter asphalt) */
-  const sheen = ctx.createLinearGradient(VX, VY, VX, H);
-  sheen.addColorStop(0, 'transparent');
-  sheen.addColorStop(0.4, 'rgba(255,235,140,0.03)');
-  sheen.addColorStop(1, 'rgba(255,235,140,0.06)');
-  ctx.fillStyle = sheen;
-  ctx.beginPath();
-  ctx.moveTo(VX - 120, H);
-  ctx.lineTo(VX - 3, VY + 20);
-  ctx.lineTo(VX + 3, VY + 20);
-  ctx.lineTo(VX + 120, H);
-  ctx.closePath();
-  ctx.fill();
-
-  /* 13. Vignette */
-  const vig = ctx.createRadialGradient(W/2, H/2, H*0.2, W/2, H/2, H*0.9);
+  /* 13. Subtle vignette */
+  const vig = ctx.createRadialGradient(W/2, H/2, H*0.3, W/2, H/2, H*0.85);
   vig.addColorStop(0, 'transparent');
-  vig.addColorStop(1, 'rgba(0,0,0,0.55)');
+  vig.addColorStop(1, 'rgba(0,30,80,0.18)');
   ctx.fillStyle = vig;
   ctx.fillRect(0, 0, W, H);
 }
 
-document.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  drawHighway();
-});
-window.addEventListener('resize', () => { stars = []; drawHighway(); });
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; drawHighway(); });
+window.addEventListener('resize', () => { cloudData = []; drawHighway(); });
 drawHighway();
 
 /* ===================== CLOCK ===================== */
