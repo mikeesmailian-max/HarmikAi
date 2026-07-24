@@ -13,23 +13,18 @@ canvas#highway{position:fixed;inset:0;z-index:0;display:block;}
 
 /* ===== LOCK SCREEN ===== */
 .lock-wrap{display:flex;flex-direction:column;align-items:center;gap:0;}
-
 .truck-hero{margin-bottom:14px;filter:drop-shadow(0 10px 28px rgba(0,0,0,.18)) drop-shadow(0 2px 6px rgba(0,0,0,.12));transition:filter .3s,transform .3s;}
 .truck-hero:hover{filter:drop-shadow(0 16px 40px rgba(240,30,44,.3)) drop-shadow(0 4px 12px rgba(0,0,0,.15));transform:translateY(-4px);}
-
 .lock-logo{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
 .logo-mark{width:50px;height:50px;border-radius:15px;background:linear-gradient(135deg,#F01E2C,#A80D17);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(240,30,44,.38);}
 .logo-text{font-size:33px;font-weight:800;color:#0D2B6E;letter-spacing:-1px;text-shadow:0 1px 0 rgba(255,255,255,.6);}
 .logo-text em{color:#F01E2C;font-style:normal;}
-
 .lock-clock{font-size:128px;font-weight:100;letter-spacing:-7px;color:#0D2B6E;line-height:.88;text-align:center;text-shadow:0 2px 20px rgba(255,255,255,.8),0 1px 0 rgba(255,255,255,.5);margin-bottom:6px;}
 .lock-date{font-size:17px;color:rgba(13,43,110,.65);text-align:center;letter-spacing:.3px;font-weight:500;margin-bottom:30px;}
-
 .login-card{width:480px;background:rgba(255,255,255,.82);backdrop-filter:blur(36px) saturate(200%);-webkit-backdrop-filter:blur(36px) saturate(200%);border:2px solid rgba(255,255,255,.9);border-radius:30px;overflow:hidden;box-shadow:0 24px 80px rgba(0,80,200,.18),0 4px 16px rgba(0,0,0,.08),0 0 0 1px rgba(255,255,255,.5) inset;}
 .login-stripe{height:7px;background:linear-gradient(90deg,#F01E2C 0%,#C01020 40%,#1565C0 60%,#0D47A1 100%);position:relative;overflow:hidden;}
 .login-stripe::after{content:"";position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);transition:left .65s ease;}
 .login-card:hover .login-stripe::after{left:150%;}
-
 .login-body{padding:34px 40px 28px;}
 .login-title{font-size:25px;font-weight:800;color:#0D2B6E;margin-bottom:3px;letter-spacing:-.3px;}
 .login-sub{font-size:14px;color:rgba(13,43,110,.45);margin-bottom:24px;font-weight:500;}
@@ -41,48 +36,88 @@ canvas#highway{position:fixed;inset:0;z-index:0;display:block;}
 .pwd-btn{position:absolute;right:8px;top:8px;width:42px;height:42px;background:linear-gradient(135deg,#F01E2C,#A80D17);border:none;border-radius:12px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s,box-shadow .2s;box-shadow:0 4px 16px rgba(240,30,44,.42);}
 .pwd-btn:hover{transform:scale(1.1);box-shadow:0 6px 22px rgba(240,30,44,.6);}
 .pwd-btn:active{transform:scale(.88);}
-
 .login-footer{display:flex;align-items:center;justify-content:space-between;padding:13px 40px;background:rgba(13,43,110,.04);border-top:1.5px solid rgba(13,43,110,.08);}
 .lf-secure{display:flex;align-items:center;gap:7px;font-size:12px;color:rgba(13,43,110,.45);font-weight:600;}
 .lf-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 7px #22c55e;}
 .lf-brand{font-size:12px;font-weight:800;background:linear-gradient(90deg,#F01E2C,#1565C0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-
 .shake{animation:shake .4s ease;}
 @keyframes shake{10%,90%{transform:translateX(-5px)}20%,80%{transform:translateX(7px)}30%,50%,70%{transform:translateX(-11px)}40%,60%{transform:translateX(11px)}}
 
 /* ===== HOME ===== */
-#home{justify-content:flex-start;background:#EEF1F8;}
-.topbar{width:100%;height:68px;flex-shrink:0;background:linear-gradient(90deg,#0D1B3E,#1565C0 50%,#F01E2C);display:flex;align-items:center;padding:0 48px;justify-content:space-between;box-shadow:0 2px 20px rgba(13,27,62,.25);}
+#home{justify-content:flex-start;align-items:stretch;}
+
+.topbar{width:100%;height:66px;flex-shrink:0;background:linear-gradient(90deg,#0D1B3E,#1565C0 50%,#F01E2C);display:flex;align-items:center;padding:0 28px;justify-content:space-between;box-shadow:0 2px 20px rgba(13,27,62,.28);}
 .tb-left{display:flex;align-items:center;gap:12px;}
-.tb-logo{width:36px;height:36px;border-radius:11px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;}
-.tb-name{font-size:18px;font-weight:700;color:#fff;}
-.tb-sep{width:1px;height:18px;background:rgba(255,255,255,.2);margin:0 8px;}
-.tb-sub{font-size:13px;color:rgba(255,255,255,.5);}
+.tb-logo{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;}
+.tb-name{font-size:17px;font-weight:700;color:#fff;}
+.tb-sep{width:1px;height:17px;background:rgba(255,255,255,.2);margin:0 8px;}
+.tb-sub{font-size:12.5px;color:rgba(255,255,255,.5);font-weight:500;}
 .tb-right{display:flex;align-items:center;gap:14px;}
-.tb-time{font-size:15px;font-weight:600;color:rgba(255,255,255,.75);}
-.lock-btn{padding:9px 18px;border-radius:10px;border:1.5px solid rgba(255,255,255,.22);background:rgba(255,255,255,.1);color:rgba(255,255,255,.88);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:7px;font-family:inherit;}
+.tb-time{font-size:14.5px;font-weight:600;color:rgba(255,255,255,.7);}
+.lock-btn{padding:8px 16px;border-radius:9px;border:1.5px solid rgba(255,255,255,.22);background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;font-family:inherit;}
 .lock-btn:hover{background:rgba(255,255,255,.22);color:#fff;}
-.main{width:100%;height:calc(100vh - 68px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 32px;}
-.greeting{text-align:center;margin-bottom:54px;}
-.greeting-h{font-size:28px;font-weight:700;color:#111827;letter-spacing:-.3px;}
-.greeting-h .name{background:linear-gradient(90deg,#F01E2C,#1565C0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.greeting-sub{font-size:14px;color:rgba(17,24,39,.38);margin-top:6px;}
-.apps-grid{display:flex;gap:28px;flex-wrap:wrap;justify-content:center;max-width:1000px;}
-.app-tile{display:flex;flex-direction:column;align-items:center;gap:16px;cursor:pointer;background:none;border:none;color:inherit;font-family:inherit;width:160px;-webkit-tap-highlight-color:transparent;}
-.app-icon-wrap{width:130px;height:130px;border-radius:34px;display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 14px 40px rgba(0,0,0,.18),0 4px 12px rgba(0,0,0,.12);transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s;transform-style:preserve-3d;}
-.app-icon-wrap::after{content:"";position:absolute;inset:0;border-radius:34px;background:linear-gradient(175deg,rgba(255,255,255,.28) 0%,transparent 55%);pointer-events:none;}
-.app-tile:hover .app-icon-wrap{transform:scale(1.1) translateY(-6px);box-shadow:0 24px 56px rgba(0,0,0,.22),0 8px 20px rgba(0,0,0,.14);}
+
+/* Portal body */
+.portal-body{display:flex;height:calc(100vh - 66px);overflow:hidden;}
+
+/* Sidebar */
+.sidebar{width:220px;flex-shrink:0;background:#0A1628;display:flex;flex-direction:column;overflow-y:auto;}
+.sb-section{padding:18px 0 10px;}
+.sb-section+.sb-section{border-top:1px solid rgba(255,255,255,.07);padding-top:14px;}
+.sb-label{font-size:9.5px;font-weight:700;color:rgba(255,255,255,.22);letter-spacing:2.5px;text-transform:uppercase;padding:0 20px;margin-bottom:6px;}
+.sb-link{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:13px;font-weight:600;color:rgba(255,255,255,.45);cursor:pointer;border:none;background:none;width:100%;text-align:left;font-family:inherit;transition:all .16s;border-left:3px solid transparent;line-height:1;}
+.sb-link:hover{color:rgba(255,255,255,.82);background:rgba(255,255,255,.06);}
+.sb-link.active{color:#fff;background:rgba(255,255,255,.1);border-left-color:#F01E2C;}
+.sb-badge{margin-left:auto;font-size:10.5px;font-weight:700;color:rgba(255,255,255,.28);background:rgba(255,255,255,.08);padding:2px 7px;border-radius:20px;}
+.sb-link.active .sb-badge{color:rgba(255,255,255,.5);background:rgba(255,255,255,.14);}
+.sb-bottom{margin-top:auto;}
+
+/* Main scrollable area */
+.portal-main{flex:1;overflow-y:auto;padding:30px 40px;background:#EEF1F8;}
+
+/* Welcome banner */
+.welcome-banner{background:linear-gradient(118deg,#0D1B3E 0%,#1A4B9E 55%,#1B3E85 100%);border-radius:20px;padding:24px 32px;display:flex;align-items:center;justify-content:space-between;margin-bottom:34px;box-shadow:0 8px 32px rgba(13,27,62,.2);position:relative;overflow:hidden;}
+.wb-accent{position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#F01E2C 0%,#FF6B35 50%,#1565C0 100%);}
+.wb-glow{position:absolute;right:-60px;top:-60px;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none;}
+.wb-glow2{position:absolute;right:100px;bottom:-80px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.03);pointer-events:none;}
+.wb-left{padding-left:14px;z-index:1;}
+.wb-eyebrow{font-size:10px;font-weight:700;color:rgba(255,255,255,.35);letter-spacing:3px;text-transform:uppercase;margin-bottom:9px;}
+.wb-name{font-size:25px;font-weight:800;color:#fff;letter-spacing:-.4px;}
+.wb-date{font-size:13px;color:rgba(255,255,255,.38);margin-top:5px;font-weight:500;}
+.wb-stats{display:flex;gap:11px;z-index:1;}
+.wb-stat{text-align:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px 18px;min-width:84px;}
+.wb-stat-n{font-size:30px;font-weight:800;color:#fff;line-height:1;}
+.wb-stat-l{font-size:9px;font-weight:700;color:rgba(255,255,255,.32);letter-spacing:1.5px;text-transform:uppercase;margin-top:5px;}
+
+/* Category sections */
+.cat-section{margin-bottom:38px;}
+.cat-section.cat-hidden{display:none;}
+.cat-header{display:flex;align-items:center;gap:14px;margin-bottom:22px;padding-bottom:14px;border-bottom:2px solid rgba(13,27,62,.07);}
+.ch-icon{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 16px rgba(0,0,0,.18);}
+.ch-log{background:linear-gradient(135deg,#1976D2,#0D1B3E);}
+.ch-re{background:linear-gradient(135deg,#9333EA,#5B21B6);}
+.ch-title{font-size:17px;font-weight:800;color:#0D1B3E;letter-spacing:-.2px;}
+.ch-sub{font-size:11px;color:rgba(13,27,62,.35);font-weight:600;margin-top:3px;text-transform:uppercase;letter-spacing:1px;}
+.ch-count{margin-left:auto;background:rgba(13,27,62,.07);color:rgba(13,27,62,.35);font-size:11.5px;font-weight:700;padding:5px 13px;border-radius:20px;flex-shrink:0;}
+
+.section-apps{display:flex;gap:20px;flex-wrap:wrap;}
+
+/* App tiles */
+.app-tile{display:flex;flex-direction:column;align-items:center;gap:13px;cursor:pointer;background:none;border:none;color:inherit;font-family:inherit;width:136px;-webkit-tap-highlight-color:transparent;}
+.app-icon-wrap{width:118px;height:118px;border-radius:30px;display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 12px 36px rgba(0,0,0,.18),0 4px 10px rgba(0,0,0,.12);transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s;transform-style:preserve-3d;}
+.app-icon-wrap::after{content:"";position:absolute;inset:0;border-radius:30px;background:linear-gradient(175deg,rgba(255,255,255,.28) 0%,transparent 55%);pointer-events:none;}
+.app-tile:hover .app-icon-wrap{transform:scale(1.08) translateY(-5px);box-shadow:0 20px 50px rgba(0,0,0,.22),0 8px 18px rgba(0,0,0,.14);}
 .app-tile:active .app-icon-wrap{transform:scale(.92) translateY(2px);}
-.app-icon-wrap svg{width:60px;height:60px;position:relative;z-index:2;}
+.app-icon-wrap svg{width:52px;height:52px;position:relative;z-index:2;}
 .ic-red{background:linear-gradient(145deg,#FF3A47,#C41020);}
 .ic-blue{background:linear-gradient(145deg,#2A7DE8,#0D47A1);}
 .ic-dkred{background:linear-gradient(145deg,#C41020,#7A0A12);}
 .ic-navy{background:linear-gradient(145deg,#1E3A7A,#0A1B4A);}
 .ic-mix{background:linear-gradient(145deg,#D41830,#1565C0);}
 .ic-green{background:linear-gradient(145deg,#22C55E,#15803D);}
-.ic-purple{background:linear-gradient(145deg,#8B5CF6,#5B21B6);}
-.app-label{font-size:15px;font-weight:700;color:#111827;text-align:center;line-height:1.25;}
-.app-sublabel{font-size:12px;color:rgba(17,24,39,.4);text-align:center;margin-top:3px;}
+.ic-purple{background:linear-gradient(145deg,#9333EA,#5B21B6);}
+.app-label{font-size:13.5px;font-weight:700;color:#111827;text-align:center;line-height:1.25;}
+.app-sublabel{font-size:11px;color:rgba(17,24,39,.38);text-align:center;margin-top:2px;}
 </style>
 </head>
 <body>
@@ -96,56 +131,35 @@ canvas#highway{position:fixed;inset:0;z-index:0;display:block;}
     <!-- Truck hero -->
     <div class="truck-hero">
       <svg viewBox="0 0 420 110" width="440" height="115" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Trailer body - vibrant red -->
         <rect x="8" y="14" width="248" height="74" rx="8" fill="#F01E2C"/>
-        <!-- Trailer top lighter panel -->
         <rect x="8" y="14" width="248" height="22" rx="8" fill="#FF3A47"/>
         <rect x="8" y="28" width="248" height="8" fill="#FF3A47"/>
-        <!-- Trailer side white stripe -->
         <rect x="8" y="36" width="248" height="5" fill="rgba(255,255,255,0.5)"/>
-        <!-- Trailer panel ribs -->
         <line x1="60" y1="41" x2="60" y2="88" stroke="rgba(180,0,10,0.4)" stroke-width="1.5"/>
         <line x1="112" y1="41" x2="112" y2="88" stroke="rgba(180,0,10,0.4)" stroke-width="1.5"/>
         <line x1="164" y1="41" x2="164" y2="88" stroke="rgba(180,0,10,0.4)" stroke-width="1.5"/>
         <line x1="216" y1="41" x2="216" y2="88" stroke="rgba(180,0,10,0.4)" stroke-width="1.5"/>
-        <!-- HARMIK text -->
         <text x="130" y="72" fill="rgba(255,255,255,0.95)" font-size="20" font-family="system-ui,-apple-system,sans-serif" font-weight="900" text-anchor="middle" letter-spacing="8">HARMIK</text>
-        <!-- Rear red lights -->
         <rect x="9" y="18" width="11" height="16" rx="3" fill="#FFD700"/>
         <rect x="9" y="64" width="11" height="18" rx="3" fill="#FF0000"/>
-        <!-- Trailer underrail -->
         <rect x="14" y="88" width="234" height="5" rx="2" fill="rgba(120,0,5,0.6)"/>
-        <!-- Fifth wheel link -->
         <rect x="248" y="75" width="22" height="7" rx="3" fill="#E0E0E0"/>
-        <!-- CAB - vivid navy blue -->
         <path d="M268 90 L268 28 Q270 13 286 7 L344 7 Q362 7 374 22 L412 72 L412 90 Z" fill="#1565C0"/>
-        <!-- Cab top lighter gradient -->
         <path d="M270 15 Q302 3 352 7 L286 7 Q274 9 270 15 Z" fill="#1976D2"/>
-        <!-- Cab air deflector (top) - bright blue -->
         <path d="M268 18 Q300 2 356 7 L286 7 Q272 11 268 18 Z" fill="#1976D2"/>
-        <!-- Windshield - clear bright blue-tint -->
         <path d="M272 32 L272 72 L350 72 L350 30 L334 13 L290 13 Q277 15 272 32 Z" fill="#90CAF9" opacity="0.85"/>
-        <!-- Windshield sheen -->
         <path d="M275 34 L290 15 L308 15 L275 44 Z" fill="rgba(255,255,255,0.3)"/>
-        <!-- Cab door panel line -->
         <line x1="328" y1="30" x2="328" y2="89" stroke="rgba(10,80,180,0.6)" stroke-width="1.5"/>
-        <!-- Door handle -->
         <rect x="334" y="60" width="15" height="4" rx="2" fill="#42A5F5"/>
-        <!-- Cab brand badge -->
         <rect x="276" y="76" width="44" height="13" rx="4" fill="#F01E2C"/>
         <text x="298" y="86" fill="white" font-size="7.5" font-family="system-ui,-apple-system,sans-serif" font-weight="900" text-anchor="middle" letter-spacing="1">MEGAFLEET</text>
-        <!-- Exhaust stacks - silver/chrome -->
         <rect x="342" y="0" width="8" height="16" rx="3.5" fill="#BDBDBD" stroke="#E0E0E0" stroke-width="1"/>
         <rect x="354" y="2" width="8" height="14" rx="3.5" fill="#BDBDBD" stroke="#E0E0E0" stroke-width="1"/>
-        <!-- Exhaust caps -->
         <ellipse cx="346" cy="0" rx="4" ry="2.5" fill="#E0E0E0"/>
         <ellipse cx="358" cy="2" rx="4" ry="2.5" fill="#E0E0E0"/>
-        <!-- Headlights - bright amber -->
         <rect x="398" y="32" width="15" height="18" rx="3" fill="#FFD740"/>
         <rect x="398" y="32" width="15" height="18" rx="3" fill="url(#hl)"/>
-        <!-- Fog/running light -->
         <rect x="398" y="54" width="15" height="10" rx="2" fill="#42A5F5"/>
-        <!-- Grille - white with blue -->
         <rect x="394" y="66" width="19" height="22" rx="3" fill="white" stroke="#90CAF9" stroke-width="1.5"/>
         <line x1="395" y1="70" x2="412" y2="70" stroke="#90CAF9" stroke-width="1.5"/>
         <line x1="395" y1="74" x2="412" y2="74" stroke="#90CAF9" stroke-width="1.5"/>
@@ -153,13 +167,9 @@ canvas#highway{position:fixed;inset:0;z-index:0;display:block;}
         <line x1="395" y1="82" x2="412" y2="82" stroke="#90CAF9" stroke-width="1.5"/>
         <line x1="401" y1="66" x2="401" y2="88" stroke="#90CAF9" stroke-width="1.5"/>
         <line x1="407" y1="66" x2="407" y2="88" stroke="#90CAF9" stroke-width="1.5"/>
-        <!-- Front bumper chrome -->
         <rect x="390" y="86" width="33" height="8" rx="3" fill="#E0E0E0" stroke="#BDBDBD" stroke-width="1"/>
-        <!-- Mirror -->
         <rect x="390" y="24" width="5" height="18" rx="1" fill="#1565C0"/>
         <rect x="385" y="22" width="9" height="13" rx="3" fill="#42A5F5" stroke="#1565C0" stroke-width="1"/>
-        <!-- WHEELS - bright with chrome rims -->
-        <!-- Trailer wheels -->
         <circle cx="56" cy="97" r="14" fill="#424242" stroke="#9E9E9E" stroke-width="2"/>
         <circle cx="56" cy="97" r="8" fill="#616161"/>
         <circle cx="56" cy="97" r="3" fill="#BDBDBD"/>
@@ -172,14 +182,12 @@ canvas#highway{position:fixed;inset:0;z-index:0;display:block;}
         <circle cx="194" cy="97" r="14" fill="#424242" stroke="#9E9E9E" stroke-width="2"/>
         <circle cx="194" cy="97" r="8" fill="#616161"/>
         <circle cx="194" cy="97" r="3" fill="#BDBDBD"/>
-        <!-- Cab drive wheels -->
         <circle cx="316" cy="97" r="15" fill="#424242" stroke="#9E9E9E" stroke-width="2"/>
         <circle cx="316" cy="97" r="8.5" fill="#616161"/>
         <circle cx="316" cy="97" r="3.5" fill="#BDBDBD"/>
         <circle cx="344" cy="97" r="15" fill="#424242" stroke="#9E9E9E" stroke-width="2"/>
         <circle cx="344" cy="97" r="8.5" fill="#616161"/>
         <circle cx="344" cy="97" r="3.5" fill="#BDBDBD"/>
-        <!-- Steer wheel -->
         <circle cx="382" cy="97" r="13" fill="#424242" stroke="#9E9E9E" stroke-width="2"/>
         <circle cx="382" cy="97" r="7" fill="#616161"/>
         <circle cx="382" cy="97" r="2.5" fill="#BDBDBD"/>
@@ -228,24 +236,121 @@ canvas#highway{position:fixed;inset:0;z-index:0;display:block;}
 
 <!-- HOME -->
 <div class="view hidden" id="home">
+
+  <!-- Top bar -->
   <div class="topbar">
     <div class="tb-left">
-      <div class="tb-logo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M1 17l2-6h12l2 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 11V5h4l3 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.5" cy="18.5" r="1.5" fill="#fff"/><circle cx="17.5" cy="18.5" r="1.5" fill="#fff"/></svg></div>
+      <div class="tb-logo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M1 17l2-6h12l2 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 11V5h4l3 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.5" cy="18.5" r="1.5" fill="#fff"/><circle cx="17.5" cy="18.5" r="1.5" fill="#fff"/></svg>
+      </div>
       <div class="tb-name">Harmik AI</div>
       <div class="tb-sep"></div>
-      <div class="tb-sub">MegaFleet Portal</div>
+      <div class="tb-sub">MegaFleet Executive Portal</div>
     </div>
     <div class="tb-right">
       <div class="tb-time" id="home-clock">9:41</div>
-      <button class="lock-btn" onclick="lockNow()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M7 10V7a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><rect x="5" y="10" width="14" height="10" rx="3" fill="currentColor"/></svg>Lock</button>
+      <button class="lock-btn" onclick="lockNow()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M7 10V7a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><rect x="5" y="10" width="14" height="10" rx="3" fill="currentColor"/></svg>
+        Lock
+      </button>
     </div>
   </div>
-  <div class="main">
-    <div class="greeting">
-      <div class="greeting-h">Good <span id="greeting">morning</span>, <span class="name">Master Harmik</span></div>
-      <div class="greeting-sub" id="greeting-date">Wednesday, June 10</div>
-    </div>
-    <div class="apps-grid" id="apps-grid"></div>
+
+  <!-- Portal body: sidebar + main -->
+  <div class="portal-body">
+
+    <!-- Sidebar navigation -->
+    <aside class="sidebar">
+      <div class="sb-section">
+        <div class="sb-label">Menu</div>
+        <button class="sb-link active" data-cat="all" onclick="filterCat('all')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/></svg>
+          All Applications
+          <span class="sb-badge">7</span>
+        </button>
+      </div>
+      <div class="sb-section">
+        <div class="sb-label">Categories</div>
+        <button class="sb-link" data-cat="logistics" onclick="filterCat('logistics')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M1 17l2-6h12l2 6M13 11V5h4l3 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.5" cy="18.5" r="1.5" fill="currentColor"/><circle cx="17.5" cy="18.5" r="1.5" fill="currentColor"/></svg>
+          Logistics &amp; Fleet
+          <span class="sb-badge">6</span>
+        </button>
+        <button class="sb-link" data-cat="realestate" onclick="filterCat('realestate')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          Real Estate
+          <span class="sb-badge">1</span>
+        </button>
+      </div>
+      <div class="sb-section sb-bottom">
+        <div class="sb-label">Account</div>
+        <button class="sb-link" onclick="lockNow()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M7 10V7a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="5" y="10" width="14" height="10" rx="3" fill="currentColor"/></svg>
+          Lock Portal
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="portal-main">
+
+      <!-- Welcome banner -->
+      <div class="welcome-banner">
+        <div class="wb-accent"></div>
+        <div class="wb-glow"></div>
+        <div class="wb-glow2"></div>
+        <div class="wb-left">
+          <div class="wb-eyebrow">Executive Portal &middot; MegaFleet Corp</div>
+          <div class="wb-name">Good <span id="greeting">morning</span>, Master Harmik</div>
+          <div class="wb-date" id="greeting-date">Friday, July 25</div>
+        </div>
+        <div class="wb-stats">
+          <div class="wb-stat">
+            <div class="wb-stat-n">6</div>
+            <div class="wb-stat-l">Fleet Apps</div>
+          </div>
+          <div class="wb-stat">
+            <div class="wb-stat-n">1</div>
+            <div class="wb-stat-l">Property</div>
+          </div>
+          <div class="wb-stat">
+            <div class="wb-stat-n">7</div>
+            <div class="wb-stat-l">Total Tools</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Logistics & Fleet section -->
+      <div class="cat-section" id="sec-logistics" data-cat="logistics">
+        <div class="cat-header">
+          <div class="ch-icon ch-log">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M1 17l2-6h12l2 6M13 11V5h4l3 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.5" cy="18.5" r="1.5" fill="#fff"/><circle cx="17.5" cy="18.5" r="1.5" fill="#fff"/></svg>
+          </div>
+          <div>
+            <div class="ch-title">Logistics &amp; Fleet Management</div>
+            <div class="ch-sub">MegaFleet Corp Operations</div>
+          </div>
+          <div class="ch-count">6 Applications</div>
+        </div>
+        <div class="section-apps" id="logistics-grid"></div>
+      </div>
+
+      <!-- Real Estate section -->
+      <div class="cat-section" id="sec-realestate" data-cat="realestate">
+        <div class="cat-header">
+          <div class="ch-icon ch-re">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5Z" stroke="#fff" stroke-width="2" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <div class="ch-title">Real Estate</div>
+            <div class="ch-sub">Esmailian Properties Group</div>
+          </div>
+          <div class="ch-count">1 Application</div>
+        </div>
+        <div class="section-apps" id="realestate-grid"></div>
+      </div>
+
+    </main>
   </div>
 </div>
 
@@ -258,9 +363,9 @@ let cloudData = [];
 function initClouds(W) {
   cloudData = [];
   const clouds = [
-    [0.1,0.12,55], [0.28,0.08,42], [0.45,0.15,65], [0.62,0.1,50],
-    [0.78,0.07,38], [0.9,0.13,48], [0.2,0.22,35], [0.55,0.19,44],
-    [0.85,0.24,40], [0.07,0.28,30], [0.72,0.2,36]
+    [0.1,0.12,55],[0.28,0.08,42],[0.45,0.15,65],[0.62,0.1,50],
+    [0.78,0.07,38],[0.9,0.13,48],[0.2,0.22,35],[0.55,0.19,44],
+    [0.85,0.24,40],[0.07,0.28,30],[0.72,0.2,36]
   ];
   clouds.forEach(([fx,fy,r]) => cloudData.push({fx,fy,r}));
 }
@@ -284,161 +389,73 @@ function drawHighway() {
   const W = canvas.width = window.innerWidth;
   const H = canvas.height = window.innerHeight;
   const ctx = canvas.getContext('2d');
-  const HZ = H * 0.52; // horizon
+  const HZ = H * 0.52;
   const VX = W/2 + (mx - W/2) * 0.04;
   const VY = HZ + (my - H/2) * 0.015;
-
   if (!cloudData.length) initClouds(W);
-
-  /* 1. Sky - vibrant bright blue gradient */
   const sky = ctx.createLinearGradient(0, 0, 0, HZ + 30);
   sky.addColorStop(0, '#1A78E8');
   sky.addColorStop(0.45, '#3D9EFF');
   sky.addColorStop(0.75, '#72C0FF');
   sky.addColorStop(1, '#B8E0FF');
-  ctx.fillStyle = sky;
-  ctx.fillRect(0, 0, W, HZ + 30);
-
-  /* 2. Sun glow on horizon */
+  ctx.fillStyle = sky; ctx.fillRect(0, 0, W, HZ + 30);
   const sunX = W * 0.5 + (mx - W/2) * 0.02;
   const sg = ctx.createRadialGradient(sunX, HZ, 0, sunX, HZ, W * 0.45);
   sg.addColorStop(0, 'rgba(255,240,100,0.55)');
   sg.addColorStop(0.18, 'rgba(255,200,60,0.25)');
   sg.addColorStop(0.5, 'rgba(255,160,40,0.1)');
   sg.addColorStop(1, 'transparent');
-  ctx.fillStyle = sg;
-  ctx.fillRect(0, HZ - 100, W, 200);
-
-  /* 3. Sun disc */
+  ctx.fillStyle = sg; ctx.fillRect(0, HZ - 100, W, 200);
   const sun = ctx.createRadialGradient(sunX, HZ, 0, sunX, HZ, 36);
   sun.addColorStop(0, 'rgba(255,252,200,1)');
   sun.addColorStop(0.35, 'rgba(255,220,80,0.9)');
   sun.addColorStop(1, 'transparent');
-  ctx.fillStyle = sun;
-  ctx.beginPath();
-  ctx.arc(sunX, HZ, 36, 0, Math.PI * 2);
-  ctx.fill();
-
-  /* 4. Clouds (parallax with mouse) */
+  ctx.fillStyle = sun; ctx.beginPath(); ctx.arc(sunX, HZ, 36, 0, Math.PI*2); ctx.fill();
   cloudData.forEach((c, i) => {
     const px = c.fx * W + (mx - W/2) * (0.01 + i % 3 * 0.005);
     const py = c.fy * HZ + (my - H/2) * (0.008 + i % 2 * 0.004);
     drawCloud(ctx, px, py, c.r);
   });
-
-  /* 5. Distant green hills */
   ctx.fillStyle = '#5CBF4A';
-  ctx.beginPath();
-  ctx.moveTo(0, HZ + 5);
+  ctx.beginPath(); ctx.moveTo(0, HZ + 5);
   for (let x = 0; x <= W; x += 80) {
     const hv = 18 + ((x * 37 + 13) % 40);
     ctx.quadraticCurveTo(x + 40, HZ - hv, x + 80, HZ + 5);
   }
-  ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
-  ctx.fill();
-
-  /* 6. Green shoulder areas */
+  ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath(); ctx.fill();
   const gLeft = ctx.createLinearGradient(0, HZ, 0, H);
-  gLeft.addColorStop(0, '#6DD45A');
-  gLeft.addColorStop(1, '#4BA83C');
+  gLeft.addColorStop(0, '#6DD45A'); gLeft.addColorStop(1, '#4BA83C');
   ctx.fillStyle = gLeft;
-  // Left shoulder
-  ctx.beginPath();
-  ctx.moveTo(0, H);
-  ctx.lineTo(VX - 90, VY + 5);
-  ctx.lineTo(0, HZ + 5);
-  ctx.closePath();
-  ctx.fill();
-  // Right shoulder
-  ctx.beginPath();
-  ctx.moveTo(W, H);
-  ctx.lineTo(VX + 90, VY + 5);
-  ctx.lineTo(W, HZ + 5);
-  ctx.closePath();
-  ctx.fill();
-
-  /* 7. Road surface - bright concrete */
-  ctx.beginPath();
-  ctx.moveTo(0, H);
-  ctx.lineTo(VX - 90, VY + 5);
-  ctx.lineTo(VX + 90, VY + 5);
-  ctx.lineTo(W, H);
+  ctx.beginPath(); ctx.moveTo(0, H); ctx.lineTo(VX - 90, VY + 5); ctx.lineTo(0, HZ + 5); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(W, H); ctx.lineTo(VX + 90, VY + 5); ctx.lineTo(W, HZ + 5); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(0, H); ctx.lineTo(VX - 90, VY + 5); ctx.lineTo(VX + 90, VY + 5); ctx.lineTo(W, H);
   const roadG = ctx.createLinearGradient(0, VY, 0, H);
-  roadG.addColorStop(0, '#C8CED8');
-  roadG.addColorStop(0.3, '#D4D8E4');
-  roadG.addColorStop(1, '#B8BEC8');
-  ctx.fillStyle = roadG;
-  ctx.fill();
-
-  /* 8. Road center divider stripe */
-  ctx.beginPath();
-  ctx.moveTo(W * 0.35, H);
-  ctx.lineTo(VX - 28, VY + 6);
-  ctx.strokeStyle = 'rgba(255,255,255,0.5)';
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(W * 0.65, H);
-  ctx.lineTo(VX + 28, VY + 6);
-  ctx.stroke();
-
-  /* 9. White edge lines */
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = 'rgba(255,255,255,0.85)';
-  ctx.beginPath();
-  ctx.moveTo(W * 0.04, H);
-  ctx.lineTo(VX - 84, VY + 6);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(W * 0.96, H);
-  ctx.lineTo(VX + 84, VY + 6);
-  ctx.stroke();
-
-  /* 10. Yellow dashed center line - perspective */
+  roadG.addColorStop(0, '#C8CED8'); roadG.addColorStop(0.3, '#D4D8E4'); roadG.addColorStop(1, '#B8BEC8');
+  ctx.fillStyle = roadG; ctx.fill();
+  ctx.beginPath(); ctx.moveTo(W * 0.35, H); ctx.lineTo(VX - 28, VY + 6);
+  ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(W * 0.65, H); ctx.lineTo(VX + 28, VY + 6); ctx.stroke();
+  ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(255,255,255,0.85)';
+  ctx.beginPath(); ctx.moveTo(W * 0.04, H); ctx.lineTo(VX - 84, VY + 6); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(W * 0.96, H); ctx.lineTo(VX + 84, VY + 6); ctx.stroke();
   for (let t = 0; t < 0.97; t += 0.085) {
     const t2 = Math.min(t + 0.052, 0.97);
-    const x1 = W/2 + (VX - W/2) * (1 - t);
-    const y1 = H + (VY + 6 - H) * (1 - t);
-    const x2 = W/2 + (VX - W/2) * (1 - t2);
-    const y2 = H + (VY + 6 - H) * (1 - t2);
-    ctx.strokeStyle = `rgba(255,200,0,${0.5 + t * 0.45})`;
-    ctx.lineWidth = 0.8 + t * 3;
-    ctx.beginPath();
-    ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
-    ctx.stroke();
+    const x1 = W/2 + (VX - W/2) * (1 - t), y1 = H + (VY + 6 - H) * (1 - t);
+    const x2 = W/2 + (VX - W/2) * (1 - t2), y2 = H + (VY + 6 - H) * (1 - t2);
+    ctx.strokeStyle = `rgba(255,200,0,${0.5 + t * 0.45})`; ctx.lineWidth = 0.8 + t * 3;
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
   }
-
-  /* 11. Road surface shine */
   const shine = ctx.createLinearGradient(W*0.3, VY+10, W*0.7, H);
-  shine.addColorStop(0, 'transparent');
-  shine.addColorStop(0.5, 'rgba(255,255,255,0.12)');
-  shine.addColorStop(1, 'transparent');
+  shine.addColorStop(0, 'transparent'); shine.addColorStop(0.5, 'rgba(255,255,255,0.12)'); shine.addColorStop(1, 'transparent');
   ctx.fillStyle = shine;
-  ctx.beginPath();
-  ctx.moveTo(VX - 100, H);
-  ctx.lineTo(VX - 4, VY + 20);
-  ctx.lineTo(VX + 4, VY + 20);
-  ctx.lineTo(VX + 100, H);
-  ctx.closePath(); ctx.fill();
-
-  /* 12. Distance haze over road */
+  ctx.beginPath(); ctx.moveTo(VX - 100, H); ctx.lineTo(VX - 4, VY + 20); ctx.lineTo(VX + 4, VY + 20); ctx.lineTo(VX + 100, H); ctx.closePath(); ctx.fill();
   const haze = ctx.createLinearGradient(0, VY, 0, VY + 60);
-  haze.addColorStop(0, 'rgba(180,210,255,0.45)');
-  haze.addColorStop(1, 'transparent');
+  haze.addColorStop(0, 'rgba(180,210,255,0.45)'); haze.addColorStop(1, 'transparent');
   ctx.fillStyle = haze;
-  ctx.beginPath();
-  ctx.moveTo(0, VY + 60);
-  ctx.lineTo(VX - 90, VY + 5);
-  ctx.lineTo(VX + 90, VY + 5);
-  ctx.lineTo(W, VY + 60);
-  ctx.closePath(); ctx.fill();
-
-  /* 13. Subtle vignette */
+  ctx.beginPath(); ctx.moveTo(0, VY + 60); ctx.lineTo(VX - 90, VY + 5); ctx.lineTo(VX + 90, VY + 5); ctx.lineTo(W, VY + 60); ctx.closePath(); ctx.fill();
   const vig = ctx.createRadialGradient(W/2, H/2, H*0.3, W/2, H/2, H*0.85);
-  vig.addColorStop(0, 'transparent');
-  vig.addColorStop(1, 'rgba(0,30,80,0.18)');
-  ctx.fillStyle = vig;
-  ctx.fillRect(0, 0, W, H);
+  vig.addColorStop(0, 'transparent'); vig.addColorStop(1, 'rgba(0,30,80,0.18)');
+  ctx.fillStyle = vig; ctx.fillRect(0, 0, W, H);
 }
 
 document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; drawHighway(); });
@@ -476,12 +493,58 @@ document.getElementById('pwd-form').addEventListener('submit', e => {
 });
 if(sessionStorage.getItem('mf')==='1'){ unlock(); } else { setTimeout(()=>pwd.focus(),300); }
 
+/* ===================== SIDEBAR FILTER ===================== */
+function filterCat(cat) {
+  document.querySelectorAll('.sb-link[data-cat]').forEach(l => l.classList.toggle('active', l.dataset.cat === cat));
+  document.querySelectorAll('.cat-section').forEach(s => s.classList.toggle('cat-hidden', cat !== 'all' && s.dataset.cat !== cat));
+}
+
 /* ===================== APP TILES ===================== */
-function addTilt(el){ const wrap=el.querySelector('.app-icon-wrap'); el.addEventListener('mousemove',e=>{ const r=wrap.getBoundingClientRect(); const x=(e.clientX-r.left)/r.width-.5; const y=(e.clientY-r.top)/r.height-.5; wrap.style.transform=`perspective(500px) rotateY(${x*16}deg) rotateX(${-y*16}deg) scale(1.1) translateY(-6px)`; wrap.style.boxShadow=`${-x*18}px ${-y*18+28}px 56px rgba(0,0,0,.22)`; }); el.addEventListener('mouseleave',()=>{ wrap.style.transform=''; wrap.style.boxShadow=''; }); }
-const ICONS={ auto:`<svg viewBox="0 0 24 24" fill="none"><path d="M1 17l2-6h12l2 6M13 11V5h4l3 6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.5" cy="18.5" r="1.5" fill="#fff"/><circle cx="17.5" cy="18.5" r="1.5" fill="#fff"/></svg>`, track:`<svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11Z" stroke="#fff" stroke-width="1.8"/><circle cx="12" cy="10" r="2.8" fill="#fff"/></svg>`, pct:`<svg viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="8" cy="8" r="2.4" stroke="#fff" stroke-width="1.8"/><circle cx="16" cy="16" r="2.4" stroke="#fff" stroke-width="1.8"/></svg>`, pay:`<svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="6" width="17" height="12" rx="2.5" stroke="#fff" stroke-width="1.8"/><path d="M3.5 10h17M6.5 14.5h3" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>`, crm:`<svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="9" r="3" stroke="#fff" stroke-width="1.8"/><path d="M4 19a5 5 0 0 1 10 0M16 7.5a2.6 2.6 0 0 1 0 5M17.5 18.5a4.6 4.6 0 0 0-2.2-3.9" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>`, cc:`<svg viewBox="0 0 24 24" fill="none"><rect x="2" y="6" width="20" height="13" rx="3" stroke="#fff" stroke-width="1.8"/><path d="M2 10h20" stroke="#fff" stroke-width="1.8"/><path d="M6 15h4" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>`, prop:`<svg viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5Z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/></svg>` };
-const APPS=[{name:"O'Reilly's Auto",desc:"Parts & inventory",url:"https://megafleet-6g26tnah.manus.space",c:"ic-red",i:"auto"},{name:"LINX Tracking",desc:"Live load tracking",url:"https://megafleet-j5k7rjui.manus.space",c:"ic-blue",i:"track"},{name:"Agent Commission",desc:"Freight broker calc",url:"https://freightcalc-jrksoq4b.manus.space",c:"ic-dkred",i:"pct"},{name:"Payables",desc:"AP & billing",url:"https://megafleetpay-aijaerxz.manus.space/admin",c:"ic-navy",i:"pay"},{name:"CRM Outreach",desc:"Leads & contacts",url:"https://megafleet-dhzsbjcq.manus.space",c:"ic-mix",i:"crm"},{name:"Credit Card",desc:"Payment processing",url:"https://megafleetpay-kxkqjvmf.manus.space",c:"ic-green",i:"cc"},{name:"Esmailian Properties",desc:"Property dashboard",url:"https://propdash-gfsyjvcu.manus.space/",c:"ic-purple",i:"prop"}];
-const grid=document.getElementById('apps-grid');
-APPS.forEach(a=>{ const btn=document.createElement('button'); btn.className='app-tile'; btn.innerHTML=`<div class="app-icon-wrap ${a.c}">${ICONS[a.i]}</div><div><div class="app-label">${a.name}</div><div class="app-sublabel">${a.desc}</div></div>`; btn.addEventListener('click',()=>{ window.location.href=a.url; }); grid.appendChild(btn); addTilt(btn); });
+function addTilt(el) {
+  const wrap = el.querySelector('.app-icon-wrap');
+  el.addEventListener('mousemove', e => {
+    const r = wrap.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - .5;
+    const y = (e.clientY - r.top) / r.height - .5;
+    wrap.style.transform = `perspective(500px) rotateY(${x*16}deg) rotateX(${-y*16}deg) scale(1.08) translateY(-5px)`;
+    wrap.style.boxShadow = `${-x*18}px ${-y*18+28}px 50px rgba(0,0,0,.22)`;
+  });
+  el.addEventListener('mouseleave', () => { wrap.style.transform = ''; wrap.style.boxShadow = ''; });
+}
+
+const ICONS = {
+  auto:`<svg viewBox="0 0 24 24" fill="none"><path d="M1 17l2-6h12l2 6M13 11V5h4l3 6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.5" cy="18.5" r="1.5" fill="#fff"/><circle cx="17.5" cy="18.5" r="1.5" fill="#fff"/></svg>`,
+  track:`<svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11Z" stroke="#fff" stroke-width="1.8"/><circle cx="12" cy="10" r="2.8" fill="#fff"/></svg>`,
+  pct:`<svg viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="8" cy="8" r="2.4" stroke="#fff" stroke-width="1.8"/><circle cx="16" cy="16" r="2.4" stroke="#fff" stroke-width="1.8"/></svg>`,
+  pay:`<svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="6" width="17" height="12" rx="2.5" stroke="#fff" stroke-width="1.8"/><path d="M3.5 10h17M6.5 14.5h3" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+  crm:`<svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="9" r="3" stroke="#fff" stroke-width="1.8"/><path d="M4 19a5 5 0 0 1 10 0M16 7.5a2.6 2.6 0 0 1 0 5M17.5 18.5a4.6 4.6 0 0 0-2.2-3.9" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+  cc:`<svg viewBox="0 0 24 24" fill="none"><rect x="2" y="6" width="20" height="13" rx="3" stroke="#fff" stroke-width="1.8"/><path d="M2 10h20" stroke="#fff" stroke-width="1.8"/><path d="M6 15h4" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+  prop:`<svg viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5Z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/></svg>`
+};
+
+const APPS = [
+  {name:"O'Reilly's Auto",   desc:"Parts & inventory",     url:"https://megafleet-6g26tnah.manus.space",     c:"ic-red",    i:"auto",  cat:"logistics"},
+  {name:"LINX Tracking",     desc:"Live load tracking",    url:"https://megafleet-j5k7rjui.manus.space",     c:"ic-blue",   i:"track", cat:"logistics"},
+  {name:"Agent Commission",  desc:"Freight broker calc",   url:"https://freightcalc-jrksoq4b.manus.space",   c:"ic-dkred",  i:"pct",   cat:"logistics"},
+  {name:"Payables",          desc:"AP & billing",          url:"https://megafleetpay-aijaerxz.manus.space/admin", c:"ic-navy", i:"pay", cat:"logistics"},
+  {name:"CRM Outreach",      desc:"Leads & contacts",      url:"https://megafleet-dhzsbjcq.manus.space",     c:"ic-mix",    i:"crm",   cat:"logistics"},
+  {name:"Credit Card",       desc:"Payment processing",    url:"https://megafleetpay-kxkqjvmf.manus.space",  c:"ic-green",  i:"cc",    cat:"logistics"},
+  {name:"Esmailian Properties", desc:"Property dashboard", url:"https://propdash-gfsyjvcu.manus.space/",     c:"ic-purple", i:"prop",  cat:"realestate"}
+];
+
+const grids = {
+  logistics:  document.getElementById('logistics-grid'),
+  realestate: document.getElementById('realestate-grid')
+};
+
+APPS.forEach(a => {
+  const btn = document.createElement('button');
+  btn.className = 'app-tile';
+  btn.innerHTML = `<div class="app-icon-wrap ${a.c}">${ICONS[a.i]}</div><div><div class="app-label">${a.name}</div><div class="app-sublabel">${a.desc}</div></div>`;
+  btn.addEventListener('click', () => window.location.href = a.url);
+  grids[a.cat].appendChild(btn);
+  addTilt(btn);
+});
 </script>
 </body>
 </html>
