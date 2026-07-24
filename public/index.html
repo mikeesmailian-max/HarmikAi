@@ -6,50 +6,70 @@
 <title>Harmik AI Portal</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden;background:#6EC6FF;}
-canvas#highway{position:fixed;inset:0;z-index:0;display:block;}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden;}
 .view{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1),filter .6s;}
 .view.hidden{opacity:0;transform:scale(.97) translateY(-18px);filter:blur(8px);pointer-events:none;}
 
-/* ===== LOCK SCREEN ===== */
-.lock-wrap{display:flex;flex-direction:column;align-items:center;gap:0;}
-.dual-brands{display:flex;align-items:center;background:rgba(255,255,255,.82);backdrop-filter:blur(32px) saturate(200%);-webkit-backdrop-filter:blur(32px) saturate(200%);border-radius:24px;padding:16px 28px;gap:22px;border:2px solid rgba(255,255,255,.9);box-shadow:0 16px 48px rgba(0,50,180,.14),0 2px 10px rgba(0,0,0,.08);margin-bottom:22px;}
-.db-card{display:flex;align-items:center;gap:14px;}
-.dbc-icon{width:48px;height:48px;border-radius:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.db-log .dbc-icon{background:linear-gradient(135deg,#F01E2C,#A80D17);box-shadow:0 5px 18px rgba(240,30,44,.32);}
-.db-re .dbc-icon{background:linear-gradient(135deg,#9333EA,#5B21B6);box-shadow:0 5px 18px rgba(147,51,234,.32);}
-.dbc-name{font-size:16px;font-weight:800;color:#0D2B6E;letter-spacing:-.2px;white-space:nowrap;}
-.dbc-type{font-size:10.5px;font-weight:700;color:rgba(13,43,110,.4);margin-top:3px;text-transform:uppercase;letter-spacing:1.2px;}
-.db-sep{width:1.5px;height:44px;background:rgba(13,43,110,.1);flex-shrink:0;}
-.lock-logo{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
-.logo-mark{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#F01E2C,#A80D17);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(240,30,44,.38);}
-.logo-text{font-size:30px;font-weight:800;color:#0D2B6E;letter-spacing:-1px;text-shadow:0 1px 0 rgba(255,255,255,.6);}
+/* ===== LOCK SCREEN PHOTO BACKGROUND ===== */
+#lock{flex-direction:row;align-items:stretch;justify-content:flex-start;background:#050A1C;}
+.lock-photo-bg{position:absolute;inset:0;display:flex;z-index:0;pointer-events:none;}
+.lb-panel{flex:1;background-size:cover;background-position:center;transition:background-position .1s linear;position:relative;overflow:hidden;}
+.lb-logistics{background-image:url('https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&w=960&q=85');}
+.lb-realestate{background-image:url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=960&q=85');}
+/* overlays — fade strongly toward center so login UI has clean dark area */
+.lb-logistics::after{content:"";position:absolute;inset:0;background:linear-gradient(to right,rgba(5,15,50,.45) 0%,rgba(5,15,50,.62) 45%,rgba(5,10,30,.92) 80%,rgba(5,10,30,.98) 100%);}
+.lb-realestate::after{content:"";position:absolute;inset:0;background:linear-gradient(to left,rgba(30,5,60,.45) 0%,rgba(30,5,60,.62) 45%,rgba(5,10,30,.92) 80%,rgba(5,10,30,.98) 100%);}
+/* company labels in photo panels */
+.lb-label{position:absolute;z-index:2;bottom:52px;display:flex;flex-direction:column;gap:10px;}
+.lb-logistics .lb-label{left:44px;}
+.lb-realestate .lb-label{right:44px;align-items:flex-end;}
+.lb-badge{display:flex;align-items:center;gap:12px;}
+.lb-realestate .lb-badge{flex-direction:row-reverse;}
+.lb-badge-icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.lb-logistics .lb-badge-icon{background:linear-gradient(135deg,#F01E2C,#A80D17);box-shadow:0 6px 22px rgba(240,30,44,.4);}
+.lb-realestate .lb-badge-icon{background:linear-gradient(135deg,#9333EA,#5B21B6);box-shadow:0 6px 22px rgba(147,51,234,.4);}
+.lb-badge-text{}
+.lb-company-name{font-size:20px;font-weight:800;color:#fff;letter-spacing:-.3px;text-shadow:0 2px 10px rgba(0,0,0,.5);}
+.lb-company-type{font-size:10.5px;font-weight:700;color:rgba(255,255,255,.45);letter-spacing:1.8px;text-transform:uppercase;margin-top:3px;}
+/* center seam */
+.lb-seam{width:1px;flex-shrink:0;background:linear-gradient(to bottom,transparent 0%,rgba(255,255,255,.18) 25%,rgba(255,255,255,.18) 75%,transparent 100%);z-index:1;}
+
+/* center login wrapper — sits above photos */
+.lock-center{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;pointer-events:none;}
+.lock-center > *{pointer-events:auto;}
+
+/* logo */
+.lock-logo{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.logo-mark{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#F01E2C,#A80D17);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(240,30,44,.45);}
+.logo-text{font-size:30px;font-weight:800;color:#fff;letter-spacing:-1px;text-shadow:0 2px 12px rgba(0,0,0,.4);}
 .logo-text em{color:#F01E2C;font-style:normal;}
-.lock-clock{font-size:130px;font-weight:100;letter-spacing:-7px;color:#0D2B6E;line-height:.88;text-align:center;text-shadow:0 2px 20px rgba(255,255,255,.8),0 1px 0 rgba(255,255,255,.5);margin-bottom:6px;}
-.lock-date{font-size:17px;color:rgba(13,43,110,.6);text-align:center;letter-spacing:.3px;font-weight:500;margin-bottom:28px;}
-.login-card{width:480px;background:rgba(255,255,255,.82);backdrop-filter:blur(36px) saturate(200%);-webkit-backdrop-filter:blur(36px) saturate(200%);border:2px solid rgba(255,255,255,.9);border-radius:30px;overflow:hidden;box-shadow:0 24px 80px rgba(0,80,200,.18),0 4px 16px rgba(0,0,0,.08),0 0 0 1px rgba(255,255,255,.5) inset;}
-.login-stripe{height:7px;background:linear-gradient(90deg,#F01E2C 0%,#C01020 35%,#9333EA 65%,#5B21B6 100%);position:relative;overflow:hidden;}
-.login-stripe::after{content:"";position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);transition:left .65s ease;}
-.login-card:hover .login-stripe::after{left:150%;}
-.login-body{padding:32px 40px 26px;}
-.login-title{font-size:24px;font-weight:800;color:#0D2B6E;margin-bottom:3px;letter-spacing:-.3px;}
-.login-sub{font-size:13.5px;color:rgba(13,43,110,.42);margin-bottom:22px;font-weight:500;}
-.login-err{height:18px;font-size:13px;color:#D01020;font-weight:700;margin-bottom:7px;}
+
+/* clock + date */
+.lock-clock{font-size:128px;font-weight:100;letter-spacing:-6px;color:#fff;line-height:.88;text-align:center;text-shadow:0 4px 30px rgba(0,0,0,.5);margin-bottom:6px;}
+.lock-date{font-size:17px;color:rgba(255,255,255,.55);text-align:center;letter-spacing:.3px;font-weight:500;margin-bottom:28px;text-shadow:0 1px 8px rgba(0,0,0,.4);}
+
+/* login card */
+.login-card{width:480px;background:rgba(255,255,255,.1);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1.5px solid rgba(255,255,255,.18);border-radius:30px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.45),0 8px 24px rgba(0,0,0,.3),0 0 0 1px rgba(255,255,255,.08) inset;}
+.login-stripe{height:4px;background:linear-gradient(90deg,#F01E2C 0%,#C01020 35%,#9333EA 65%,#5B21B6 100%);}
+.login-body{padding:30px 40px 24px;}
+.login-title{font-size:22px;font-weight:800;color:#fff;margin-bottom:3px;letter-spacing:-.3px;}
+.login-sub{font-size:13px;color:rgba(255,255,255,.38);margin-bottom:20px;font-weight:500;}
+.login-err{height:18px;font-size:13px;color:#FF6B7A;font-weight:700;margin-bottom:7px;}
 .pwd-wrap{position:relative;}
-.pwd{width:100%;height:56px;background:rgba(13,43,110,.06);border:2px solid rgba(13,43,110,.14);border-radius:16px;color:#0D2B6E;font-size:17px;letter-spacing:3px;padding:0 68px 0 20px;outline:none;font-family:inherit;transition:border-color .25s,box-shadow .25s,background .25s;}
-.pwd::placeholder{color:rgba(13,43,110,.3);letter-spacing:.2px;font-size:14px;}
-.pwd:focus{border-color:rgba(21,101,192,.5);box-shadow:0 0 0 4px rgba(21,101,192,.12);background:rgba(255,255,255,.9);}
-.pwd-btn{position:absolute;right:8px;top:7px;width:42px;height:42px;background:linear-gradient(135deg,#F01E2C,#A80D17);border:none;border-radius:12px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s,box-shadow .2s;box-shadow:0 4px 16px rgba(240,30,44,.42);}
-.pwd-btn:hover{transform:scale(1.1);box-shadow:0 6px 22px rgba(240,30,44,.6);}
+.pwd{width:100%;height:54px;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.18);border-radius:16px;color:#fff;font-size:17px;letter-spacing:3px;padding:0 68px 0 20px;outline:none;font-family:inherit;transition:border-color .25s,box-shadow .25s,background .25s;}
+.pwd::placeholder{color:rgba(255,255,255,.28);letter-spacing:.2px;font-size:14px;}
+.pwd:focus{border-color:rgba(255,255,255,.4);box-shadow:0 0 0 4px rgba(255,255,255,.08);background:rgba(255,255,255,.14);}
+.pwd-btn{position:absolute;right:8px;top:6px;width:42px;height:42px;background:linear-gradient(135deg,#F01E2C,#A80D17);border:none;border-radius:12px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s,box-shadow .2s;box-shadow:0 4px 16px rgba(240,30,44,.5);}
+.pwd-btn:hover{transform:scale(1.1);box-shadow:0 6px 22px rgba(240,30,44,.7);}
 .pwd-btn:active{transform:scale(.88);}
-.login-footer{display:flex;align-items:center;justify-content:space-between;padding:13px 40px;background:rgba(13,43,110,.04);border-top:1.5px solid rgba(13,43,110,.08);}
-.lf-secure{display:flex;align-items:center;gap:7px;font-size:12px;color:rgba(13,43,110,.45);font-weight:600;}
-.lf-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 7px #22c55e;}
+.login-footer{display:flex;align-items:center;justify-content:space-between;padding:12px 40px;background:rgba(255,255,255,.04);border-top:1px solid rgba(255,255,255,.1);}
+.lf-secure{display:flex;align-items:center;gap:7px;font-size:12px;color:rgba(255,255,255,.35);font-weight:600;}
+.lf-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px #22c55e;}
 .lf-brand{font-size:12px;font-weight:800;background:linear-gradient(90deg,#F01E2C,#9333EA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .shake{animation:shake .4s ease;}
 @keyframes shake{10%,90%{transform:translateX(-5px)}20%,80%{transform:translateX(7px)}30%,50%,70%{transform:translateX(-11px)}40%,60%{transform:translateX(11px)}}
 
-/* ===== HOME ===== */
+/* ===== HOME SCREEN ===== */
 #home{justify-content:flex-start;align-items:stretch;background:#EEF1F8;}
 .topbar{width:100%;height:66px;flex-shrink:0;background:linear-gradient(90deg,#0D1B3E,#1565C0 50%,#F01E2C);display:flex;align-items:center;padding:0 28px;justify-content:space-between;box-shadow:0 2px 20px rgba(13,27,62,.28);}
 .tb-left{display:flex;align-items:center;gap:12px;}
@@ -113,40 +133,57 @@ canvas#highway{position:fixed;inset:0;z-index:0;display:block;}
 </head>
 <body>
 
-<canvas id="highway"></canvas>
-
-<!-- LOCK SCREEN -->
+<!-- ===== LOCK SCREEN ===== -->
 <div class="view" id="lock">
-  <div class="lock-wrap">
-    <div class="dual-brands">
-      <div class="db-card db-log">
-        <div class="dbc-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M1 17l2-6h12l2 6M13 11V5h4l3 6" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.5" cy="18.5" r="1.5" fill="#fff"/><circle cx="17.5" cy="18.5" r="1.5" fill="#fff"/></svg>
-        </div>
-        <div>
-          <div class="dbc-name">MegaFleet Corp</div>
-          <div class="dbc-type">Freight &amp; Logistics</div>
-        </div>
-      </div>
-      <div class="db-sep"></div>
-      <div class="db-card db-re">
-        <div class="dbc-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5Z" stroke="#fff" stroke-width="2.1" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="#fff" stroke-width="2.1" stroke-linejoin="round"/></svg>
-        </div>
-        <div>
-          <div class="dbc-name">Esmailian Properties</div>
-          <div class="dbc-type">Real Estate</div>
+
+  <!-- Split photo background -->
+  <div class="lock-photo-bg">
+    <!-- Left: Logistics photo -->
+    <div class="lb-panel lb-logistics" id="lb-log">
+      <div class="lb-label">
+        <div class="lb-badge">
+          <div class="lb-badge-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M1 17l2-6h12l2 6M13 11V5h4l3 6" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.5" cy="18.5" r="1.5" fill="#fff"/><circle cx="17.5" cy="18.5" r="1.5" fill="#fff"/></svg>
+          </div>
+          <div class="lb-badge-text">
+            <div class="lb-company-name">MegaFleet Corp</div>
+            <div class="lb-company-type">Freight &amp; Logistics</div>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- center seam -->
+    <div class="lb-seam"></div>
+
+    <!-- Right: Real estate photo -->
+    <div class="lb-panel lb-realestate" id="lb-re">
+      <div class="lb-label">
+        <div class="lb-badge">
+          <div class="lb-badge-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5Z" stroke="#fff" stroke-width="2.1" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="#fff" stroke-width="2.1" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="lb-badge-text">
+            <div class="lb-company-name">Esmailian Properties</div>
+            <div class="lb-company-type">Real Estate</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Center login UI -->
+  <div class="lock-center">
     <div class="lock-logo">
       <div class="logo-mark">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M1 17l2-6h12l2 6M13 11V5h4l3 6" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.5" cy="18.5" r="1.5" fill="#fff"/><circle cx="17.5" cy="18.5" r="1.5" fill="#fff"/></svg>
       </div>
       <div class="logo-text">Harmik <em>AI</em></div>
     </div>
+
     <div class="lock-clock" id="lock-clock">9:41</div>
-    <div class="lock-date" id="lock-date">Wednesday, June 10</div>
+    <div class="lock-date" id="lock-date">Friday, July 24</div>
+
     <div class="login-card">
       <div class="login-stripe"></div>
       <div class="login-body">
@@ -168,9 +205,10 @@ canvas#highway{position:fixed;inset:0;z-index:0;display:block;}
       </div>
     </div>
   </div>
+
 </div>
 
-<!-- HOME -->
+<!-- ===== HOME SCREEN ===== -->
 <div class="view hidden" id="home">
   <div class="topbar">
     <div class="tb-left">
@@ -267,282 +305,6 @@ canvas#highway{position:fixed;inset:0;z-index:0;display:block;}
 </div>
 
 <script>
-/* ===================== FLYING PIG HELPER ===================== */
-function drawPig(ctx, x, y, r) {
-  ctx.save();
-  /* shadow */
-  ctx.fillStyle = 'rgba(200,100,130,0.10)';
-  ctx.beginPath(); ctx.ellipse(x + r*0.3, y + r*0.95, r*0.9, r*0.22, 0, 0, Math.PI*2); ctx.fill();
-
-  /* wings — drawn behind body */
-  /* left wing */
-  ctx.fillStyle = 'rgba(255,210,225,0.92)';
-  ctx.beginPath();
-  ctx.moveTo(x - r*0.15, y - r*0.05);
-  ctx.bezierCurveTo(x - r*1.1, y - r*0.6, x - r*1.3, y + r*0.2, x - r*0.2, y + r*0.3);
-  ctx.closePath(); ctx.fill();
-  ctx.strokeStyle = 'rgba(240,160,185,0.5)'; ctx.lineWidth = r*0.04; ctx.stroke();
-  /* wing feather lines */
-  ctx.strokeStyle = 'rgba(240,160,185,0.4)'; ctx.lineWidth = r*0.03;
-  for (let i = 0; i < 3; i++) {
-    const t = 0.25 + i * 0.22;
-    ctx.beginPath();
-    ctx.moveTo(x - r*0.15 + (x - r*0.2 - (x - r*0.15)) * t, (y - r*0.05) + (y + r*0.3 - (y - r*0.05)) * t);
-    ctx.quadraticCurveTo(x - r*(0.9 + i*0.1), y - r*(0.3 - i*0.15), x - r*(0.7 + i*0.2), y + r*(0.1 + i*0.1));
-    ctx.stroke();
-  }
-  /* right wing */
-  ctx.fillStyle = 'rgba(255,210,225,0.92)';
-  ctx.beginPath();
-  ctx.moveTo(x + r*0.95, y - r*0.05);
-  ctx.bezierCurveTo(x + r*1.9, y - r*0.6, x + r*2.1, y + r*0.2, x + r*1.0, y + r*0.3);
-  ctx.closePath(); ctx.fill();
-  ctx.strokeStyle = 'rgba(240,160,185,0.5)'; ctx.lineWidth = r*0.04; ctx.stroke();
-  ctx.strokeStyle = 'rgba(240,160,185,0.4)'; ctx.lineWidth = r*0.03;
-  for (let i = 0; i < 3; i++) {
-    const t = 0.25 + i * 0.22;
-    ctx.beginPath();
-    ctx.moveTo(x + r*0.95 + (x + r*1.0 - (x + r*0.95)) * t, (y - r*0.05) + (y + r*0.3 - (y - r*0.05)) * t);
-    ctx.quadraticCurveTo(x + r*(1.7 + i*0.1), y - r*(0.3 - i*0.15), x + r*(1.5 + i*0.2), y + r*(0.1 + i*0.1));
-    ctx.stroke();
-  }
-
-  /* body */
-  ctx.fillStyle = '#FFB3C6';
-  ctx.beginPath(); ctx.ellipse(x + r*0.4, y, r*0.78, r*0.62, 0, 0, Math.PI*2); ctx.fill();
-
-  /* belly highlight */
-  ctx.fillStyle = 'rgba(255,235,242,0.55)';
-  ctx.beginPath(); ctx.ellipse(x + r*0.38, y - r*0.08, r*0.38, r*0.28, -0.2, 0, Math.PI*2); ctx.fill();
-
-  /* head */
-  ctx.fillStyle = '#FFB3C6';
-  ctx.beginPath(); ctx.arc(x + r*0.98, y - r*0.22, r*0.48, 0, Math.PI*2); ctx.fill();
-
-  /* left ear */
-  ctx.fillStyle = '#FF8FAD';
-  ctx.beginPath();
-  ctx.ellipse(x + r*0.72, y - r*0.60, r*0.16, r*0.24, -0.5, 0, Math.PI*2); ctx.fill();
-  ctx.fillStyle = '#FFB3C6';
-  ctx.beginPath();
-  ctx.ellipse(x + r*0.72, y - r*0.60, r*0.09, r*0.15, -0.5, 0, Math.PI*2); ctx.fill();
-
-  /* right ear */
-  ctx.fillStyle = '#FF8FAD';
-  ctx.beginPath();
-  ctx.ellipse(x + r*1.20, y - r*0.62, r*0.16, r*0.24, 0.5, 0, Math.PI*2); ctx.fill();
-  ctx.fillStyle = '#FFB3C6';
-  ctx.beginPath();
-  ctx.ellipse(x + r*1.20, y - r*0.62, r*0.09, r*0.15, 0.5, 0, Math.PI*2); ctx.fill();
-
-  /* snout */
-  ctx.fillStyle = '#FF8FAD';
-  ctx.beginPath(); ctx.ellipse(x + r*1.36, y - r*0.14, r*0.23, r*0.18, 0, 0, Math.PI*2); ctx.fill();
-  /* nostrils */
-  ctx.fillStyle = '#C0556A';
-  ctx.beginPath(); ctx.ellipse(x + r*1.27, y - r*0.15, r*0.055, r*0.07, 0.2, 0, Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.ellipse(x + r*1.44, y - r*0.15, r*0.055, r*0.07, -0.2, 0, Math.PI*2); ctx.fill();
-
-  /* eye */
-  ctx.fillStyle = '#1A1030';
-  ctx.beginPath(); ctx.arc(x + r*1.06, y - r*0.36, r*0.09, 0, Math.PI*2); ctx.fill();
-  /* eye shine */
-  ctx.fillStyle = 'rgba(255,255,255,0.85)';
-  ctx.beginPath(); ctx.arc(x + r*1.09, y - r*0.39, r*0.04, 0, Math.PI*2); ctx.fill();
-
-  /* smile */
-  ctx.strokeStyle = '#C0556A'; ctx.lineWidth = r*0.045; ctx.lineCap = 'round';
-  ctx.beginPath(); ctx.arc(x + r*1.32, y - r*0.04, r*0.1, 0.1, Math.PI - 0.1); ctx.stroke();
-
-  /* curly tail */
-  ctx.strokeStyle = '#FF8FAD'; ctx.lineWidth = r*0.1; ctx.lineCap = 'round';
-  ctx.beginPath();
-  ctx.moveTo(x - r*0.3, y + r*0.1);
-  ctx.bezierCurveTo(x - r*0.75, y - r*0.2, x - r*0.85, y + r*0.42, x - r*0.52, y + r*0.45);
-  ctx.bezierCurveTo(x - r*0.28, y + r*0.47, x - r*0.22, y + r*0.28, x - r*0.38, y + r*0.22);
-  ctx.stroke();
-
-  /* tiny legs dangling */
-  ctx.fillStyle = '#FF8FAD';
-  const legs = [0.12, 0.42, 0.65, 0.88];
-  legs.forEach(lx => {
-    ctx.beginPath();
-    ctx.roundRect(x + lx*r, y + r*0.52, r*0.17, r*0.3, r*0.06);
-    ctx.fill();
-    /* hoof */
-    ctx.fillStyle = '#C0556A';
-    ctx.beginPath(); ctx.ellipse(x + lx*r + r*0.085, y + r*0.82, r*0.1, r*0.07, 0, 0, Math.PI*2); ctx.fill();
-    ctx.fillStyle = '#FF8FAD';
-  });
-
-  ctx.restore();
-}
-
-/* ===================== CITY SKYLINE HELPER ===================== */
-function drawBuilding(ctx, x, y, w, h, bi, glass) {
-  ctx.fillStyle = 'rgba(60,90,140,0.13)';
-  ctx.fillRect(x + 5, y + 6, w, h);
-  const g = ctx.createLinearGradient(x, y, x, y + h);
-  if (glass) {
-    g.addColorStop(0,   'rgba(195,225,252,0.72)');
-    g.addColorStop(0.4, 'rgba(155,198,238,0.68)');
-    g.addColorStop(1,   'rgba(108,158,218,0.74)');
-  } else {
-    g.addColorStop(0,   'rgba(182,192,212,0.68)');
-    g.addColorStop(0.5, 'rgba(158,168,190,0.63)');
-    g.addColorStop(1,   'rgba(128,138,165,0.70)');
-  }
-  ctx.fillStyle = g; ctx.fillRect(x, y, w, h);
-  ctx.fillStyle = glass ? 'rgba(90,165,235,0.88)' : 'rgba(105,115,145,0.88)';
-  ctx.fillRect(x, y, w, 2);
-  if (glass) {
-    ctx.strokeStyle = 'rgba(255,255,255,0.18)'; ctx.lineWidth = 0.5;
-    for (let fy = y + 9; fy < y + h - 4; fy += 9) { ctx.beginPath(); ctx.moveTo(x, fy); ctx.lineTo(x + w, fy); ctx.stroke(); }
-    for (let fx = x + 10; fx < x + w - 4; fx += 10) { ctx.beginPath(); ctx.moveTo(fx, y); ctx.lineTo(fx, y + h); ctx.stroke(); }
-  }
-  const wW = 3, wH = 4, gX = glass ? 7 : 6, gY = 7;
-  const cols = Math.max(1, Math.floor((w - 6) / (wW + gX)));
-  const rows = Math.max(1, Math.floor((h - 10) / (wH + gY)));
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      const lit = ((bi * 13 + r * 7 + c * 5) % 5) > 0;
-      ctx.fillStyle = lit ? (glass ? 'rgba(220,242,255,0.72)' : 'rgba(255,246,180,0.68)') : 'rgba(70,100,150,0.16)';
-      ctx.fillRect(x + 3 + c * (wW + gX), y + 6 + r * (wH + gY), wW, wH);
-    }
-  }
-  if (h > 85) {
-    ctx.strokeStyle = 'rgba(140,160,200,0.55)'; ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.moveTo(x + w/2, y); ctx.lineTo(x + w/2, y - 16); ctx.stroke();
-    ctx.fillStyle = 'rgba(255,80,80,0.65)';
-    ctx.beginPath(); ctx.arc(x + w/2, y - 16, 2.5, 0, Math.PI*2); ctx.fill();
-  }
-}
-
-/* ===================== CANVAS BACKGROUND ===================== */
-const canvas = document.getElementById('highway');
-let mx = window.innerWidth/2, my = window.innerHeight/2;
-
-/* Pig positions: [xFraction, yFraction, radius, facing-right] */
-/* facing-right=1 means pig faces right (default), 0 means flip */
-const PIG_DATA = [
-  [0.07, 0.10, 22, 1], [0.22, 0.06, 18, 0], [0.40, 0.13, 26, 1],
-  [0.58, 0.08, 20, 1], [0.73, 0.12, 24, 0], [0.88, 0.07, 17, 1],
-  [0.14, 0.22, 16, 1], [0.50, 0.20, 21, 0], [0.80, 0.18, 19, 1],
-  [0.32, 0.28, 15, 0], [0.65, 0.26, 18, 1]
-];
-
-const BLDGS = [
-  [0.03,38,44,false],[0.08,26,64,true],[0.13,34,50,false],
-  [0.75,36,54,false],[0.80,24,70,true],[0.85,40,46,false],
-  [0.33,28,60,true],[0.40,44,82,false],[0.44,58,118,true],
-  [0.51,38,92,false],[0.57,30,72,true],[0.63,32,58,false]
-];
-
-function drawHighway() {
-  const W = canvas.width = window.innerWidth;
-  const H = canvas.height = window.innerHeight;
-  const ctx = canvas.getContext('2d');
-  const HZ = H * 0.52;
-  const VX = W/2 + (mx - W/2) * 0.04;
-  const VY = HZ + (my - H/2) * 0.015;
-
-  /* 1. Sky */
-  const sky = ctx.createLinearGradient(0, 0, 0, HZ + 30);
-  sky.addColorStop(0, '#1A78E8'); sky.addColorStop(0.45, '#3D9EFF');
-  sky.addColorStop(0.75, '#72C0FF'); sky.addColorStop(1, '#B8E0FF');
-  ctx.fillStyle = sky; ctx.fillRect(0, 0, W, HZ + 30);
-
-  /* 2. Sun glow */
-  const sunX = W * 0.5 + (mx - W/2) * 0.02;
-  const sg = ctx.createRadialGradient(sunX, HZ, 0, sunX, HZ, W * 0.45);
-  sg.addColorStop(0, 'rgba(255,240,100,0.55)'); sg.addColorStop(0.18, 'rgba(255,200,60,0.25)');
-  sg.addColorStop(0.5, 'rgba(255,160,40,0.1)'); sg.addColorStop(1, 'transparent');
-  ctx.fillStyle = sg; ctx.fillRect(0, HZ - 100, W, 200);
-
-  /* 3. Sun disc */
-  const sun = ctx.createRadialGradient(sunX, HZ, 0, sunX, HZ, 36);
-  sun.addColorStop(0, 'rgba(255,252,200,1)'); sun.addColorStop(0.35, 'rgba(255,220,80,0.9)');
-  sun.addColorStop(1, 'transparent');
-  ctx.fillStyle = sun; ctx.beginPath(); ctx.arc(sunX, HZ, 36, 0, Math.PI*2); ctx.fill();
-
-  /* 4. Flying pigs! */
-  PIG_DATA.forEach(([fx, fy, r, faceRight], i) => {
-    const px = fx * W + (mx - W/2) * (0.012 + (i % 3) * 0.006);
-    const py = fy * HZ + (my - H/2) * (0.01 + (i % 2) * 0.005);
-    ctx.save();
-    if (!faceRight) {
-      /* mirror horizontally around pig center */
-      ctx.translate(px + r * 0.6, 0);
-      ctx.scale(-1, 1);
-      drawPig(ctx, r * 0.6 * -1 + r * 0.0, py, r);
-    } else {
-      drawPig(ctx, px, py, r);
-    }
-    ctx.restore();
-  });
-
-  /* 5. City skyline */
-  BLDGS.forEach(([fx, bw, bh, glass], bi) => {
-    drawBuilding(ctx, Math.floor(fx * W), Math.floor(HZ - bh), bw, bh, bi, glass);
-  });
-
-  /* 6. Green hills */
-  ctx.fillStyle = '#5CBF4A';
-  ctx.beginPath(); ctx.moveTo(0, HZ + 5);
-  for (let x = 0; x <= W; x += 80) {
-    const hv = 18 + ((x * 37 + 13) % 40);
-    ctx.quadraticCurveTo(x + 40, HZ - hv, x + 80, HZ + 5);
-  }
-  ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath(); ctx.fill();
-
-  /* 7. Road shoulders */
-  ctx.fillStyle = '#6DD45A';
-  ctx.beginPath(); ctx.moveTo(0, H); ctx.lineTo(VX - 90, VY + 5); ctx.lineTo(0, HZ + 5); ctx.closePath(); ctx.fill();
-  ctx.beginPath(); ctx.moveTo(W, H); ctx.lineTo(VX + 90, VY + 5); ctx.lineTo(W, HZ + 5); ctx.closePath(); ctx.fill();
-
-  /* 8. Road */
-  ctx.beginPath(); ctx.moveTo(0, H); ctx.lineTo(VX - 90, VY + 5); ctx.lineTo(VX + 90, VY + 5); ctx.lineTo(W, H);
-  const roadG = ctx.createLinearGradient(0, VY, 0, H);
-  roadG.addColorStop(0, '#C8CED8'); roadG.addColorStop(0.3, '#D4D8E4'); roadG.addColorStop(1, '#B8BEC8');
-  ctx.fillStyle = roadG; ctx.fill();
-
-  /* 9. Lane markers */
-  ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 1.5;
-  ctx.beginPath(); ctx.moveTo(W * 0.35, H); ctx.lineTo(VX - 28, VY + 6); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(W * 0.65, H); ctx.lineTo(VX + 28, VY + 6); ctx.stroke();
-  ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(255,255,255,0.85)';
-  ctx.beginPath(); ctx.moveTo(W * 0.04, H); ctx.lineTo(VX - 84, VY + 6); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(W * 0.96, H); ctx.lineTo(VX + 84, VY + 6); ctx.stroke();
-
-  /* 10. Yellow dashes */
-  for (let t = 0; t < 0.97; t += 0.085) {
-    const t2 = Math.min(t + 0.052, 0.97);
-    const x1 = W/2 + (VX - W/2) * (1 - t), y1 = H + (VY + 6 - H) * (1 - t);
-    const x2 = W/2 + (VX - W/2) * (1 - t2), y2 = H + (VY + 6 - H) * (1 - t2);
-    ctx.strokeStyle = `rgba(255,200,0,${0.5 + t * 0.45})`; ctx.lineWidth = 0.8 + t * 3;
-    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
-  }
-
-  /* 11. Road shine + haze */
-  const shine = ctx.createLinearGradient(W*0.3, VY+10, W*0.7, H);
-  shine.addColorStop(0,'transparent'); shine.addColorStop(0.5,'rgba(255,255,255,0.12)'); shine.addColorStop(1,'transparent');
-  ctx.fillStyle = shine;
-  ctx.beginPath(); ctx.moveTo(VX-100,H); ctx.lineTo(VX-4,VY+20); ctx.lineTo(VX+4,VY+20); ctx.lineTo(VX+100,H); ctx.closePath(); ctx.fill();
-  const haze = ctx.createLinearGradient(0, VY, 0, VY + 60);
-  haze.addColorStop(0,'rgba(180,210,255,0.4)'); haze.addColorStop(1,'transparent');
-  ctx.fillStyle = haze;
-  ctx.beginPath(); ctx.moveTo(0,VY+60); ctx.lineTo(VX-90,VY+5); ctx.lineTo(VX+90,VY+5); ctx.lineTo(W,VY+60); ctx.closePath(); ctx.fill();
-
-  /* 12. Vignette */
-  const vig = ctx.createRadialGradient(W/2,H/2,H*0.3,W/2,H/2,H*0.85);
-  vig.addColorStop(0,'transparent'); vig.addColorStop(1,'rgba(0,30,80,0.18)');
-  ctx.fillStyle = vig; ctx.fillRect(0,0,W,H);
-}
-
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; drawHighway(); });
-window.addEventListener('resize', drawHighway);
-drawHighway();
-
 /* ===================== CLOCK ===================== */
 function tick() {
   const d = new Date(), h = d.getHours(), m = String(d.getMinutes()).padStart(2,'0');
@@ -557,6 +319,16 @@ function tick() {
   document.getElementById('greeting').textContent = h<12?'morning':h<17?'afternoon':'evening';
 }
 tick(); setInterval(tick, 1000);
+
+/* ===================== PARALLAX ON PHOTOS ===================== */
+document.addEventListener('mousemove', e => {
+  const xPct = (e.clientX / window.innerWidth - 0.5);
+  const yPct = (e.clientY / window.innerHeight - 0.5);
+  const lx = 50 + xPct * 6, ly = 50 + yPct * 5;
+  const rx = 50 - xPct * 6, ry = 50 + yPct * 5;
+  document.getElementById('lb-log').style.backgroundPosition = `${lx}% ${ly}%`;
+  document.getElementById('lb-re').style.backgroundPosition  = `${rx}% ${ry}%`;
+});
 
 /* ===================== AUTH ===================== */
 const lockV = document.getElementById('lock'), homeV = document.getElementById('home');
