@@ -13,8 +13,6 @@ canvas#highway{position:fixed;inset:0;z-index:0;display:block;}
 
 /* ===== LOCK SCREEN ===== */
 .lock-wrap{display:flex;flex-direction:column;align-items:center;gap:0;}
-
-/* Dual brand badges */
 .dual-brands{display:flex;align-items:center;background:rgba(255,255,255,.82);backdrop-filter:blur(32px) saturate(200%);-webkit-backdrop-filter:blur(32px) saturate(200%);border-radius:24px;padding:16px 28px;gap:22px;border:2px solid rgba(255,255,255,.9);box-shadow:0 16px 48px rgba(0,50,180,.14),0 2px 10px rgba(0,0,0,.08);margin-bottom:22px;}
 .db-card{display:flex;align-items:center;gap:14px;}
 .dbc-icon{width:48px;height:48px;border-radius:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
@@ -23,16 +21,12 @@ canvas#highway{position:fixed;inset:0;z-index:0;display:block;}
 .dbc-name{font-size:16px;font-weight:800;color:#0D2B6E;letter-spacing:-.2px;white-space:nowrap;}
 .dbc-type{font-size:10.5px;font-weight:700;color:rgba(13,43,110,.4);margin-top:3px;text-transform:uppercase;letter-spacing:1.2px;}
 .db-sep{width:1.5px;height:44px;background:rgba(13,43,110,.1);flex-shrink:0;}
-
-/* Logo */
 .lock-logo{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
 .logo-mark{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#F01E2C,#A80D17);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(240,30,44,.38);}
 .logo-text{font-size:30px;font-weight:800;color:#0D2B6E;letter-spacing:-1px;text-shadow:0 1px 0 rgba(255,255,255,.6);}
 .logo-text em{color:#F01E2C;font-style:normal;}
-
 .lock-clock{font-size:130px;font-weight:100;letter-spacing:-7px;color:#0D2B6E;line-height:.88;text-align:center;text-shadow:0 2px 20px rgba(255,255,255,.8),0 1px 0 rgba(255,255,255,.5);margin-bottom:6px;}
 .lock-date{font-size:17px;color:rgba(13,43,110,.6);text-align:center;letter-spacing:.3px;font-weight:500;margin-bottom:28px;}
-
 .login-card{width:480px;background:rgba(255,255,255,.82);backdrop-filter:blur(36px) saturate(200%);-webkit-backdrop-filter:blur(36px) saturate(200%);border:2px solid rgba(255,255,255,.9);border-radius:30px;overflow:hidden;box-shadow:0 24px 80px rgba(0,80,200,.18),0 4px 16px rgba(0,0,0,.08),0 0 0 1px rgba(255,255,255,.5) inset;}
 .login-stripe{height:7px;background:linear-gradient(90deg,#F01E2C 0%,#C01020 35%,#9333EA 65%,#5B21B6 100%);position:relative;overflow:hidden;}
 .login-stripe::after{content:"";position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);transition:left .65s ease;}
@@ -124,8 +118,6 @@ canvas#highway{position:fixed;inset:0;z-index:0;display:block;}
 <!-- LOCK SCREEN -->
 <div class="view" id="lock">
   <div class="lock-wrap">
-
-    <!-- Dual brand badges -->
     <div class="dual-brands">
       <div class="db-card db-log">
         <div class="dbc-icon">
@@ -147,18 +139,14 @@ canvas#highway{position:fixed;inset:0;z-index:0;display:block;}
         </div>
       </div>
     </div>
-
-    <!-- Logo -->
     <div class="lock-logo">
       <div class="logo-mark">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M1 17l2-6h12l2 6M13 11V5h4l3 6" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.5" cy="18.5" r="1.5" fill="#fff"/><circle cx="17.5" cy="18.5" r="1.5" fill="#fff"/></svg>
       </div>
       <div class="logo-text">Harmik <em>AI</em></div>
     </div>
-
     <div class="lock-clock" id="lock-clock">9:41</div>
     <div class="lock-date" id="lock-date">Wednesday, June 10</div>
-
     <div class="login-card">
       <div class="login-stripe"></div>
       <div class="login-body">
@@ -279,12 +267,121 @@ canvas#highway{position:fixed;inset:0;z-index:0;display:block;}
 </div>
 
 <script>
+/* ===================== FLYING PIG HELPER ===================== */
+function drawPig(ctx, x, y, r) {
+  ctx.save();
+  /* shadow */
+  ctx.fillStyle = 'rgba(200,100,130,0.10)';
+  ctx.beginPath(); ctx.ellipse(x + r*0.3, y + r*0.95, r*0.9, r*0.22, 0, 0, Math.PI*2); ctx.fill();
+
+  /* wings — drawn behind body */
+  /* left wing */
+  ctx.fillStyle = 'rgba(255,210,225,0.92)';
+  ctx.beginPath();
+  ctx.moveTo(x - r*0.15, y - r*0.05);
+  ctx.bezierCurveTo(x - r*1.1, y - r*0.6, x - r*1.3, y + r*0.2, x - r*0.2, y + r*0.3);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = 'rgba(240,160,185,0.5)'; ctx.lineWidth = r*0.04; ctx.stroke();
+  /* wing feather lines */
+  ctx.strokeStyle = 'rgba(240,160,185,0.4)'; ctx.lineWidth = r*0.03;
+  for (let i = 0; i < 3; i++) {
+    const t = 0.25 + i * 0.22;
+    ctx.beginPath();
+    ctx.moveTo(x - r*0.15 + (x - r*0.2 - (x - r*0.15)) * t, (y - r*0.05) + (y + r*0.3 - (y - r*0.05)) * t);
+    ctx.quadraticCurveTo(x - r*(0.9 + i*0.1), y - r*(0.3 - i*0.15), x - r*(0.7 + i*0.2), y + r*(0.1 + i*0.1));
+    ctx.stroke();
+  }
+  /* right wing */
+  ctx.fillStyle = 'rgba(255,210,225,0.92)';
+  ctx.beginPath();
+  ctx.moveTo(x + r*0.95, y - r*0.05);
+  ctx.bezierCurveTo(x + r*1.9, y - r*0.6, x + r*2.1, y + r*0.2, x + r*1.0, y + r*0.3);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = 'rgba(240,160,185,0.5)'; ctx.lineWidth = r*0.04; ctx.stroke();
+  ctx.strokeStyle = 'rgba(240,160,185,0.4)'; ctx.lineWidth = r*0.03;
+  for (let i = 0; i < 3; i++) {
+    const t = 0.25 + i * 0.22;
+    ctx.beginPath();
+    ctx.moveTo(x + r*0.95 + (x + r*1.0 - (x + r*0.95)) * t, (y - r*0.05) + (y + r*0.3 - (y - r*0.05)) * t);
+    ctx.quadraticCurveTo(x + r*(1.7 + i*0.1), y - r*(0.3 - i*0.15), x + r*(1.5 + i*0.2), y + r*(0.1 + i*0.1));
+    ctx.stroke();
+  }
+
+  /* body */
+  ctx.fillStyle = '#FFB3C6';
+  ctx.beginPath(); ctx.ellipse(x + r*0.4, y, r*0.78, r*0.62, 0, 0, Math.PI*2); ctx.fill();
+
+  /* belly highlight */
+  ctx.fillStyle = 'rgba(255,235,242,0.55)';
+  ctx.beginPath(); ctx.ellipse(x + r*0.38, y - r*0.08, r*0.38, r*0.28, -0.2, 0, Math.PI*2); ctx.fill();
+
+  /* head */
+  ctx.fillStyle = '#FFB3C6';
+  ctx.beginPath(); ctx.arc(x + r*0.98, y - r*0.22, r*0.48, 0, Math.PI*2); ctx.fill();
+
+  /* left ear */
+  ctx.fillStyle = '#FF8FAD';
+  ctx.beginPath();
+  ctx.ellipse(x + r*0.72, y - r*0.60, r*0.16, r*0.24, -0.5, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#FFB3C6';
+  ctx.beginPath();
+  ctx.ellipse(x + r*0.72, y - r*0.60, r*0.09, r*0.15, -0.5, 0, Math.PI*2); ctx.fill();
+
+  /* right ear */
+  ctx.fillStyle = '#FF8FAD';
+  ctx.beginPath();
+  ctx.ellipse(x + r*1.20, y - r*0.62, r*0.16, r*0.24, 0.5, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#FFB3C6';
+  ctx.beginPath();
+  ctx.ellipse(x + r*1.20, y - r*0.62, r*0.09, r*0.15, 0.5, 0, Math.PI*2); ctx.fill();
+
+  /* snout */
+  ctx.fillStyle = '#FF8FAD';
+  ctx.beginPath(); ctx.ellipse(x + r*1.36, y - r*0.14, r*0.23, r*0.18, 0, 0, Math.PI*2); ctx.fill();
+  /* nostrils */
+  ctx.fillStyle = '#C0556A';
+  ctx.beginPath(); ctx.ellipse(x + r*1.27, y - r*0.15, r*0.055, r*0.07, 0.2, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(x + r*1.44, y - r*0.15, r*0.055, r*0.07, -0.2, 0, Math.PI*2); ctx.fill();
+
+  /* eye */
+  ctx.fillStyle = '#1A1030';
+  ctx.beginPath(); ctx.arc(x + r*1.06, y - r*0.36, r*0.09, 0, Math.PI*2); ctx.fill();
+  /* eye shine */
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  ctx.beginPath(); ctx.arc(x + r*1.09, y - r*0.39, r*0.04, 0, Math.PI*2); ctx.fill();
+
+  /* smile */
+  ctx.strokeStyle = '#C0556A'; ctx.lineWidth = r*0.045; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.arc(x + r*1.32, y - r*0.04, r*0.1, 0.1, Math.PI - 0.1); ctx.stroke();
+
+  /* curly tail */
+  ctx.strokeStyle = '#FF8FAD'; ctx.lineWidth = r*0.1; ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(x - r*0.3, y + r*0.1);
+  ctx.bezierCurveTo(x - r*0.75, y - r*0.2, x - r*0.85, y + r*0.42, x - r*0.52, y + r*0.45);
+  ctx.bezierCurveTo(x - r*0.28, y + r*0.47, x - r*0.22, y + r*0.28, x - r*0.38, y + r*0.22);
+  ctx.stroke();
+
+  /* tiny legs dangling */
+  ctx.fillStyle = '#FF8FAD';
+  const legs = [0.12, 0.42, 0.65, 0.88];
+  legs.forEach(lx => {
+    ctx.beginPath();
+    ctx.roundRect(x + lx*r, y + r*0.52, r*0.17, r*0.3, r*0.06);
+    ctx.fill();
+    /* hoof */
+    ctx.fillStyle = '#C0556A';
+    ctx.beginPath(); ctx.ellipse(x + lx*r + r*0.085, y + r*0.82, r*0.1, r*0.07, 0, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#FF8FAD';
+  });
+
+  ctx.restore();
+}
+
 /* ===================== CITY SKYLINE HELPER ===================== */
 function drawBuilding(ctx, x, y, w, h, bi, glass) {
-  /* shadow */
   ctx.fillStyle = 'rgba(60,90,140,0.13)';
   ctx.fillRect(x + 5, y + 6, w, h);
-  /* body */
   const g = ctx.createLinearGradient(x, y, x, y + h);
   if (glass) {
     g.addColorStop(0,   'rgba(195,225,252,0.72)');
@@ -295,74 +392,45 @@ function drawBuilding(ctx, x, y, w, h, bi, glass) {
     g.addColorStop(0.5, 'rgba(158,168,190,0.63)');
     g.addColorStop(1,   'rgba(128,138,165,0.70)');
   }
-  ctx.fillStyle = g;
-  ctx.fillRect(x, y, w, h);
-  /* roof cap */
+  ctx.fillStyle = g; ctx.fillRect(x, y, w, h);
   ctx.fillStyle = glass ? 'rgba(90,165,235,0.88)' : 'rgba(105,115,145,0.88)';
   ctx.fillRect(x, y, w, 2);
-  /* glass facade grid lines */
   if (glass) {
-    ctx.strokeStyle = 'rgba(255,255,255,0.18)';
-    ctx.lineWidth = 0.5;
-    for (let fy = y + 9; fy < y + h - 4; fy += 9) {
-      ctx.beginPath(); ctx.moveTo(x, fy); ctx.lineTo(x + w, fy); ctx.stroke();
-    }
-    for (let fx = x + 10; fx < x + w - 4; fx += 10) {
-      ctx.beginPath(); ctx.moveTo(fx, y); ctx.lineTo(fx, y + h); ctx.stroke();
-    }
+    ctx.strokeStyle = 'rgba(255,255,255,0.18)'; ctx.lineWidth = 0.5;
+    for (let fy = y + 9; fy < y + h - 4; fy += 9) { ctx.beginPath(); ctx.moveTo(x, fy); ctx.lineTo(x + w, fy); ctx.stroke(); }
+    for (let fx = x + 10; fx < x + w - 4; fx += 10) { ctx.beginPath(); ctx.moveTo(fx, y); ctx.lineTo(fx, y + h); ctx.stroke(); }
   }
-  /* windows — deterministic pattern */
   const wW = 3, wH = 4, gX = glass ? 7 : 6, gY = 7;
   const cols = Math.max(1, Math.floor((w - 6) / (wW + gX)));
   const rows = Math.max(1, Math.floor((h - 10) / (wH + gY)));
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
       const lit = ((bi * 13 + r * 7 + c * 5) % 5) > 0;
-      ctx.fillStyle = lit
-        ? (glass ? 'rgba(220,242,255,0.72)' : 'rgba(255,246,180,0.68)')
-        : 'rgba(70,100,150,0.16)';
+      ctx.fillStyle = lit ? (glass ? 'rgba(220,242,255,0.72)' : 'rgba(255,246,180,0.68)') : 'rgba(70,100,150,0.16)';
       ctx.fillRect(x + 3 + c * (wW + gX), y + 6 + r * (wH + gY), wW, wH);
     }
   }
-  /* antenna on tallest */
   if (h > 85) {
-    ctx.strokeStyle = 'rgba(140,160,200,0.55)';
-    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = 'rgba(140,160,200,0.55)'; ctx.lineWidth = 1.5;
     ctx.beginPath(); ctx.moveTo(x + w/2, y); ctx.lineTo(x + w/2, y - 16); ctx.stroke();
     ctx.fillStyle = 'rgba(255,80,80,0.65)';
     ctx.beginPath(); ctx.arc(x + w/2, y - 16, 2.5, 0, Math.PI*2); ctx.fill();
   }
 }
 
-/* ===================== BRIGHT HIGHWAY CANVAS ===================== */
+/* ===================== CANVAS BACKGROUND ===================== */
 const canvas = document.getElementById('highway');
 let mx = window.innerWidth/2, my = window.innerHeight/2;
-let cloudData = [];
 
-function initClouds(W) {
-  cloudData = [];
-  [[0.1,0.12,55],[0.28,0.08,42],[0.45,0.15,65],[0.62,0.1,50],
-   [0.78,0.07,38],[0.9,0.13,48],[0.2,0.22,35],[0.55,0.19,44],
-   [0.85,0.24,40],[0.07,0.28,30],[0.72,0.2,36]
-  ].forEach(([fx,fy,r]) => cloudData.push({fx,fy,r}));
-}
+/* Pig positions: [xFraction, yFraction, radius, facing-right] */
+/* facing-right=1 means pig faces right (default), 0 means flip */
+const PIG_DATA = [
+  [0.07, 0.10, 22, 1], [0.22, 0.06, 18, 0], [0.40, 0.13, 26, 1],
+  [0.58, 0.08, 20, 1], [0.73, 0.12, 24, 0], [0.88, 0.07, 17, 1],
+  [0.14, 0.22, 16, 1], [0.50, 0.20, 21, 0], [0.80, 0.18, 19, 1],
+  [0.32, 0.28, 15, 0], [0.65, 0.26, 18, 1]
+];
 
-function drawCloud(ctx, x, y, r) {
-  ctx.save();
-  ctx.fillStyle = 'rgba(255,255,255,0.88)';
-  ctx.shadowColor = 'rgba(200,220,255,0.4)';
-  ctx.shadowBlur = 12;
-  ctx.beginPath();
-  ctx.arc(x, y, r, 0, Math.PI*2);
-  ctx.arc(x + r*0.85, y + r*0.12, r*0.72, 0, Math.PI*2);
-  ctx.arc(x + r*1.55, y, r*0.62, 0, Math.PI*2);
-  ctx.arc(x + r*0.9, y - r*0.45, r*0.58, 0, Math.PI*2);
-  ctx.arc(x + r*0.35, y - r*0.35, r*0.5, 0, Math.PI*2);
-  ctx.fill();
-  ctx.restore();
-}
-
-/* Building layout: [xFraction, width, heightAboveHorizon, isGlass] */
 const BLDGS = [
   [0.03,38,44,false],[0.08,26,64,true],[0.13,34,50,false],
   [0.75,36,54,false],[0.80,24,70,true],[0.85,40,46,false],
@@ -377,45 +445,48 @@ function drawHighway() {
   const HZ = H * 0.52;
   const VX = W/2 + (mx - W/2) * 0.04;
   const VY = HZ + (my - H/2) * 0.015;
-  if (!cloudData.length) initClouds(W);
 
   /* 1. Sky */
   const sky = ctx.createLinearGradient(0, 0, 0, HZ + 30);
-  sky.addColorStop(0,    '#1A78E8');
-  sky.addColorStop(0.45, '#3D9EFF');
-  sky.addColorStop(0.75, '#72C0FF');
-  sky.addColorStop(1,    '#B8E0FF');
+  sky.addColorStop(0, '#1A78E8'); sky.addColorStop(0.45, '#3D9EFF');
+  sky.addColorStop(0.75, '#72C0FF'); sky.addColorStop(1, '#B8E0FF');
   ctx.fillStyle = sky; ctx.fillRect(0, 0, W, HZ + 30);
 
   /* 2. Sun glow */
   const sunX = W * 0.5 + (mx - W/2) * 0.02;
   const sg = ctx.createRadialGradient(sunX, HZ, 0, sunX, HZ, W * 0.45);
-  sg.addColorStop(0, 'rgba(255,240,100,0.55)');
-  sg.addColorStop(0.18, 'rgba(255,200,60,0.25)');
-  sg.addColorStop(0.5, 'rgba(255,160,40,0.1)');
-  sg.addColorStop(1, 'transparent');
+  sg.addColorStop(0, 'rgba(255,240,100,0.55)'); sg.addColorStop(0.18, 'rgba(255,200,60,0.25)');
+  sg.addColorStop(0.5, 'rgba(255,160,40,0.1)'); sg.addColorStop(1, 'transparent');
   ctx.fillStyle = sg; ctx.fillRect(0, HZ - 100, W, 200);
 
   /* 3. Sun disc */
   const sun = ctx.createRadialGradient(sunX, HZ, 0, sunX, HZ, 36);
-  sun.addColorStop(0, 'rgba(255,252,200,1)');
-  sun.addColorStop(0.35, 'rgba(255,220,80,0.9)');
+  sun.addColorStop(0, 'rgba(255,252,200,1)'); sun.addColorStop(0.35, 'rgba(255,220,80,0.9)');
   sun.addColorStop(1, 'transparent');
   ctx.fillStyle = sun; ctx.beginPath(); ctx.arc(sunX, HZ, 36, 0, Math.PI*2); ctx.fill();
 
-  /* 4. Clouds */
-  cloudData.forEach((c, i) => {
-    const px = c.fx * W + (mx - W/2) * (0.01 + i % 3 * 0.005);
-    const py = c.fy * HZ + (my - H/2) * (0.008 + i % 2 * 0.004);
-    drawCloud(ctx, px, py, c.r);
+  /* 4. Flying pigs! */
+  PIG_DATA.forEach(([fx, fy, r, faceRight], i) => {
+    const px = fx * W + (mx - W/2) * (0.012 + (i % 3) * 0.006);
+    const py = fy * HZ + (my - H/2) * (0.01 + (i % 2) * 0.005);
+    ctx.save();
+    if (!faceRight) {
+      /* mirror horizontally around pig center */
+      ctx.translate(px + r * 0.6, 0);
+      ctx.scale(-1, 1);
+      drawPig(ctx, r * 0.6 * -1 + r * 0.0, py, r);
+    } else {
+      drawPig(ctx, px, py, r);
+    }
+    ctx.restore();
   });
 
-  /* 5. City skyline at horizon */
+  /* 5. City skyline */
   BLDGS.forEach(([fx, bw, bh, glass], bi) => {
     drawBuilding(ctx, Math.floor(fx * W), Math.floor(HZ - bh), bw, bh, bi, glass);
   });
 
-  /* 6. Green hills (foreground, in front of buildings) */
+  /* 6. Green hills */
   ctx.fillStyle = '#5CBF4A';
   ctx.beginPath(); ctx.moveTo(0, HZ + 5);
   for (let x = 0; x <= W; x += 80) {
@@ -424,10 +495,8 @@ function drawHighway() {
   }
   ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath(); ctx.fill();
 
-  /* 7. Shoulders */
-  const gLeft = ctx.createLinearGradient(0, HZ, 0, H);
-  gLeft.addColorStop(0, '#6DD45A'); gLeft.addColorStop(1, '#4BA83C');
-  ctx.fillStyle = gLeft;
+  /* 7. Road shoulders */
+  ctx.fillStyle = '#6DD45A';
   ctx.beginPath(); ctx.moveTo(0, H); ctx.lineTo(VX - 90, VY + 5); ctx.lineTo(0, HZ + 5); ctx.closePath(); ctx.fill();
   ctx.beginPath(); ctx.moveTo(W, H); ctx.lineTo(VX + 90, VY + 5); ctx.lineTo(W, HZ + 5); ctx.closePath(); ctx.fill();
 
@@ -438,8 +507,8 @@ function drawHighway() {
   ctx.fillStyle = roadG; ctx.fill();
 
   /* 9. Lane markers */
-  ctx.beginPath(); ctx.moveTo(W * 0.35, H); ctx.lineTo(VX - 28, VY + 6);
-  ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(W * 0.35, H); ctx.lineTo(VX - 28, VY + 6); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(W * 0.65, H); ctx.lineTo(VX + 28, VY + 6); ctx.stroke();
   ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(255,255,255,0.85)';
   ctx.beginPath(); ctx.moveTo(W * 0.04, H); ctx.lineTo(VX - 84, VY + 6); ctx.stroke();
@@ -459,7 +528,6 @@ function drawHighway() {
   shine.addColorStop(0,'transparent'); shine.addColorStop(0.5,'rgba(255,255,255,0.12)'); shine.addColorStop(1,'transparent');
   ctx.fillStyle = shine;
   ctx.beginPath(); ctx.moveTo(VX-100,H); ctx.lineTo(VX-4,VY+20); ctx.lineTo(VX+4,VY+20); ctx.lineTo(VX+100,H); ctx.closePath(); ctx.fill();
-
   const haze = ctx.createLinearGradient(0, VY, 0, VY + 60);
   haze.addColorStop(0,'rgba(180,210,255,0.4)'); haze.addColorStop(1,'transparent');
   ctx.fillStyle = haze;
@@ -472,7 +540,7 @@ function drawHighway() {
 }
 
 document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; drawHighway(); });
-window.addEventListener('resize', () => { cloudData = []; drawHighway(); });
+window.addEventListener('resize', drawHighway);
 drawHighway();
 
 /* ===================== CLOCK ===================== */
@@ -517,8 +585,7 @@ function addTilt(el) {
   const wrap = el.querySelector('.app-icon-wrap');
   el.addEventListener('mousemove', e => {
     const r = wrap.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - .5;
-    const y = (e.clientY - r.top) / r.height - .5;
+    const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
     wrap.style.transform = `perspective(500px) rotateY(${x*16}deg) rotateX(${-y*16}deg) scale(1.08) translateY(-5px)`;
     wrap.style.boxShadow = `${-x*18}px ${-y*18+28}px 50px rgba(0,0,0,.22)`;
   });
