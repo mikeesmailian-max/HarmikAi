@@ -13,11 +13,14 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
 /* ===== LOCK SCREEN ===== */
 #lock{
   flex-direction:column;
-  background-image:url('https://d8j0ntlcm91z4.cloudfront.net/user_36OpTNMit8hWQiCytfcCKuxFxhq/hf_20260724_182715_677e7b96-aabc-4b0a-ba25-460b286e91b8.png');
-  background-size:110%;
-  background-position:50% 50%;
-  background-repeat:no-repeat;
-  background-color:#87CEEB;
+  background:#87CEEB;
+  overflow:hidden;
+}
+/* full-bleed autoplay looping pig video */
+.lock-video{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;z-index:0;pointer-events:none;
+  transition:transform .18s ease-out;
 }
 #lock::before{
   content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
@@ -125,6 +128,10 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
 
 <!-- ===== LOCK SCREEN ===== -->
 <div class="view" id="lock">
+  <video class="lock-video" id="lock-video" autoplay muted loop playsinline
+         poster="https://d8j0ntlcm91z4.cloudfront.net/user_36OpTNMit8hWQiCytfcCKuxFxhq/hf_20260724_182715_677e7b96-aabc-4b0a-ba25-460b286e91b8.png">
+    <source src="https://d8j0ntlcm91z4.cloudfront.net/user_36OpTNMit8hWQiCytfcCKuxFxhq/hf_20260727_193542_70d0861e-78a7-47f3-87be-7a918831d611.mp4" type="video/mp4">
+  </video>
   <div class="lock-center">
     <div class="lock-logo">
       <div class="logo-mark">
@@ -268,11 +275,12 @@ function tick() {
 }
 tick(); setInterval(tick, 1000);
 
-const lockEl = document.getElementById('lock');
+const lockVid = document.getElementById('lock-video');
+lockVid.style.transform = 'scale(1.08)';
 document.addEventListener('mousemove', e => {
   const xPct = (e.clientX / window.innerWidth - 0.5);
   const yPct = (e.clientY / window.innerHeight - 0.5);
-  lockEl.style.backgroundPosition = `${50 + xPct * 6}% ${50 + yPct * 5}%`;
+  lockVid.style.transform = `scale(1.08) translate(${-xPct * 18}px, ${-yPct * 14}px)`;
 });
 
 const lockV = document.getElementById('lock'), homeV = document.getElementById('home');
