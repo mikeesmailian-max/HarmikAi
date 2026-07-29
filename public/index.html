@@ -121,6 +121,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
 .ic-green{background:linear-gradient(145deg,#22C55E,#15803D);}
 .ic-purple{background:linear-gradient(145deg,#9333EA,#5B21B6);}
 .ic-teal{background:linear-gradient(145deg,#0EA5A5,#0A5E6B);}
+.ic-amber{background:linear-gradient(145deg,#F59E0B,#B45309);}
 .app-label{font-size:13.5px;font-weight:700;color:#111827;text-align:center;line-height:1.25;}
 .app-sublabel{font-size:11px;color:rgba(17,24,39,.38);text-align:center;margin-top:2px;}
 </style>
@@ -191,7 +192,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
         <button class="sb-link active" data-cat="all" onclick="filterCat('all')">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/></svg>
           All Applications
-          <span class="sb-badge">8</span>
+          <span class="sb-badge">9</span>
         </button>
       </div>
       <div class="sb-section">
@@ -199,7 +200,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
         <button class="sb-link" data-cat="logistics" onclick="filterCat('logistics')">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M1 17l2-6h12l2 6M13 11V5h4l3 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.5" cy="18.5" r="1.5" fill="currentColor"/><circle cx="17.5" cy="18.5" r="1.5" fill="currentColor"/></svg>
           Logistics &amp; Fleet
-          <span class="sb-badge">7</span>
+          <span class="sb-badge">8</span>
         </button>
         <button class="sb-link" data-cat="realestate" onclick="filterCat('realestate')">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
@@ -226,9 +227,9 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
           <div class="wb-date" id="greeting-date">Friday, July 24</div>
         </div>
         <div class="wb-stats">
-          <div class="wb-stat"><div class="wb-stat-n">7</div><div class="wb-stat-l">Fleet Apps</div></div>
+          <div class="wb-stat"><div class="wb-stat-n">8</div><div class="wb-stat-l">Fleet Apps</div></div>
           <div class="wb-stat"><div class="wb-stat-n">1</div><div class="wb-stat-l">Property</div></div>
-          <div class="wb-stat"><div class="wb-stat-n">8</div><div class="wb-stat-l">Total Tools</div></div>
+          <div class="wb-stat"><div class="wb-stat-n">9</div><div class="wb-stat-l">Total Tools</div></div>
         </div>
       </div>
       <div class="cat-section" id="sec-logistics" data-cat="logistics">
@@ -240,7 +241,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
             <div class="ch-title">Logistics &amp; Fleet Management</div>
             <div class="ch-sub">MegaFleet Corp Operations</div>
           </div>
-          <div class="ch-count">7 Applications</div>
+          <div class="ch-count">8 Applications</div>
         </div>
         <div class="section-apps" id="logistics-grid"></div>
       </div>
@@ -322,7 +323,8 @@ const ICONS = {
   crm:`<svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="9" r="3" stroke="#fff" stroke-width="1.8"/><path d="M4 19a5 5 0 0 1 10 0M16 7.5a2.6 2.6 0 0 1 0 5M17.5 18.5a4.6 4.6 0 0 0-2.2-3.9" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>`,
   cc:`<svg viewBox="0 0 24 24" fill="none"><rect x="2" y="6" width="20" height="13" rx="3" stroke="#fff" stroke-width="1.8"/><path d="M2 10h20" stroke="#fff" stroke-width="1.8"/><path d="M6 15h4" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>`,
   prop:`<svg viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5Z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/></svg>`,
-  ach:`<svg viewBox="0 0 24 24" fill="none"><path d="M3 9.5 12 4l9 5.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><path d="M2.5 20.5h19" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>`
+  ach:`<svg viewBox="0 0 24 24" fill="none"><path d="M3 9.5 12 4l9 5.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><path d="M2.5 20.5h19" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+  coll:`<svg viewBox="0 0 24 24" fill="none"><rect x="4.5" y="3" width="15" height="18" rx="2.5" stroke="#fff" stroke-width="1.8"/><path d="M9 3v2.5h6V3" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 9v7.5M14.2 10.6c0-.9-1-1.5-2.2-1.5s-2.2.6-2.2 1.5c0 2 4.4.9 4.4 3 0 1-1 1.6-2.2 1.6s-2.2-.6-2.2-1.6" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/></svg>`
 };
 const APPS = [
   {name:"O'Reilly's Auto",      desc:"Parts & inventory",     url:"https://megafleet-6g26tnah.manus.space",        c:"ic-red",    i:"auto",  cat:"logistics"},
@@ -332,6 +334,7 @@ const APPS = [
   {name:"CRM Outreach",         desc:"Leads & contacts",      url:"https://megafleet-dhzsbjcq.manus.space",        c:"ic-mix",    i:"crm",   cat:"logistics"},
   {name:"Credit Card",          desc:"Payment processing",    url:"https://megafleetpay-kxkqjvmf.manus.space",     c:"ic-green",  i:"cc",    cat:"logistics"},
   {name:"ACH Remittances",      desc:"ACH remittance desk",   url:"https://mega-fleet-ach-desk.harmo1977.chatgpt.site/", c:"ic-teal", i:"ach", cat:"logistics"},
+  {name:"Collections",          desc:"Collections control",   url:"https://mega-fleet-collections-control.harmo1977.chatgpt.site/", c:"ic-amber", i:"coll", cat:"logistics"},
   {name:"Esmailian Properties", desc:"Property dashboard",    url:"https://propdash-gfsyjvcu.manus.space/",        c:"ic-purple", i:"prop",  cat:"realestate"}
 ];
 const grids = {logistics: document.getElementById('logistics-grid'), realestate: document.getElementById('realestate-grid')};
