@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0D1836">
 <title>Harmik AI Portal</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -150,7 +151,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
   transition:all .22s;display:flex;align-items:center;gap:8px;font-family:inherit;backdrop-filter:blur(10px);}
 .lock-btn:hover{background:rgba(240,30,44,.18);border-color:rgba(240,30,44,.5);color:#fff;box-shadow:0 4px 20px rgba(240,30,44,.28);}
 
-.portal-body{display:flex;height:calc(100vh - 80px);overflow:hidden;}
+.portal-body{display:flex;height:calc(100vh - 80px);height:calc(100dvh - 80px);overflow:hidden;}
 
 /* sidebar */
 .sidebar{width:268px;flex-shrink:0;background:var(--side-bg);
@@ -169,7 +170,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
 .sb-link.active .sb-badge{color:#fff;background:rgba(240,30,44,.35);}
 
 /* main */
-.portal-main{flex:1;overflow-y:auto;padding:38px 48px 60px;
+.portal-main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:38px 48px 60px;
   background:radial-gradient(1200px 600px at 15% -5%, var(--glow-a), transparent 60%),
              radial-gradient(1000px 500px at 95% 5%, var(--glow-b), transparent 60%),
              var(--page-bg);transition:background .3s;}
@@ -214,7 +215,6 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
   background:linear-gradient(90deg,var(--rule),transparent 62%);}
 .ch-icon{width:54px;height:54px;border-radius:17px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .ch-log{background:linear-gradient(135deg,#2A7DE8,#0D1B3E);box-shadow:0 8px 28px rgba(42,125,232,.4);}
-.ch-re{background:linear-gradient(135deg,#9333EA,#5B21B6);box-shadow:0 8px 28px rgba(147,51,234,.4);}
 .ch-title{font-size:22px;font-weight:800;color:var(--heading);letter-spacing:-.5px;}
 .ch-sub{font-size:11.5px;color:var(--subhead);font-weight:700;margin-top:5px;text-transform:uppercase;letter-spacing:1.6px;}
 .ch-count{margin-left:auto;font-size:12.5px;font-weight:800;color:var(--count-text);
@@ -250,6 +250,124 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
 ::-webkit-scrollbar-track{background:var(--scroll-track);}
 ::-webkit-scrollbar-thumb{background:var(--scroll-thumb);border-radius:10px;border:3px solid var(--scroll-track);}
 ::-webkit-scrollbar-thumb:hover{filter:brightness(.8);}
+
+/* ==================== RESPONSIVE ==================== */
+
+/* ---- TABLET / SMALL LAPTOP ---- */
+@media (max-width:1100px){
+  .portal-main{padding:30px 30px 52px;}
+  .hero{padding:30px 32px;min-height:auto;}
+  .hero-name{font-size:34px;}
+  .section-apps{gap:20px;}
+  .app-tile{width:172px;}
+  .app-icon-wrap{width:128px;height:128px;}
+}
+
+/* ---- SIDEBAR BECOMES A HORIZONTAL PILL BAR ---- */
+@media (max-width:900px){
+  .topbar{height:66px;padding:0 18px;}
+  .tb-sub,.tb-sep,.tb-live{display:none;}
+  .tb-left{gap:11px;}
+  .tb-logo{width:38px;height:38px;border-radius:12px;}
+  .tb-name{font-size:19px;}
+  .tb-right{gap:11px;}
+  .tb-time{font-size:16px;}
+  .theme-btn{width:40px;height:40px;}
+  .lock-btn{padding:10px 15px;font-size:13px;}
+
+  .portal-body{flex-direction:column;height:calc(100vh - 66px);height:calc(100dvh - 66px);}
+  .sidebar{width:100%;flex-direction:row;align-items:center;gap:8px;padding:0 14px;
+    overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;flex-shrink:0;
+    border-right:none;border-bottom:1px solid var(--side-border);}
+  .sidebar::-webkit-scrollbar{display:none;}
+  .sb-section,.sb-section+.sb-section{display:flex;align-items:center;gap:8px;padding:11px 0;border-top:none;}
+  .sb-label{display:none;}
+  .sb-acct{display:none;}
+  .sb-link{width:auto;white-space:nowrap;padding:10px 16px;font-size:13px;border-radius:30px;
+    border-left:none;background:var(--sb-hover-bg);gap:9px;}
+  .sb-link:hover{border-left:none;}
+  .sb-link.active{border-left:none;background:linear-gradient(100deg,#F01E2C,#C01020);color:#fff;
+    box-shadow:0 4px 16px rgba(240,30,44,.4);}
+  .sb-link.active::after{display:none;}
+  .sb-link.active .sb-badge{background:rgba(255,255,255,.26);color:#fff;}
+  .sb-badge{font-size:11px;padding:3px 9px;min-width:24px;}
+}
+
+/* ---- PHONE ---- */
+@media (max-width:640px){
+  /* lock screen */
+  .lock-center{width:100%;padding:0 18px;}
+  .lock-logo{margin-bottom:12px;gap:10px;}
+  .logo-mark{width:38px;height:38px;border-radius:12px;}
+  .logo-text{font-size:24px;}
+  .lock-clock{font-size:66px;letter-spacing:-3px;margin-bottom:4px;}
+  .lock-date{font-size:14px;margin-bottom:22px;}
+  .login-card{width:100%;border-radius:24px;}
+  .login-body{padding:24px 24px 20px;}
+  .login-title{font-size:18px;}
+  .login-sub{font-size:12.5px;margin-bottom:17px;}
+  .pwd{height:52px;font-size:16px;padding:0 62px 0 17px;}
+  .pwd-btn{width:40px;height:40px;top:6px;right:7px;}
+  .login-footer{padding:12px 24px;}
+
+  /* portal shell */
+  .portal-main{padding:22px 15px 46px;}
+
+  /* hero stacks */
+  .hero{flex-direction:column;align-items:flex-start;gap:22px;padding:24px 20px;
+    min-height:auto;border-radius:22px;margin-bottom:34px;}
+  .hero-accent{width:4px;}
+  .hero-eyebrow{font-size:9px;letter-spacing:2px;padding:7px 12px;margin-bottom:13px;}
+  .hero-name{font-size:27px;letter-spacing:-.9px;}
+  .hero-date{font-size:13.5px;margin-top:9px;}
+  .hero-stats{width:100%;gap:9px;}
+  .hstat{flex:1;min-width:0;padding:15px 6px;border-radius:16px;}
+  .hstat-n{font-size:29px;letter-spacing:-1px;}
+  .hstat-l{font-size:8px;letter-spacing:1.1px;margin-top:6px;}
+
+  /* section headers */
+  .cat-section{margin-bottom:38px;}
+  .cat-header{gap:13px;margin-bottom:22px;padding-bottom:16px;flex-wrap:wrap;}
+  .ch-icon{width:44px;height:44px;border-radius:14px;}
+  .ch-icon svg{width:22px;height:22px;}
+  .ch-title{font-size:17.5px;}
+  .ch-sub{font-size:10px;letter-spacing:1.2px;margin-top:4px;}
+  .ch-count{font-size:11px;padding:7px 13px;}
+
+  /* app tiles — 2 per row, fluid */
+  .section-apps{gap:13px;}
+  .app-tile{width:calc(50% - 6.5px);padding:16px 10px 15px;border-radius:20px;}
+  .app-icon-wrap{width:100%;height:auto;aspect-ratio:1/1;border-radius:22px;}
+  .app-icon-wrap::after{border-radius:22px;}
+  .app-tile::before{border-radius:20px;}
+  .app-label{font-size:14px;margin-top:14px;letter-spacing:-.2px;}
+  .app-sublabel{font-size:11px;margin-top:4px;}
+  .app-open{font-size:9.5px;margin-top:11px;letter-spacing:1.2px;}
+  /* no hover-lift on touch — use tap feedback instead */
+  .app-tile:hover{transform:none;}
+  .app-tile:hover .app-icon-wrap{transform:none;}
+  .app-tile:active{transform:scale(.955);}
+}
+
+/* ---- VERY SMALL PHONE ---- */
+@media (max-width:380px){
+  .lock-clock{font-size:56px;}
+  .hero-name{font-size:24px;}
+  .hstat-n{font-size:25px;}
+  .app-label{font-size:13px;}
+  .tb-name{font-size:17px;}
+}
+
+/* ---- SHORT LANDSCAPE PHONE (lock screen fits) ---- */
+@media (max-height:560px) and (max-width:900px){
+  .lock-clock{font-size:44px;letter-spacing:-2px;margin-bottom:2px;}
+  .lock-date{font-size:12.5px;margin-bottom:14px;}
+  .lock-logo{margin-bottom:8px;}
+  .logo-mark{width:32px;height:32px;}
+  .logo-text{font-size:20px;}
+  .login-body{padding:18px 24px 15px;}
+  .login-err{height:15px;font-size:12px;}
+}
 </style>
 </head>
 <body>
@@ -324,7 +442,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
         <button class="sb-link active" data-cat="all" onclick="filterCat('all')">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2.1"/><rect x="14" y="3" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2.1"/><rect x="3" y="14" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2.1"/><rect x="14" y="14" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2.1"/></svg>
           All Applications
-          <span class="sb-badge">9</span>
+          <span class="sb-badge">8</span>
         </button>
       </div>
       <div class="sb-section">
@@ -334,13 +452,8 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
           Logistics &amp; Fleet
           <span class="sb-badge">8</span>
         </button>
-        <button class="sb-link" data-cat="realestate" onclick="filterCat('realestate')">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5Z" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round"/></svg>
-          Real Estate
-          <span class="sb-badge">1</span>
-        </button>
       </div>
-      <div class="sb-section">
+      <div class="sb-section sb-acct">
         <div class="sb-label">Account</div>
         <button class="sb-link" onclick="lockNow()">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M7 10V7a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/><rect x="5" y="10" width="14" height="10" rx="3" fill="currentColor"/></svg>
@@ -360,8 +473,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
         </div>
         <div class="hero-stats">
           <div class="hstat hs-red"><div class="hstat-n">8</div><div class="hstat-l">Fleet Apps</div></div>
-          <div class="hstat hs-purple"><div class="hstat-n">1</div><div class="hstat-l">Property</div></div>
-          <div class="hstat hs-blue"><div class="hstat-n">9</div><div class="hstat-l">Total Tools</div></div>
+          <div class="hstat hs-blue"><div class="hstat-n">8</div><div class="hstat-l">Total Tools</div></div>
         </div>
       </div>
 
@@ -377,20 +489,6 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
           <div class="ch-count">8 Applications</div>
         </div>
         <div class="section-apps" id="logistics-grid"></div>
-      </div>
-
-      <div class="cat-section" data-cat="realestate">
-        <div class="cat-header">
-          <div class="ch-icon ch-re">
-            <svg width="27" height="27" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5Z" stroke="#fff" stroke-width="2" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
-          </div>
-          <div>
-            <div class="ch-title">Real Estate</div>
-            <div class="ch-sub">Esmailian Properties Group</div>
-          </div>
-          <div class="ch-count">1 Application</div>
-        </div>
-        <div class="section-apps" id="realestate-grid"></div>
       </div>
     </main>
   </div>
@@ -468,11 +566,10 @@ const APPS = [
   {name:"CRM Outreach",         desc:"Leads & contacts",    cat:"logistics",  glow:"rgba(212,24,120,.45)",  img:"hf_20260729_222917_a3e1b61e-74db-438d-96f0-975fe44d0150.png", url:"https://megafleet-dhzsbjcq.manus.space"},
   {name:"Credit Card",          desc:"Payment processing",  cat:"logistics",  glow:"rgba(34,197,94,.45)",   img:"hf_20260729_222923_b035d167-47d2-4119-afe9-a717a5b460c7.png", url:"https://megafleetpay-kxkqjvmf.manus.space"},
   {name:"ACH Remittances",      desc:"ACH remittance desk", cat:"logistics",  glow:"rgba(14,165,165,.45)",  img:"hf_20260729_222930_062ee625-2cf6-4bdf-8e74-b40687a8cddf.png", url:"https://mega-fleet-ach-desk.harmo1977.chatgpt.site/"},
-  {name:"Collections",          desc:"Collections control", cat:"logistics",  glow:"rgba(245,158,11,.45)",  img:"hf_20260729_222937_2696acb7-d6a5-4f2a-bc00-8f81e4fcc66c.png", url:"https://mega-fleet-collections-control.harmo1977.chatgpt.site/"},
-  {name:"Esmailian Properties", desc:"Property dashboard",  cat:"realestate", glow:"rgba(147,51,234,.45)",  img:"hf_20260729_222943_ceb0e03c-5d39-48b8-9c5f-20f5e9ea3109.png", url:"https://propdash-gfsyjvcu.manus.space/"}
+  {name:"Collections",          desc:"Collections control", cat:"logistics",  glow:"rgba(245,158,11,.45)",  img:"hf_20260729_222937_2696acb7-d6a5-4f2a-bc00-8f81e4fcc66c.png", url:"https://mega-fleet-collections-control.harmo1977.chatgpt.site/"}
 ];
 const ARROW = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-const grids = {logistics: document.getElementById('logistics-grid'), realestate: document.getElementById('realestate-grid')};
+const grids = {logistics: document.getElementById('logistics-grid')};
 APPS.forEach(a => {
   const btn = document.createElement('button');
   btn.className = 'app-tile';
