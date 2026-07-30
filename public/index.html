@@ -12,18 +12,23 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
 .view.hidden{opacity:0;transform:scale(.97) translateY(-18px);filter:blur(8px);pointer-events:none;}
 
 /* ============ LOCK SCREEN ============ */
-#lock{flex-direction:column;background:#87CEEB;overflow:hidden;}
+#lock{flex-direction:column;justify-content:flex-end;background:#87CEEB;overflow:hidden;}
 .lock-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;transition:transform .18s ease-out;}
 #lock::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:radial-gradient(ellipse 80% 80% at 50% 50%, transparent 20%, rgba(0,0,30,.55) 100%),
-             linear-gradient(to bottom, rgba(0,0,20,.18) 0%, rgba(0,0,20,.08) 40%, rgba(0,0,20,.08) 60%, rgba(0,0,20,.25) 100%);}
-.lock-center{position:relative;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.lock-logo{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  background:linear-gradient(to bottom,
+    rgba(0,0,20,.10) 0%,
+    rgba(0,0,20,.02) 26%,
+    rgba(0,0,20,.02) 46%,
+    rgba(0,0,25,.30) 68%,
+    rgba(0,0,25,.62) 88%,
+    rgba(0,0,25,.74) 100%);}
+.lock-center{position:relative;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:46px;}
+.lock-logo{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
 .logo-mark{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#F01E2C,#A80D17);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(240,30,44,.45);}
 .logo-text{font-size:30px;font-weight:800;color:#fff;letter-spacing:-1px;text-shadow:0 2px 16px rgba(0,0,0,.6);}
 .logo-text em{color:#F01E2C;font-style:normal;}
-.lock-clock{font-size:128px;font-weight:100;letter-spacing:-6px;color:#fff;line-height:.88;text-align:center;text-shadow:0 4px 30px rgba(0,0,0,.6);margin-bottom:6px;}
-.lock-date{font-size:17px;color:rgba(255,255,255,.65);text-align:center;letter-spacing:.3px;font-weight:500;margin-bottom:28px;text-shadow:0 1px 10px rgba(0,0,0,.6);}
+.lock-clock{font-size:92px;font-weight:100;letter-spacing:-4px;color:#fff;line-height:.9;text-align:center;text-shadow:0 4px 30px rgba(0,0,0,.7);margin-bottom:4px;}
+.lock-date{font-size:16px;color:rgba(255,255,255,.7);text-align:center;letter-spacing:.3px;font-weight:500;margin-bottom:20px;text-shadow:0 1px 10px rgba(0,0,0,.7);}
 .login-card{width:480px;background:rgba(5,10,35,.88);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1.5px solid rgba(255,255,255,.18);border-radius:30px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.7),0 8px 24px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.08) inset;}
 .login-stripe{height:4px;background:linear-gradient(90deg,#F01E2C 0%,#C01020 35%,#9333EA 65%,#5B21B6 100%);}
 .login-body{padding:30px 40px 24px;}
@@ -296,12 +301,12 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
 /* ---- PHONE ---- */
 @media (max-width:640px){
   /* lock screen */
-  .lock-center{width:100%;padding:0 18px;}
+  .lock-center{width:100%;padding:0 16px 26px;}
   .lock-logo{margin-bottom:12px;gap:10px;}
   .logo-mark{width:38px;height:38px;border-radius:12px;}
   .logo-text{font-size:24px;}
-  .lock-clock{font-size:66px;letter-spacing:-3px;margin-bottom:4px;}
-  .lock-date{font-size:14px;margin-bottom:22px;}
+  .lock-clock{font-size:60px;letter-spacing:-2.5px;margin-bottom:3px;}
+  .lock-date{font-size:13.5px;margin-bottom:16px;}
   .login-card{width:100%;border-radius:24px;}
   .login-body{padding:24px 24px 20px;}
   .login-title{font-size:18px;}
@@ -360,7 +365,8 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
 
 /* ---- SHORT LANDSCAPE PHONE (lock screen fits) ---- */
 @media (max-height:560px) and (max-width:900px){
-  .lock-clock{font-size:44px;letter-spacing:-2px;margin-bottom:2px;}
+  .lock-center{padding-bottom:16px;}
+  .lock-clock{font-size:40px;letter-spacing:-1.5px;margin-bottom:2px;}
   .lock-date{font-size:12.5px;margin-bottom:14px;}
   .lock-logo{margin-bottom:8px;}
   .logo-mark{width:32px;height:32px;}
