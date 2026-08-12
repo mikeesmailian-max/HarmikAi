@@ -242,6 +242,11 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
   box-shadow:var(--icon-shadow), 0 0 0 1px rgba(255,255,255,.1) inset;
   transition:transform .26s cubic-bezier(.34,1.4,.64,1),box-shadow .26s;}
 .app-icon-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+.app-icon-wrap.gen{display:flex;align-items:center;justify-content:center;}
+.app-icon-wrap.gen svg{width:52%;height:52%;position:relative;z-index:2;
+  filter:drop-shadow(0 3px 8px rgba(0,0,0,.28));}
+.app-icon-wrap.gen::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(ellipse 120% 80% at 50% -10%, rgba(255,255,255,.34), transparent 62%);}
 .app-icon-wrap::after{content:"";position:absolute;inset:0;border-radius:34px;pointer-events:none;
   background:linear-gradient(170deg,rgba(255,255,255,.2) 0%,transparent 48%);}
 .app-tile:hover .app-icon-wrap{transform:scale(1.055);box-shadow:var(--icon-shadow), 0 0 34px -6px var(--glow), 0 0 0 1px rgba(255,255,255,.16) inset;}
@@ -448,7 +453,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
         <button class="sb-link active" data-cat="all" onclick="filterCat('all')">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2.1"/><rect x="14" y="3" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2.1"/><rect x="3" y="14" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2.1"/><rect x="14" y="14" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2.1"/></svg>
           All Applications
-          <span class="sb-badge">6</span>
+          <span class="sb-badge">7</span>
         </button>
       </div>
       <div class="sb-section">
@@ -456,7 +461,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
         <button class="sb-link" data-cat="logistics" onclick="filterCat('logistics')">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M1 17l2-6h12l2 6M13 11V5h4l3 6" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.5" cy="18.5" r="1.5" fill="currentColor"/><circle cx="17.5" cy="18.5" r="1.5" fill="currentColor"/></svg>
           Logistics &amp; Fleet
-          <span class="sb-badge">6</span>
+          <span class="sb-badge">7</span>
         </button>
       </div>
       <div class="sb-section sb-acct">
@@ -478,8 +483,8 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
           <div class="hero-date" id="greeting-date">Friday, July 24</div>
         </div>
         <div class="hero-stats">
-          <div class="hstat hs-red"><div class="hstat-n">6</div><div class="hstat-l">Fleet Apps</div></div>
-          <div class="hstat hs-blue"><div class="hstat-n">6</div><div class="hstat-l">Total Tools</div></div>
+          <div class="hstat hs-red"><div class="hstat-n">7</div><div class="hstat-l">Fleet Apps</div></div>
+          <div class="hstat hs-blue"><div class="hstat-n">7</div><div class="hstat-l">Total Tools</div></div>
         </div>
       </div>
 
@@ -492,7 +497,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
             <div class="ch-title">Logistics &amp; Fleet Management</div>
             <div class="ch-sub">MegaFleet Corp Operations</div>
           </div>
-          <div class="ch-count">6 Applications</div>
+          <div class="ch-count">7 Applications</div>
         </div>
         <div class="section-apps" id="logistics-grid"></div>
       </div>
@@ -570,7 +575,11 @@ const APPS = [
   {name:"Agent Commission",     desc:"Freight broker calc", cat:"logistics",  glow:"rgba(196,16,32,.45)",   img:"hf_20260729_222902_f6f70952-c841-429c-858c-d9bbc4f00304.png", url:"https://freightcalc-jrksoq4b.manus.space"},
   {name:"Payables",             desc:"AP & billing",        cat:"logistics",  glow:"rgba(56,89,180,.45)",   img:"hf_20260729_222910_5fba5229-923b-421c-b029-bb2a4489a791.png", url:"https://megafleetpay-aijaerxz.manus.space/admin"},
   {name:"CRM Outreach",         desc:"Leads & contacts",    cat:"logistics",  glow:"rgba(212,24,120,.45)",  img:"hf_20260729_222917_a3e1b61e-74db-438d-96f0-975fe44d0150.png", url:"https://megafleet-dhzsbjcq.manus.space"},
-  {name:"Credit Card",          desc:"Payment processing",  cat:"logistics",  glow:"rgba(34,197,94,.45)",   img:"hf_20260729_222923_b035d167-47d2-4119-afe9-a717a5b460c7.png", url:"https://megafleetpay-kxkqjvmf.manus.space"}
+  {name:"Credit Card",          desc:"Payment processing",  cat:"logistics",  glow:"rgba(34,197,94,.45)",   img:"hf_20260729_222923_b035d167-47d2-4119-afe9-a717a5b460c7.png", url:"https://megafleetpay-kxkqjvmf.manus.space"},
+  {name:"Tracking",             desc:"Load follow-up",      cat:"logistics",  glow:"rgba(139,92,246,.45)",
+   grad:"linear-gradient(145deg,#A78BFA 0%,#7C3AED 45%,#4C1D95 100%)",
+   svg:'<svg viewBox="0 0 24 24" fill="none"><path d="M5.6 20.5c1.9 0 1.9-2.4 3.8-2.4s1.9 2.4 3.8 2.4 1.9-2.4 3.8-2.4 1.9 2.4 3.8 2.4" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" opacity=".55"/><path d="M6.5 15.4 10 11.9l3 3 4.6-5.4" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="0.1 3.4"/><path d="M18.6 3.2c1.9 0 3.4 1.6 3.4 3.5 0 2.6-3.4 6.2-3.4 6.2s-3.4-3.6-3.4-6.2c0-1.9 1.5-3.5 3.4-3.5Z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><circle cx="18.6" cy="6.6" r="1.3" fill="#fff"/><circle cx="5.6" cy="16.4" r="2.1" stroke="#fff" stroke-width="1.8"/></svg>',
+   url:"https://mega-fleet-load-follow-up.mikeesmailian.workers.dev/"}
 ];
 const ARROW = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const grids = {logistics: document.getElementById('logistics-grid')};
@@ -578,8 +587,11 @@ APPS.forEach(a => {
   const btn = document.createElement('button');
   btn.className = 'app-tile';
   btn.style.setProperty('--glow', a.glow);
+  const icon = a.img
+    ? `<div class="app-icon-wrap"><img src="${CDN}${a.img}" alt="${a.name}" loading="lazy"></div>`
+    : `<div class="app-icon-wrap gen" style="background:${a.grad}">${a.svg}</div>`;
   btn.innerHTML =
-    `<div class="app-icon-wrap"><img src="${CDN}${a.img}" alt="${a.name}" loading="lazy"></div>`+
+    icon+
     `<div class="app-label">${a.name}</div>`+
     `<div class="app-sublabel">${a.desc}</div>`+
     `<div class="app-open">Open ${ARROW}</div>`;
