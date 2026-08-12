@@ -532,8 +532,17 @@ document.addEventListener('mousemove', e => {
 /* ---------- auth ---------- */
 const lockV = document.getElementById('lock'), homeV = document.getElementById('home');
 const pwd = document.getElementById('pwd'), loginErr = document.getElementById('login-err');
-function unlock(){ lockV.classList.add('hidden'); homeV.classList.remove('hidden'); sessionStorage.setItem('mf','1'); }
-function lockNow(){ homeV.classList.add('hidden'); lockV.classList.remove('hidden'); pwd.value=''; loginErr.textContent=''; sessionStorage.removeItem('mf'); setTimeout(()=>pwd.focus(),400); }
+function unlock(){
+  lockV.classList.add('hidden'); homeV.classList.remove('hidden');
+  try{ localStorage.setItem('mf-auth','1'); }catch(e){ sessionStorage.setItem('mf-auth','1'); }
+}
+function lockNow(){
+  homeV.classList.add('hidden'); lockV.classList.remove('hidden');
+  pwd.value=''; loginErr.textContent='';
+  try{ localStorage.removeItem('mf-auth'); }catch(e){}
+  try{ sessionStorage.removeItem('mf-auth'); }catch(e){}
+  setTimeout(()=>pwd.focus(),400);
+}
 document.getElementById('pwd-form').addEventListener('submit', e => {
   e.preventDefault();
   if(pwd.value==="Megafleet424$"){ loginErr.textContent=''; unlock(); }
@@ -543,7 +552,13 @@ document.getElementById('pwd-form').addEventListener('submit', e => {
     pwd.value=''; pwd.focus();
   }
 });
-if(sessionStorage.getItem('mf')==='1'){ unlock(); } else { setTimeout(()=>pwd.focus(),300); }
+/* stay signed in until Lock is pressed */
+(function(){
+  let authed = false;
+  try{ authed = localStorage.getItem('mf-auth')==='1'; }catch(e){}
+  if(!authed){ try{ authed = sessionStorage.getItem('mf-auth')==='1'; }catch(e){} }
+  if(authed){ unlock(); } else { setTimeout(()=>pwd.focus(),300); }
+})();
 
 /* ---------- theme toggle ---------- */
 const homeEl = document.getElementById('home');
@@ -595,7 +610,10 @@ APPS.forEach(a => {
     `<div class="app-label">${a.name}</div>`+
     `<div class="app-sublabel">${a.desc}</div>`+
     `<div class="app-open">Open ${ARROW}</div>`;
-  btn.addEventListener('click', () => window.location.href = a.url);
+  btn.addEventListener('click', () => {
+    const w = window.open(a.url, '_blank', 'noopener,noreferrer');
+    if(!w) window.location.href = a.url;   // popup blocked -> same tab fallback
+  });
   grids[a.cat].appendChild(btn);
 });
 </script>
