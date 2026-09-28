@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="icons/cr-hero.webp">
+<link rel="preload" as="image" href="icons/crl-hero.webp">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden;}
@@ -578,6 +578,43 @@ html,body{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-s
   #home .sb-link.active .sb-badge{background:rgba(255,255,255,.28);color:#fff;}
 }
 @media (max-width:640px){ .ch-icon{display:none;} .cat-header{flex-wrap:nowrap;} .ch-count{display:none;} }
+
+/* ==================== BRIGHT LIGHT MODE (v3) ==================== */
+#home:not([data-theme="dark"]) .topbar{background:rgba(255,255,255,.86);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);
+  border-bottom:1px solid rgba(15,40,90,.08);box-shadow:0 4px 24px rgba(15,40,90,.06);}
+#home:not([data-theme="dark"]) .topbar::after{box-shadow:none;opacity:.7;}
+#home:not([data-theme="dark"]) .tb-name{color:#0A1428;}
+#home:not([data-theme="dark"]) .tb-sep{background:rgba(15,40,90,.12);}
+#home:not([data-theme="dark"]) .tb-sub{color:#0E7490;}
+#home:not([data-theme="dark"]) .tb-time{color:#0A1428;}
+#home:not([data-theme="dark"]) .tb-live{color:#047857;background:rgba(16,185,129,.10);border-color:rgba(16,185,129,.35);}
+#home:not([data-theme="dark"]) .tb-live i{background:#10B981;box-shadow:0 0 8px #10B981;}
+#home:not([data-theme="dark"]) .theme-btn,
+#home:not([data-theme="dark"]) .lock-btn{background:#fff;color:#0A1428;border-color:rgba(15,40,90,.14);box-shadow:0 2px 8px rgba(15,40,90,.06);}
+#home:not([data-theme="dark"]) .theme-btn:hover{background:#F1F5FB;color:#0A1428;}
+#home:not([data-theme="dark"]) .lock-btn:hover{background:#FFF1F2;border-color:rgba(240,30,44,.4);color:#BE123C;}
+
+#home:not([data-theme="dark"]) .hero{border-color:rgba(15,40,90,.08);box-shadow:0 20px 50px rgba(15,40,90,.12);}
+#home:not([data-theme="dark"]) .hero::after{background:linear-gradient(95deg,rgba(255,255,255,.95) 0%,rgba(255,255,255,.86) 32%,rgba(255,255,255,.35) 62%,rgba(255,255,255,.05) 100%);}
+#home:not([data-theme="dark"]) .hero-hud{background:
+    linear-gradient(90deg,rgba(8,145,178,.8),rgba(8,145,178,0)) 0 0/60px 1px no-repeat,
+    linear-gradient(180deg,rgba(8,145,178,.8),rgba(8,145,178,0)) 0 0/1px 60px no-repeat,
+    linear-gradient(270deg,rgba(8,145,178,.8),rgba(8,145,178,0)) 100% 100%/60px 1px no-repeat,
+    linear-gradient(0deg,rgba(8,145,178,.8),rgba(8,145,178,0)) 100% 100%/1px 60px no-repeat;}
+#home:not([data-theme="dark"]) .hero-hud::after{background:linear-gradient(180deg,transparent,rgba(8,145,178,.06),transparent);}
+#home:not([data-theme="dark"]) .hero-name{color:#0A1428;text-shadow:none;}
+#home:not([data-theme="dark"]) .hero-name span{background:linear-gradient(95deg,#0891B2,#6366F1 55%,#DB2777);-webkit-background-clip:text;background-clip:text;}
+#home:not([data-theme="dark"]) .hero-date{color:#475569;}
+#home:not([data-theme="dark"]) .hero-eyebrow{color:#0E7490;background:rgba(255,255,255,.8);border-color:rgba(8,145,178,.3);}
+#home:not([data-theme="dark"]) .hero-eyebrow i{background:#0891B2;box-shadow:0 0 8px #0891B2;}
+#home:not([data-theme="dark"]) .hstat{background:rgba(255,255,255,.82);border-color:rgba(8,145,178,.3);box-shadow:0 10px 30px rgba(15,40,90,.12);}
+#home:not([data-theme="dark"]) .hstat.hs-red{background:rgba(255,255,255,.82);border-color:rgba(244,63,94,.35);}
+#home:not([data-theme="dark"]) .hstat.hs-blue{background:rgba(255,255,255,.82);border-color:rgba(8,145,178,.35);}
+#home:not([data-theme="dark"]) .hstat-n{background:linear-gradient(180deg,#0A1428,#334155);-webkit-background-clip:text;background-clip:text;}
+#home:not([data-theme="dark"]) .hstat-l{color:#64748B;}
+#home:not([data-theme="dark"]) .app-icon-wrap{box-shadow:0 8px 20px rgba(15,40,90,.12),0 0 0 1px rgba(15,40,90,.06);}
+#home:not([data-theme="dark"]) .app-tile:hover .app-icon-wrap{box-shadow:0 12px 26px rgba(15,40,90,.16),0 0 26px -6px var(--glow);}
+#home:not([data-theme="dark"]) .app-tile:hover .app-icon-wrap img{filter:none;}
 </style>
 </head>
 <body>
@@ -674,7 +711,7 @@ html,body{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-s
 
     <main class="portal-main">
       <div class="hero">
-        <img class="hero-bg" src="icons/cr-hero.webp" alt="">
+        <img class="hero-bg" src="icons/crl-hero.webp" data-light="icons/crl-hero.webp" data-dark="icons/cr-hero.webp" alt="">
         <div class="hero-accent"></div>
         <div class="hero-hud"></div>
         <div class="hero-left">
@@ -766,6 +803,11 @@ function applyTheme(t){
   if(t === 'dark') homeEl.setAttribute('data-theme','dark');
   else homeEl.removeAttribute('data-theme');
   try{ localStorage.setItem('mf-theme-v2', t); }catch(e){}
+  themeArt();
+}
+function themeArt(){
+  const dark = homeEl.getAttribute('data-theme') === 'dark';
+  document.querySelectorAll('img[data-light]').forEach(i => { const v = dark ? i.dataset.dark : i.dataset.light; if(i.getAttribute('src') !== v) i.src = v; });
 }
 function toggleTheme(){
   applyTheme(homeEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
@@ -801,7 +843,7 @@ APPS.forEach(a => {
   btn.style.setProperty('--glow', a.glow);
   const src = a.img && (a.img.startsWith('http') || a.img.startsWith('icons/')) ? a.img : CDN + a.img;
   const icon = a.img
-    ? `<div class="app-icon-wrap"><img src="${src}" alt="${a.name}" loading="lazy"></div>`
+    ? `<div class="app-icon-wrap"><img src="${src.replace('/cr-','/crl-')}" data-light="${src.replace('/cr-','/crl-')}" data-dark="${src}" alt="${a.name}" loading="lazy"></div>`
     : `<div class="app-icon-wrap gen" style="background:${a.grad}">${a.svg}</div>`;
   btn.innerHTML =
     icon+
@@ -814,6 +856,7 @@ APPS.forEach(a => {
   });
   grids[a.cat].appendChild(btn);
 });
+themeArt();
 </script>
 </body>
 </html>
