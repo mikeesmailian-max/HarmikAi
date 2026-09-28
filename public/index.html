@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0D1836">
 <title>Harmik AI Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="icons/cr-hero.webp">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden;}
@@ -379,6 +383,201 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
   .login-body{padding:18px 24px 15px;}
   .login-err{height:15px;font-size:12px;}
 }
+
+/* ==================== CONTROL ROOM THEME (v2) ==================== */
+html,body{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+.tb-name,.hero-name,.ch-title,.app-label,.hstat-n,.lock-clock,.logo-text,.login-title{font-family:"Space Grotesk","Inter",-apple-system,sans-serif;}
+.tb-time{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:700;}
+
+/* dark palette — deeper, cooler, cyan-lit */
+#home[data-theme="dark"]{
+  --page-bg:#03060D;
+  --glow-a:rgba(34,211,238,.10);
+  --glow-b:rgba(124,58,237,.12);
+  --side-bg:linear-gradient(180deg,rgba(6,12,26,.92) 0%,rgba(4,8,18,.96) 100%);
+  --side-border:rgba(56,189,248,.10);
+  --sb-label:rgba(125,211,252,.42);
+  --sb-text:rgba(226,238,255,.58);
+  --sb-hover-bg:rgba(56,189,248,.06);
+  --sb-active-bg:linear-gradient(90deg,rgba(34,211,238,.16),rgba(34,211,238,0));
+  --sb-badge-bg:rgba(56,189,248,.10);
+  --sb-badge-text:rgba(186,230,253,.75);
+  --sb-div:rgba(56,189,248,.08);
+  --subhead:rgba(125,211,252,.55);
+  --rule:rgba(56,189,248,.35);
+  --count-bg:rgba(56,189,248,.07);
+  --count-border:rgba(56,189,248,.22);
+  --count-text:rgba(186,230,253,.85);
+  --tile-bg:linear-gradient(165deg,rgba(14,24,46,.72),rgba(6,11,24,.82));
+  --tile-border:rgba(125,180,255,.10);
+  --tile-bg-hi:linear-gradient(165deg,rgba(18,32,60,.85),rgba(8,14,30,.9));
+  --tile-border-hi:rgba(125,211,252,.30);
+  --tile-sub:rgba(186,210,240,.55);
+  --tile-open:rgba(125,211,252,.55);
+  --tile-open-hi:#E0F7FF;
+  --scroll-track:#03060D;
+  --scroll-thumb:rgba(56,189,248,.22);
+}
+
+/* topbar: glass + cyan scan edge */
+.topbar{background:linear-gradient(100deg,rgba(4,8,20,.97) 0%,rgba(8,16,38,.97) 50%,rgba(14,8,32,.97) 100%);
+  border-bottom:1px solid rgba(56,189,248,.14);}
+.topbar::after{height:1px;opacity:1;
+  background:linear-gradient(90deg,transparent 0%,#F01E2C 18%,#22D3EE 50%,#7C3AED 82%,transparent 100%);
+  box-shadow:0 0 18px 1px rgba(34,211,238,.55);}
+.tb-sub{font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:rgba(125,211,252,.6);}
+
+/* canvas: layered glow + blueprint grid */
+#home[data-theme="dark"] .portal-main{
+  background:
+    radial-gradient(900px 520px at 12% -8%, rgba(34,211,238,.13), transparent 62%),
+    radial-gradient(900px 520px at 100% 0%, rgba(124,58,237,.16), transparent 60%),
+    radial-gradient(700px 500px at 50% 110%, rgba(240,30,44,.08), transparent 60%),
+    linear-gradient(rgba(56,189,248,.045) 1px, transparent 1px) 0 0/44px 44px,
+    linear-gradient(90deg, rgba(56,189,248,.045) 1px, transparent 1px) 0 0/44px 44px,
+    var(--page-bg);}
+#home[data-theme="dark"] .sidebar{backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);}
+#home[data-theme="dark"] .sb-link.active{border-left-color:#22D3EE;}
+#home[data-theme="dark"] .sb-link.active::after{background:#22D3EE;box-shadow:0 0 16px 2px rgba(34,211,238,.8);}
+#home[data-theme="dark"] .sb-link.active .sb-badge{background:rgba(34,211,238,.28);color:#fff;}
+.sb-label{font-family:"JetBrains Mono",monospace;letter-spacing:2.4px;}
+
+/* hero: new art + HUD overlay */
+.hero{min-height:260px;border:1px solid rgba(56,189,248,.22);
+  box-shadow:0 30px 80px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.03) inset,0 0 60px -20px rgba(34,211,238,.45);}
+.hero-bg{object-position:65% 45%;transform:scale(1.02);animation:heroDrift 28s ease-in-out infinite alternate;}
+@keyframes heroDrift{from{transform:scale(1.02) translateX(0)}to{transform:scale(1.07) translateX(-1.5%)}}
+.hero::after{background:linear-gradient(95deg,rgba(2,5,14,.94) 0%,rgba(3,8,22,.82) 30%,rgba(4,10,26,.35) 62%,rgba(10,6,28,.25) 100%);}
+.hero-hud{position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:
+    repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px),
+    linear-gradient(90deg,rgba(34,211,238,.9),rgba(34,211,238,0)) 0 0/60px 1px no-repeat,
+    linear-gradient(180deg,rgba(34,211,238,.9),rgba(34,211,238,0)) 0 0/1px 60px no-repeat,
+    linear-gradient(270deg,rgba(34,211,238,.9),rgba(34,211,238,0)) 100% 100%/60px 1px no-repeat,
+    linear-gradient(0deg,rgba(34,211,238,.9),rgba(34,211,238,0)) 100% 100%/1px 60px no-repeat;}
+.hero-hud::after{content:"";position:absolute;left:0;right:0;height:120px;top:-120px;
+  background:linear-gradient(180deg,transparent,rgba(34,211,238,.07),transparent);
+  animation:scan 7s linear infinite;}
+@keyframes scan{to{top:100%}}
+.hero-accent{width:3px;background:linear-gradient(180deg,#22D3EE 0%,#7C3AED 55%,#F01E2C 100%);box-shadow:0 0 24px 2px rgba(34,211,238,.6);}
+.hero-eyebrow{font-family:"JetBrains Mono",monospace;font-weight:700;letter-spacing:2.6px;color:#A5F3FC;
+  background:rgba(34,211,238,.08);border-color:rgba(34,211,238,.32);}
+.hero-eyebrow i{background:#22D3EE;box-shadow:0 0 10px #22D3EE;animation:pulse 2s infinite;}
+.hero-name{font-size:46px;font-weight:700;letter-spacing:-1.6px;}
+.hero-name span{background:linear-gradient(95deg,#67E8F9,#A78BFA 55%,#F472B6);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-date{font-family:"JetBrains Mono",monospace;font-size:13px;letter-spacing:1.2px;text-transform:uppercase;color:rgba(186,230,253,.6);}
+.hstat{position:relative;border-radius:16px;min-width:124px;background:rgba(3,10,24,.55);border:1px solid rgba(56,189,248,.28);}
+.hstat::before{content:"";position:absolute;left:14px;right:14px;top:0;height:1px;background:linear-gradient(90deg,transparent,#22D3EE,transparent);}
+.hstat.hs-red{border-color:rgba(244,63,94,.42);background:rgba(40,4,14,.5);}
+.hstat.hs-red::before{background:linear-gradient(90deg,transparent,#FB7185,transparent);}
+.hstat.hs-blue{border-color:rgba(34,211,238,.42);background:rgba(2,24,40,.5);}
+.hstat-n{font-weight:700;font-size:44px;}
+.hstat-l{font-family:"JetBrains Mono",monospace;letter-spacing:1.8px;color:rgba(186,230,253,.6);}
+
+/* section header */
+.ch-log{background:linear-gradient(135deg,rgba(34,211,238,.25),rgba(124,58,237,.25));border:1px solid rgba(34,211,238,.4);
+  box-shadow:0 0 28px -4px rgba(34,211,238,.55),inset 0 0 18px rgba(34,211,238,.15);}
+.ch-title{font-weight:700;font-size:24px;}
+.ch-sub,.ch-count{font-family:"JetBrains Mono",monospace;}
+.ch-count{letter-spacing:.6px;}
+
+/* app tiles: glass panels with HUD corner brackets */
+.section-apps{display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:22px;}
+.app-tile{width:auto;border-radius:22px;padding:18px 16px 18px;
+  backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);}
+.app-tile::before{border-radius:22px;background:radial-gradient(circle at 50% 18%, var(--glow), transparent 68%);}
+.app-tile::after{content:"";position:absolute;inset:8px;pointer-events:none;opacity:.35;transition:opacity .26s;
+  background:
+    linear-gradient(var(--glow),var(--glow)) 0 0/14px 1.5px no-repeat,
+    linear-gradient(var(--glow),var(--glow)) 0 0/1.5px 14px no-repeat,
+    linear-gradient(var(--glow),var(--glow)) 100% 0/14px 1.5px no-repeat,
+    linear-gradient(var(--glow),var(--glow)) 100% 0/1.5px 14px no-repeat,
+    linear-gradient(var(--glow),var(--glow)) 0 100%/14px 1.5px no-repeat,
+    linear-gradient(var(--glow),var(--glow)) 0 100%/1.5px 14px no-repeat,
+    linear-gradient(var(--glow),var(--glow)) 100% 100%/14px 1.5px no-repeat,
+    linear-gradient(var(--glow),var(--glow)) 100% 100%/1.5px 14px no-repeat;}
+.app-tile:hover::after{opacity:1;}
+.app-tile:hover{transform:translateY(-7px);}
+.app-icon-wrap{width:100%;max-width:168px;height:auto;aspect-ratio:1/1;border-radius:20px;
+  box-shadow:0 14px 34px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.07) inset;}
+.app-icon-wrap::after{border-radius:20px;background:linear-gradient(170deg,rgba(255,255,255,.08) 0%,transparent 40%);}
+.app-icon-wrap img{transition:transform .5s cubic-bezier(.22,1,.36,1),filter .3s;}
+.app-tile:hover .app-icon-wrap{transform:none;box-shadow:0 18px 40px rgba(0,0,0,.6),0 0 38px -4px var(--glow),0 0 0 1px var(--glow) inset;}
+.app-tile:hover .app-icon-wrap img{transform:scale(1.08);filter:brightness(1.15) saturate(1.1);}
+.app-label{font-weight:700;font-size:16.5px;margin-top:16px;letter-spacing:-.2px;}
+.app-open{font-family:"JetBrains Mono",monospace;font-weight:700;}
+
+/* light theme stays available, tuned for the dark icons */
+#home:not([data-theme="dark"]) .app-icon-wrap{box-shadow:0 12px 28px rgba(13,27,62,.28);}
+
+@media (max-width:1100px){.section-apps{grid-template-columns:repeat(auto-fill,minmax(172px,1fr));gap:18px;}}
+@media (max-width:640px){
+  .section-apps{grid-template-columns:1fr 1fr;gap:12px;}
+  .app-tile{width:auto;padding:14px 10px;}
+  .app-icon-wrap{max-width:none;border-radius:16px;}
+  .app-icon-wrap::after{border-radius:16px;}
+  .hero{min-height:auto;}
+  .hero-name{font-size:28px;}
+  .hstat-n{font-size:30px;}
+}
+@media (prefers-reduced-motion:reduce){.hero-bg,.hero-hud::after{animation:none;}}
+
+/* ==================== LIGHT CONTROL ROOM (default) ==================== */
+#home:not([data-theme="dark"]){
+  --page-bg:#F3F6FB;
+  --side-bg:linear-gradient(180deg,rgba(255,255,255,.92) 0%,rgba(248,250,254,.95) 100%);
+  --side-border:rgba(15,40,90,.08);
+  --sb-label:rgba(14,116,144,.7);
+  --sb-text:rgba(15,30,60,.62);
+  --sb-text-hi:#0A1428;
+  --sb-hover-bg:rgba(8,145,178,.06);
+  --sb-active-bg:linear-gradient(90deg,rgba(8,145,178,.12),rgba(8,145,178,0));
+  --sb-badge-bg:rgba(8,145,178,.10);
+  --sb-badge-text:#0E7490;
+  --sb-div:rgba(15,40,90,.07);
+  --heading:#0A1428;
+  --subhead:#0E7490;
+  --rule:rgba(8,145,178,.35);
+  --count-bg:#fff;
+  --count-border:rgba(8,145,178,.28);
+  --count-text:#0E7490;
+  --tile-bg:rgba(255,255,255,.88);
+  --tile-border:rgba(15,40,90,.08);
+  --tile-bg-hi:#fff;
+  --tile-border-hi:rgba(8,145,178,.30);
+  --tile-shadow:0 1px 2px rgba(15,40,90,.05),0 8px 24px rgba(15,40,90,.06);
+  --tile-shadow-hi:0 22px 48px rgba(15,40,90,.16);
+  --tile-label:#0A1428;
+  --tile-sub:rgba(15,30,60,.52);
+  --tile-open:#0891B2;
+  --tile-open-hi:#0A1428;
+  --scroll-track:#EEF2F8;
+  --scroll-thumb:rgba(15,40,90,.18);
+}
+#home:not([data-theme="dark"]) .portal-main{
+  background:
+    radial-gradient(900px 500px at 10% -10%, rgba(34,211,238,.14), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, rgba(139,92,246,.10), transparent 60%),
+    linear-gradient(rgba(14,116,144,.055) 1px, transparent 1px) 0 0/44px 44px,
+    linear-gradient(90deg, rgba(14,116,144,.055) 1px, transparent 1px) 0 0/44px 44px,
+    var(--page-bg);}
+#home:not([data-theme="dark"]) .sidebar{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);}
+#home:not([data-theme="dark"]) .sb-link.active{border-left-color:#0891B2;}
+#home:not([data-theme="dark"]) .sb-link.active::after{background:#0891B2;box-shadow:0 0 12px 1px rgba(8,145,178,.5);}
+#home:not([data-theme="dark"]) .sb-link.active .sb-badge{background:#0891B2;color:#fff;}
+#home:not([data-theme="dark"]) .ch-log{background:linear-gradient(135deg,#06B6D4,#6366F1);border:none;box-shadow:0 10px 26px -6px rgba(8,145,178,.6);}
+#home:not([data-theme="dark"]) .app-tile{backdrop-filter:blur(10px);}
+#home:not([data-theme="dark"]) .app-tile::after{opacity:.55;}
+#home:not([data-theme="dark"]) .app-tile:hover{box-shadow:var(--tile-shadow-hi),0 0 0 1px var(--glow),0 18px 50px -18px var(--glow);}
+#home:not([data-theme="dark"]) .app-icon-wrap{box-shadow:0 10px 24px rgba(10,20,40,.22),0 0 0 1px rgba(10,20,40,.06);}
+#home:not([data-theme="dark"]) .app-tile:hover .app-icon-wrap{box-shadow:0 14px 30px rgba(10,20,40,.25),0 0 30px -6px var(--glow);}
+#home:not([data-theme="dark"]) .hero{border-color:rgba(8,145,178,.25);box-shadow:0 24px 60px rgba(15,40,90,.22);}
+
+@media (max-width:900px){
+  #home .sb-link.active{background:linear-gradient(100deg,#0891B2,#6366F1);box-shadow:0 4px 16px rgba(8,145,178,.4);}
+  #home .sb-link.active .sb-badge{background:rgba(255,255,255,.28);color:#fff;}
+}
+@media (max-width:640px){ .ch-icon{display:none;} .cat-header{flex-wrap:nowrap;} .ch-count{display:none;} }
 </style>
 </head>
 <body>
@@ -453,7 +652,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
         <button class="sb-link active" data-cat="all" onclick="filterCat('all')">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2.1"/><rect x="14" y="3" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2.1"/><rect x="3" y="14" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2.1"/><rect x="14" y="14" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2.1"/></svg>
           All Applications
-          <span class="sb-badge">9</span>
+          <span class="sb-badge">7</span>
         </button>
       </div>
       <div class="sb-section">
@@ -461,7 +660,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
         <button class="sb-link" data-cat="logistics" onclick="filterCat('logistics')">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M1 17l2-6h12l2 6M13 11V5h4l3 6" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.5" cy="18.5" r="1.5" fill="currentColor"/><circle cx="17.5" cy="18.5" r="1.5" fill="currentColor"/></svg>
           Logistics &amp; Fleet
-          <span class="sb-badge">9</span>
+          <span class="sb-badge">7</span>
         </button>
       </div>
       <div class="sb-section sb-acct">
@@ -475,16 +674,17 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
 
     <main class="portal-main">
       <div class="hero">
-        <img class="hero-bg" src="https://d8j0ntlcm91z4.cloudfront.net/user_36OpTNMit8hWQiCytfcCKuxFxhq/hf_20260729_222730_a9da1dd7-667f-4a86-9d02-d41c403d7800.png" alt="">
+        <img class="hero-bg" src="icons/cr-hero.webp" alt="">
         <div class="hero-accent"></div>
+        <div class="hero-hud"></div>
         <div class="hero-left">
           <div class="hero-eyebrow"><i></i> Executive Portal &middot; MegaFleet Corp</div>
           <div class="hero-name">Good <span id="greeting">morning</span>, Master Harmik</div>
           <div class="hero-date" id="greeting-date">Friday, July 24</div>
         </div>
         <div class="hero-stats">
-          <div class="hstat hs-red"><div class="hstat-n">9</div><div class="hstat-l">Fleet Apps</div></div>
-          <div class="hstat hs-blue"><div class="hstat-n">9</div><div class="hstat-l">Total Tools</div></div>
+          <div class="hstat hs-red"><div class="hstat-n">7</div><div class="hstat-l">Fleet Apps</div></div>
+          <div class="hstat hs-blue"><div class="hstat-n">7</div><div class="hstat-l">Total Tools</div></div>
         </div>
       </div>
 
@@ -497,7 +697,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
             <div class="ch-title">Logistics &amp; Fleet Management</div>
             <div class="ch-sub">MegaFleet Corp Operations</div>
           </div>
-          <div class="ch-count">9 Applications</div>
+          <div class="ch-count">7 Applications</div>
         </div>
         <div class="section-apps" id="logistics-grid"></div>
       </div>
@@ -565,14 +765,14 @@ const homeEl = document.getElementById('home');
 function applyTheme(t){
   if(t === 'dark') homeEl.setAttribute('data-theme','dark');
   else homeEl.removeAttribute('data-theme');
-  try{ localStorage.setItem('mf-theme', t); }catch(e){}
+  try{ localStorage.setItem('mf-theme-v2', t); }catch(e){}
 }
 function toggleTheme(){
   applyTheme(homeEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
 }
 (function(){
   let saved = 'light';
-  try{ saved = localStorage.getItem('mf-theme') || 'light'; }catch(e){}
+  try{ saved = localStorage.getItem('mf-theme-v2') || 'light'; }catch(e){}
   applyTheme(saved);
 })();
 
@@ -585,24 +785,13 @@ function filterCat(cat) {
 /* ---------- app tiles (Higgsfield AI icons) ---------- */
 const CDN = 'https://d8j0ntlcm91z4.cloudfront.net/user_36OpTNMit8hWQiCytfcCKuxFxhq/';
 const APPS = [
-  {name:"O'Reilly's Auto",      desc:"Parts & inventory",   cat:"logistics",  glow:"rgba(255,58,71,.45)",   img:"hf_20260729_222850_0aa49275-ddf0-4d91-aa7f-37c5a3d9fa23.png", url:"https://megafleet-6g26tnah.manus.space"},
-  {name:"LINX Tracking",        desc:"Live load tracking",  cat:"logistics",  glow:"rgba(42,125,232,.45)",  img:"hf_20260729_222855_437e4b83-3c5f-4b5c-8d70-67dd039cdac5.png", url:"https://megafleet-j5k7rjui.manus.space"},
-  {name:"Agent Commission",     desc:"Freight broker calc", cat:"logistics",  glow:"rgba(196,16,32,.45)",   img:"hf_20260729_222902_f6f70952-c841-429c-858c-d9bbc4f00304.png", url:"https://mega-fleet-commission-dashboard.harmo1977.chatgpt.site/"},
-  {name:"Payables",             desc:"AP & billing",        cat:"logistics",  glow:"rgba(56,89,180,.45)",   img:"hf_20260729_222910_5fba5229-923b-421c-b029-bb2a4489a791.png", url:"https://megafleetpay-aijaerxz.manus.space/admin"},
-  {name:"Credit Card",          desc:"Payment processing",  cat:"logistics",  glow:"rgba(34,197,94,.45)",   img:"hf_20260729_222923_b035d167-47d2-4119-afe9-a717a5b460c7.png", url:"https://megafleetpay-kxkqjvmf.manus.space"},
-  {name:"T-Chek",               desc:"Verification checks", cat:"logistics",  glow:"rgba(14,165,165,.45)",  img:"icons/tchek.png", url:"https://megafleet-vjw7teeh.manus.space"},
-  {name:"Missed Invoice",       desc:"Unbilled load audit", cat:"logistics",  glow:"rgba(245,158,11,.45)",
-   grad:"linear-gradient(145deg,#FBBF24 0%,#F59E0B 42%,#B45309 100%)",
-   svg:'<svg viewBox="0 0 24 24" fill="none"><path d="M5.4 2.6h9.1l4.3 4.3v11.4a2.1 2.1 0 0 1-2.1 2.1H5.4a2.1 2.1 0 0 1-2.1-2.1V4.7a2.1 2.1 0 0 1 2.1-2.1Z" stroke="#fff" stroke-width="1.75" stroke-linejoin="round"/><path d="M14.3 2.7v4.3h4.3" stroke="#fff" stroke-width="1.75" stroke-linejoin="round"/><path d="M6.8 11h6.4M6.8 14.2h4.2" stroke="#fff" stroke-width="1.75" stroke-linecap="round"/><circle cx="17.4" cy="17.1" r="4.6" fill="#fff"/><path d="M17.4 14.7v2.6" stroke="#B45309" stroke-width="1.9" stroke-linecap="round"/><circle cx="17.4" cy="19.5" r="1" fill="#B45309"/></svg>',
-   url:"https://megafleetdas-kzwt3hfp.manus.space"},
-  {name:"Incomplete Paperwork", desc:"Carrier doc follow-up", cat:"logistics", glow:"rgba(139,92,246,.45)",
-   grad:"linear-gradient(145deg,#A78BFA 0%,#7C3AED 45%,#4C1D95 100%)",
-   svg:'<svg viewBox="0 0 24 24" fill="none"><path d="M10.2 2.8h5.2l3.4 3.4v9.4a1.7 1.7 0 0 1-1.7 1.7h-1.4" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" opacity=".55"/><path d="M15.3 2.9v3.4h3.4" stroke="#fff" stroke-width="1.7" stroke-linejoin="round" opacity=".55"/><path d="M5.2 7.4h6l3.4 3.4v8.4a1.7 1.7 0 0 1-1.7 1.7H5.2a1.7 1.7 0 0 1-1.7-1.7V9.1a1.7 1.7 0 0 1 1.7-1.7Z" fill="rgba(30,12,72,.42)" stroke="#fff" stroke-width="1.7" stroke-linejoin="round" stroke-dasharray="3.1 2.4"/><path d="M11.2 7.5v3.4h3.4" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"/><path d="M6.5 14.6h5" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/><path d="M6.5 17.3h3.1" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-dasharray="2.3 2.1" opacity=".75"/></svg>',
-   url:"https://mega-fleet-accounting-follow-up.harmo1977.chatgpt.site/"},
-  {name:"Missing Paperwork MANUS", desc:"Missing doc tracker", cat:"logistics", glow:"rgba(56,189,248,.45)",
-   grad:"linear-gradient(145deg,#7DD3FC 0%,#0EA5E9 45%,#075985 100%)",
-   svg:'<svg viewBox="0 0 24 24" fill="none"><path d="M6 2.6h7.2l4.2 4.2v6.1" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 2.6A1.8 1.8 0 0 0 4.2 4.4v15.2A1.8 1.8 0 0 0 6 21.4h5.1" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.1 2.7v4.2h4.2" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"/><path d="M7.3 10.4h6.4M7.3 13.6h3.9" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/><circle cx="16.4" cy="16.3" r="3.7" fill="rgba(4,42,66,.35)" stroke="#fff" stroke-width="1.7"/><path d="M19.2 19.1l2.4 2.4" stroke="#fff" stroke-width="1.9" stroke-linecap="round"/></svg>',
-   url:"https://megafleetdas-aaysdugs.manus.space"}
+  {name:"O'Reilly's Auto",         desc:"Parts & inventory",     cat:"logistics", glow:"rgba(255,45,70,.55)",   img:"icons/cr-oreilly.webp",              url:"https://megafleet-6g26tnah.manus.space"},
+  {name:"LINX Tracking",           desc:"Live load tracking",    cat:"logistics", glow:"rgba(40,140,255,.55)",  img:"icons/cr-linx.webp",                 url:"https://megafleet-j5k7rjui.manus.space"},
+  {name:"Agent Commission",        desc:"Commission dashboard",  cat:"logistics", glow:"rgba(255,176,32,.55)",  img:"icons/cr-commission.webp",           url:"https://mega-fleet-commission-dashboard.harmo1977.chatgpt.site/"},
+  {name:"Payables",                desc:"AP & billing",          cat:"logistics", glow:"rgba(99,102,241,.6)",   img:"icons/cr-payables.webp",             url:"https://megafleetpay-aijaerxz.manus.space/admin"},
+  {name:"Credit Card",             desc:"Payment processing",    cat:"logistics", glow:"rgba(34,230,120,.5)",   img:"icons/cr-creditcard.webp",           url:"https://megafleetpay-kxkqjvmf.manus.space"},
+  {name:"T-Chek",                  desc:"Verification checks",   cat:"logistics", glow:"rgba(34,211,238,.55)",  img:"icons/cr-tchek.webp",                url:"https://megafleet-vjw7teeh.manus.space"},
+  {name:"Missed Invoice",          desc:"Unbilled load audit",   cat:"logistics", glow:"rgba(255,120,30,.55)",  img:"icons/cr-missed-invoice.webp",       url:"https://megafleetdas-kzwt3hfp.manus.space"},
 ];
 const ARROW = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const grids = {logistics: document.getElementById('logistics-grid')};
