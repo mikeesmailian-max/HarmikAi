@@ -153,7 +153,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sa
 .hl2 h2{font-size:clamp(30px,5.4vw,78px);line-height:1.02;letter-spacing:-.04em;font-weight:800;color:var(--ink);}
 .hl2 h2 span{color:var(--red);}
 .hl2 p{margin-top:12px;font-size:clamp(14px,1.3vw,18px);font-weight:600;color:var(--ink2);}
-.truck{position:absolute;left:50%;top:0;transform-origin:50% 100%;will-change:transform;pointer-events:none;}
+.truck{position:absolute;left:0;top:0;opacity:0;transform-origin:50% 100%;will-change:transform;pointer-events:none;}
 .truck img{display:block;width:100%;height:auto;filter:var(--truck-filter);}
 .truck::after{content:"";position:absolute;left:4%;right:2%;bottom:-2.5%;height:11%;background:radial-gradient(ellipse at 45% 50%,rgba(8,16,48,.5),rgba(8,16,48,0) 68%);filter:blur(10px);z-index:-1;}
 .orbit{position:absolute;inset:0;perspective:900px;pointer-events:none;}
@@ -415,7 +415,7 @@ const lockV = document.getElementById('lock'), homeV = document.getElementById('
 const pwd = document.getElementById('pwd'), loginErr = document.getElementById('login-err');
 const sc = document.getElementById('scroller');
 function unlock(){
-  lockV.classList.add('hidden'); homeV.classList.remove('hidden');
+  lockV.classList.add('hidden'); homeV.classList.remove('hidden'); try{ t0 = performance.now(); }catch(e){}
   try{ localStorage.setItem('mf-auth','1'); }catch(e){ sessionStorage.setItem('mf-auth','1'); }
 }
 function lockNow(){
@@ -526,11 +526,34 @@ const clamp = (v,a=0,b=1) => Math.min(b, Math.max(a, v)), lerp = (a,b,t) => a+(b
 const ss = (a,b,v) => { const t = clamp((v-a)/(b-a)); return t*t*(3-2*t); };
 const SKY_W = 2688, SKY_H = 1520, HORIZON = .687;   /* horizon line of the backdrop art */
 let cx = 0, cy = 0, lastKey = '';
+/* ---------- live truck: drives toward you in real time, on a loop ---------- */
+const DRIVE_MS = 7600, GAP_MS = 1400, FAR = .085, NEAR = 2.6;   /* apparent size far away / as it passes */
+let t0 = performance.now();
+function driveTruck(W, H, hy){
+  const tw = Math.min(W*(W<700?1.5:.94), H*1.5, 1500), th = tw*1195/1800;
+  let u = RM ? .78 : ((performance.now() - t0) % (DRIVE_MS + GAP_MS)) / DRIVE_MS;
+  if(u >= 1){ truck.style.opacity = 0; return; }
+  /* constant road speed: distance shrinks linearly, so size grows like 1/distance (real perspective) */
+  const sc1 = FAR / (1 - u*(1 - FAR/NEAR));
+  const ground = (H*.965 - hy) / .66;                 /* road drop per unit of size */
+  const by = hy + ground*sc1;                          /* wheels stay planted on the road */
+  const x = W/2 + (W*.012 - W*.40*sc1) + cx*22*sc1;    /* left lane: sweeps past the camera on the left */
+  const bob = RM ? 0 : Math.sin(performance.now()/46)*.9*sc1 + Math.sin(performance.now()/173)*1.4*sc1;   /* suspension */
+  truck.style.width = tw+'px';
+  truck.style.opacity = clamp(u/.06) * (1 - clamp((u-.985)/.015));
+  truck.style.transform = `translate3d(${x - tw/2}px,${by - th + bob}px,0) scale(${sc1})`;
+}
+document.addEventListener('visibilitychange', () => { if(!document.hidden) t0 = performance.now(); });
+
 function frame(){
   requestAnimationFrame(frame);
   if(homeV.classList.contains('hidden')) return;
   cx += (mx-cx)*.07; cy += (my-cy)*.07;
   const W = sc.clientWidth, H = sc.clientHeight, st = sc.scrollTop;
+  const inStage = st < stageWrap.offsetHeight;
+  /* backdrop geometry: where the horizon sits on screen */
+  const s0 = Math.max(W/SKY_W, H/SKY_H), dh = SKY_H*s0, hy = (H-dh)/2 + HORIZON*dh;
+  if(inStage) driveTruck(W, H, hy);
   const key = st+'|'+W+'|'+H+'|'+Math.round(cx*400)+'|'+Math.round(cy*400);
   if(key === lastKey) return; lastKey = key;
   const p = RM ? 0 : clamp(st / Math.max(1, stageWrap.offsetHeight - H));
@@ -538,9 +561,8 @@ function frame(){
   nav.classList.toggle('scrolled', st > 30);
   bar.style.transform = `scaleX(${clamp(st / Math.max(1, sc.scrollHeight - H))})`;
 
-  if(st < stageWrap.offsetHeight){
+  if(inStage){
     /* backdrop: zoom into the vanishing point */
-    const s = Math.max(W/SKY_W, H/SKY_H), dh = SKY_H*s, hy = (H-dh)/2 + HORIZON*dh;
     sky.style.transformOrigin = `50% ${hy}px`;
     sky.style.transform = `translate3d(${-cx*16}px,${-cy*9}px,0) scale(${1.05 + p*.75})`;
     sun.style.top = hy+'px';
@@ -551,14 +573,6 @@ function frame(){
     const a2 = ss(.25,.38,p) * (1 - ss(.66,.78,p));
     hl2.style.opacity = a2;
     hl2.style.transform = `translate3d(${-cx*10}px,${lerp(50,0,ss(.25,.38,p)) - ss(.66,.78,p)*60}px,0)`;
-    /* truck: drives from the horizon, fills the frame, passes the camera */
-    const tw = Math.min(W*(W<700?1.5:.94), H*1.5, 1500), th = tw*1195/1800;
-    const e = p, sc1 = .13 * Math.pow(15, e), m = .56;
-    let by, x;
-    if(e < m){ const k = ss(0,m,e); by = lerp(hy + H*.05, H*.965, k); x = lerp(W*.03, -W*.01, k); }
-    else { const k = (e-m)/(1-m); by = H*.965 + k*k*H*1.1; x = -W*.01 - Math.pow(k,1.6)*W*1.05; }
-    truck.style.width = tw+'px';
-    truck.style.transform = `translate3d(${x - tw/2 + cx*26*sc1}px,${by - th + cy*8*sc1}px,0) scale(${sc1})`;
     /* app chips fly past in real 3D */
     orbit.style.perspectiveOrigin = `50% ${hy}px`;
     chips.forEach(c => {
